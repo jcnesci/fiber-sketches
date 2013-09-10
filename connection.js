@@ -9,8 +9,13 @@ function Connection(a, b, type, strength) {
 	this.a.connections.push(this)
 	this.b.connections.push(this)
 
+	this.shape = "bezier"; // "straight"
+
 	this.addToDom();
 }
+
+Connection.shapes = ["straight", "bezier"];
+
 Connection.prototype = {
 	addToDom: function() {
 		// Create the DOM elements needed to draw this connection
@@ -21,11 +26,29 @@ Connection.prototype = {
 			var y1 = this.a.anchor.top;
 			var x2 = this.b.anchor.left;
 			var y2 = this.b.anchor.top;
-			this.el = $(svg.line(x1, y1, x2, y2));
+
+			if(this.shape == "straight") {
+				this.el = $(svg.line(x1, y1, x2, y2));
+			}
+			else if(this.shape == "bezier") {
+				var p = svg.createPath();
+				var dY = (y2 - y1) * .7;
+				p.move(x1, y1).curveC(x1, y1 + dY, x2, y2 - dY, x2, y2);
+				this.el = $(svg.path(p));
+			}
 			this.el.addClass("connector");
 
 			if(this.type == "wireless") this.el.addClass("wireless");
 		}
+	},
+	changeShape: function(newshape) {
+		if(newshape == this.shape) return;
+
+		this.shape = newshape;
+
+		// Remove and re-build
+		this.el.remove();
+		this.addToDom();
 	},
 	update: function() {
 		// Update enpoints
@@ -34,10 +57,31 @@ Connection.prototype = {
 		var x2 = this.b.anchor.left;
 		var y2 = this.b.anchor.top;
 
-		this.el.attr("x1", x1);
-		this.el.attr("y1", y1);
-		this.el.attr("x2", x2);
-		this.el.attr("y2", y2);
+		var svg = $("#svg_container").svg('get');
+
+		if(this.shape == "straight") {
+			this.el.attr("x1", x1);
+			this.el.attr("y1", y1);
+			this.el.attr("x2", x2);
+			this.el.attr("y2", y2);
+		}
+		else {
+			/*
+			this.el.remove();
+			var p = svg.createPath();
+			p.move(x1, y1).curveC(x1, y1 + 100, x2, y2 - 100, x2, y2);
+			this.el = $(svg.path(p));			
+			this.el.addClass("connector");
+
+			if(this.type == "wireless") this.el.addClass("wireless");
+			*/
+			// Build path manually
+			var dY = (y2 - y1) * .7;
+			this.el.attr("d", "M" + x1 + "," + y1 +
+						      "C" + x1 + "," + (y1 + dY) + " " +
+						            x2 + "," + (y2 - dY) + " " +
+						            x2 + "," + y2); 
+		}
 
 		if(this.a.el.is(":visible") && this.b.el.is(":visible")) {
 			this.el.show();

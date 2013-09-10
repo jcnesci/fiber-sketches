@@ -240,6 +240,14 @@ function toggleShading(indicator) {
 		$(indicator).addClass("shaded");
 	}
 }
+
+var current_connection_style = 1;
+function toggleConnectors(indicator) {
+	current_connection_style++;
+	$.each(connections, function(index, conn) {
+		conn.changeShape(Connection.shapes[current_connection_style % Connection.shapes.length]);
+	});
+}
 </script>
 <div id="controller">
 	<div class="button" onClick="layoutDevices('random')">Random</div>
@@ -247,6 +255,7 @@ function toggleShading(indicator) {
 	<div class="button" onClick="layoutDevices('tree')">Tree</div>
 	<br /><br />
 	<div class="button" onClick="toggleShading(this)">Toggle cells</div>
+	<div class="button" onClick="toggleConnectors(this)">Toggle connector style</div>
 	<br /><br />
 	<div class="button" onClick="populateDevices(); layoutDevices('tree')">New Network</div>
 </div>

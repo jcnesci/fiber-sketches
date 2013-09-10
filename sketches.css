@@ -73,6 +73,7 @@ body {
 .connector  {
 	stroke: #AAA;
 	stroke-width: 1;
+	fill: none;
 }
 
 .connector.wireless {
