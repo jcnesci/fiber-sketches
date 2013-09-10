@@ -13,6 +13,11 @@ function Device(name, type) {
 		"top": ($(document).height() / 2 - this.size.height / 2) 
 	}
 
+	// Physics properties
+	this.velocity = [0,0];
+	this.mass = 1;
+	this.target = [0,0];
+
 	this.addToDom();
 }
 Device.count = 0;
@@ -53,6 +58,21 @@ Device.prototype = {
 		var dx = b.anchor.left - this.anchor.left;
 		var dy = b.anchor.top - this.anchor.top;
 		return Math.sqrt(dx*dx + dy*dy);
+	},
+	physicsDistanceTo: function(b) {
+		var dx = b.target[0] - this.target[0];
+		var dy = b.target[1] - this.target[1];
+		return Math.sqrt(dx*dx + dy*dy);
+	},
+	physicsDistanceToSquared: function(b) {
+		var dx = b.target[0] - this.target[0];
+		var dy = b.target[1] - this.target[1];
+		return Math.abs(dx*dx + dy*dy);
+	},
+	physicsVectorTo: function(b) {
+		var dx = b.target[0] - this.target[0];
+		var dy = b.target[1] - this.target[1];
+		return [dx, dy];
 	},
 
 	die: function() {

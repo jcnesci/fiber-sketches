@@ -55,6 +55,7 @@ function populateDevices() {
 
 	devices.push(new Device("Network Box", "networkbox"));	// devices[0] is always the network box
 	routing_devices.push(devices[0]);
+	devices[0].mass = 100;
 
 	var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah"];
 	var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs"]
@@ -186,6 +187,63 @@ function layoutDevices(type) {
 			treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height);
 
 			break;
+
+		case "physics":
+			// Tiny physics simulator
+			devices[0].el.animate({
+				top: $(window).height()/2-devices[0].size.height/2,
+				left: $(window).width()/2-devices[0].size.width/2
+			}, function() {
+				$.each(devices, function(index, device) {
+					device.target = [device.el.offset().left, device.el.offset().top]; // Set target to current position
+				});
+				for(var step = 0; step<500; step++) {
+					$.each(devices, function(index, device) {
+						var F = [0,0];	// force summation
+						// Calculate spring force on each device
+						$.each(device.connections, function(idx, connection) {
+							var sign = device == connection.a ? 1 : -1;
+							var m = (connection.getPhysicsLength() - connection.idealLength) * connection.strength * sign;
+							var v = connection.getPhysicsUnitVector();
+							F[0] += v[0] * m * 0.1;
+							F[1] += v[1] * m * 0.1;
+						});
+
+						// Calculate repulsive force on each device (SLOW AND STUPID WAY I KNOW)
+						$.each(devices, function(idx, other) {
+							if(other == device) return; // Don't repell self
+							if(other.physicsDistanceToSquared(device) < 1000000) {
+								var v = other.physicsVectorTo(device);
+								var m = 1/other.physicsDistanceTo(device);
+								F[0] += v[0]* m * 1;
+								F[1] += v[1]* m * 1;
+							}
+						});
+
+						// Add (force/mass = accelration) to velocity
+						device.velocity[0] += F[0] / device.mass;
+						device.velocity[1] += F[1] / device.mass;
+
+						// Add damping to velocity
+						device.velocity[0] *= 0.5;
+						device.velocity[1] *= 0.5;
+						
+						device.target[0] += device.velocity[0];
+						device.target[1] += device.velocity[1];
+					});
+				}
+
+				$.each(devices, function(index, device) {
+					device.el.animate({
+						left: device.target[0],
+						top: device.target[1],
+					}, {
+						step: function(n) {
+							device.update();
+						}})
+				});
+			});
+			break;
 	}
 }
 
@@ -253,6 +311,7 @@ function toggleConnectors(indicator) {
 	<div class="button" onClick="layoutDevices('random')">Random</div>
 	<div class="button" onClick="layoutDevices('random grid')">Random Grid</div>
 	<div class="button" onClick="layoutDevices('tree')">Tree</div>
+	<div class="button" onClick="layoutDevices('physics')">Physics</div>
 	<br /><br />
 	<div class="button" onClick="toggleShading(this)">Toggle cells</div>
 	<div class="button" onClick="toggleConnectors(this)">Toggle connector style</div>

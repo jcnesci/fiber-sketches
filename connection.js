@@ -5,6 +5,7 @@ function Connection(a, b, type, strength) {
 	this.b = b; // Device B
 	this.type = type;
 	this.strength = strength;
+	this.idealLength = 150;
 
 	this.a.connections.push(this)
 	this.b.connections.push(this)
@@ -70,6 +71,23 @@ Connection.prototype = {
 		// Remove and re-build
 		this.el.remove();
 		this.addToDom();
+	},
+	getLength: function() {
+		// Returns length of element as drawn
+		return this.a.distanceTo(this.b);
+	},
+	getPhysicsLength: function() {
+		// Returns length of connector as modelled by the physics engine
+		var v = this.getPhysicsVector();
+		return Math.sqrt(v[0]*v[0] + v[1]*v[1]);
+	},
+	getPhysicsUnitVector: function() {
+		var l = this.getPhysicsLength();
+		var v = this.getPhysicsVector();
+		return [v[0]/l, v[1]/l];
+	},
+	getPhysicsVector: function() {
+		return [(this.b.target[0] - this.a.target[0]), (this.b.target[1] - this.a.target[1])];
 	},
 	update: function() {
 		// Update enpoints
