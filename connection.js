@@ -82,7 +82,7 @@ Connection.prototype = {
 		return Math.sqrt(v[0]*v[0] + v[1]*v[1]);
 	},
 	getPhysicsUnitVector: function() {
-		var l = this.getPhysicsLength();
+		var l = Math.max(this.getPhysicsLength(), 0.001);
 		var v = this.getPhysicsVector();
 		return [v[0]/l, v[1]/l];
 	},
