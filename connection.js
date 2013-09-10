@@ -15,7 +15,6 @@ Connection.prototype = {
 	addToDom: function() {
 		// Create the DOM elements needed to draw this connection
 		if(this.type == "wired" || this.type == "wireless") {
-			console.log("Creating connector");
 			//this.el = $("<line x1='0' y1='0' x2='100' y2='100' class='connector' />");
 			var svg = $("#svg_container").svg('get');
 			var x1 = this.a.anchor.left;
@@ -46,6 +45,16 @@ Connection.prototype = {
 		else {
 			this.el.hide();
 		}
+	},
+	die: function() {
+		this.el.remove();
+		// Remove references from devices
+		var i = this.a.connections.indexOf(this);
+		if(i >= 0)
+			this.a.connections.splice(i, 1);
+		i = this.a.connections.indexOf(this);
+		if(i >= 0)
+			this.b.connections.splice(i, 1);
 	}
 
 }

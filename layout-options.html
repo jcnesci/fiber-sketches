@@ -40,6 +40,14 @@ $(document).ready(function() {
 
 function populateDevices() {
 	// Clear out old lists. TODO: Make sure circular references are broken, too
+	$.each(devices, function(index, device) {
+		device.die();
+	});
+
+	$.each(connections, function(index, connection) {
+			connection.die();
+	});
+
 	devices.length = 0;
 	personal_devices.length = 0;
 	routing_devices.length = 0;
@@ -239,6 +247,8 @@ function toggleShading(indicator) {
 	<div class="button" onClick="layoutDevices('tree')">Tree</div>
 	<br /><br />
 	<div class="button" onClick="toggleShading(this)">Toggle cells</div>
+	<br /><br />
+	<div class="button" onClick="populateDevices(); layoutDevices('tree')">New Network</div>
 </div>
 
 <div id="container">

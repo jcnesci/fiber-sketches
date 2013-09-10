@@ -53,5 +53,15 @@ Device.prototype = {
 		var dx = b.anchor.left - this.anchor.left;
 		var dy = b.anchor.top - this.anchor.top;
 		return Math.sqrt(dx*dx + dy*dy);
+	},
+
+	die: function() {
+		this.el.remove();
+		$.each(this.connections, function(i, conn) {
+			if(conn)
+				conn.die();
+		});
+
+		this.connections.length = 0;
 	}
 }
