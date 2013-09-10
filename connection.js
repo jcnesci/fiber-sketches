@@ -43,8 +43,8 @@ Connection.prototype = {
 				this.el = $(svg.path(p));
 			}
 			else if(this.shape == "rounded") {
-				var r = Math.min(20, Math.abs(x2-x1));
-				r = Math.min(r,Math.abs(y2-y1));		// Make sure there's room to draw an arc
+				var r = Math.min(20, Math.abs(x2-x1)/2);
+				r = Math.min(r,Math.abs(y2-y1)/2);		// Make sure there's room to draw an arc
 				var rx = r * (x2 > x1 ? 1 : -1);	// Radius
 				var ry = r * (y2 > y1 ? 1 : -1);	// Radius
 				var p = svg.createPath();
@@ -102,8 +102,8 @@ Connection.prototype = {
 							   "L" + x2 + "," + y2);
 		}
 		else if(this.shape == "rounded") {
-			var r = Math.min(20, Math.abs(x2-x1));
-			r = Math.min(r,Math.abs(y2-y1));		// Make sure there's room to draw an arc
+			var r = Math.min(20, Math.abs(x2-x1)/2);
+			r = Math.min(r,Math.abs(y2-y1)/2);		// Make sure there's room to draw an arc
 			var rx = r * (x2 > x1 ? 1 : -1);	// Radius
 			var ry = r * (y2 > y1 ? 1 : -1);	// Radius
 			var p = svg.createPath();
