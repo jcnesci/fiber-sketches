@@ -128,10 +128,12 @@ function runTinyPhysics() {
 	// TUNING PARAMETERS
 	// -------------------------------------------------------------------------------------------------------
 	var SPRING_K = 0.1;		// Spring force constant
+	var SPRING_REST = 100;	// Spring resting distance
 	var REPULSION_K = 2;	// Repulsion force between nodes to keep things spaced out
 	var BOUNDARY_K = 10; 	// Repulsion force to keep everything constrained to the screen
 	var DAMPING = 0.5;		// Percent of velocity to retain between steps (higher numbers are bouncier)
 	var STEPS = 500;		// Steps to run towards convergence. Higher numbers are slower but more stable.
+
 
 	// Set target to current position
 	$.each(devices, function(index, device) {
@@ -144,7 +146,7 @@ function runTinyPhysics() {
 			// Calculate spring force on each device
 			$.each(device.connections, function(idx, connection) {
 				var sign = device == connection.a ? 1 : -1;
-				var m = (connection.getPhysicsLength() - connection.idealLength) * connection.strength * sign;
+				var m = (connection.getPhysicsLength() - SPRING_REST) * connection.strength * sign;
 				var v = connection.getPhysicsUnitVector();
 				F[0] += v[0] * m * SPRING_K;
 				F[1] += v[1] * m * SPRING_K;
