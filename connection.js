@@ -14,7 +14,7 @@ function Connection(a, b, type, strength) {
 	this.addToDom();
 }
 
-Connection.shapes = ["straight", "bezier"];
+Connection.shapes = ["straight", "bezier", "90s"];
 
 Connection.prototype = {
 	addToDom: function() {
@@ -34,6 +34,12 @@ Connection.prototype = {
 				var p = svg.createPath();
 				var dY = (y2 - y1) * .7;
 				p.move(x1, y1).curveC(x1, y1 + dY, x2, y2 - dY, x2, y2);
+				this.el = $(svg.path(p));
+			}
+			else if(this.shape == "90s") {
+				var p = svg.createPath();
+				var midY = (y2 - y1) / 2 + y1;
+				p.move(x1, y1).line(x1, midY).line(x2, midY).line(x2,y2);
 				this.el = $(svg.path(p));
 			}
 			this.el.addClass("connector");
@@ -65,22 +71,20 @@ Connection.prototype = {
 			this.el.attr("x2", x2);
 			this.el.attr("y2", y2);
 		}
-		else {
-			/*
-			this.el.remove();
-			var p = svg.createPath();
-			p.move(x1, y1).curveC(x1, y1 + 100, x2, y2 - 100, x2, y2);
-			this.el = $(svg.path(p));			
-			this.el.addClass("connector");
-
-			if(this.type == "wireless") this.el.addClass("wireless");
-			*/
+		else if(this.shape == "bezier") {
 			// Build path manually
 			var dY = (y2 - y1) * .7;
 			this.el.attr("d", "M" + x1 + "," + y1 +
 						      "C" + x1 + "," + (y1 + dY) + " " +
 						            x2 + "," + (y2 - dY) + " " +
 						            x2 + "," + y2); 
+		}
+		else if(this.shape == "90s") {
+			var midY = (y2 - y1) / 2 + y1;
+			this.el.attr("d",  "M" + x1 + "," + y1 +
+							   "L" + x1 + "," + midY + " " +
+							   "L" + x2 + "," + midY + " " +
+							   "L" + x2 + "," + y2);
 		}
 
 		if(this.a.el.is(":visible") && this.b.el.is(":visible")) {
