@@ -1,0 +1,87 @@
+
+@import "jquery-svg/jquery.svg.css";
+
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+
+#controller {
+	z-index: 1000;
+	width: 200px;
+}
+
+.button {
+}
+.button:after {
+	content: " >";
+}
+
+.button:hover {
+	font-style: italic;
+	cursor: pointer;
+	background-color: rgba(200,200,200,0.5);
+}
+
+.invisible {
+	display: none;
+}
+
+.device {
+	/* DIVs that contain a device */
+	width: 200px;
+	height: 200px;
+	position: absolute;
+	background-color: rgba(255,255,255,0.5);
+}
+
+.shaded {
+	background-color: rgba(200,200,200,0.5);
+}
+
+.device .name {
+	font-weight: lighter;
+	text-align: center;
+}
+
+.device .icon {
+	width: 128px;
+	height: 128px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.networkbox .icon  {
+	background-image: url(images/device-networkbox.png);
+}
+.laptop .icon  {
+	background-image: url(images/device-laptop.png);
+}
+.phone .icon  {
+	background-image: url(images/device-phone.png);
+}
+.storage .icon  {
+	background-image: url(images/device-storage.png);
+}
+.tv .icon  {
+	background-image: url(images/device-tv.png);
+}
+.tvbox .icon  {
+	background-image: url(images/device-tvbox.png);
+}
+
+.connector  {
+	stroke: #AAA;
+	stroke-width: 1;
+}
+
+.connector.wireless {
+	stroke-dasharray: 5,5;
+}
+
+SVG {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: -1;
+}

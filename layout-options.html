@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,700,300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="sketches.css">
+</head>
+<body>
+<script src="jquery-1.10.2.js"></script>
+<script src="jquery-svg/jquery.svg.js"></script>
+<script type="text/javascript" src="jquery-svg/jquery.svgdom.js"></script>
+
+<script src="device.js"></script>
+<script src="connection.js"></script>
+
+<script>
+var devices = [];			// All devices
+var personal_devices = [];	// Computers/laptops and mobile devices
+var routing_devices = []; 	// Network boxes, tv boxes, or other routers/switches
+var connections = [];
+
+$(document).ready(function() {
+	$("#svg_container").svg();	// Initialize the SVG canvas
+
+	populateDevices();
+
+	/*
+	$.each(devices, function(index, device) {
+		device.el.delay(index*1000).fadeIn(500).animate({
+			top: "+=" + (Math.random() * 500 - 250),
+			left: "+=" + (Math.random() * 500 - 250),
+		}, 500, function() { device.update() });
+	});
+	*/
+
+	layoutDevices("random grid");
+
+});
+
+function populateDevices() {
+	// Clear out old lists. TODO: Make sure circular references are broken, too
+	devices.length = 0;
+	personal_devices.length = 0;
+	routing_devices.length = 0;
+	connections.length = 0;
+
+	devices.push(new Device("Network Box", "networkbox"));	// devices[0] is always the network box
+	routing_devices.push(devices[0]);
+
+	var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah"];
+	var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs"]
+	var n_personal_devices = Math.round(Math.random() * 8 + 2);
+	var n_tv_devices = Math.round(Math.random() * 3);
+
+	// Create personal devices (phones, laptops, etc)
+	for(var i=0; i<n_personal_devices; i++) {
+		var type = Math.random() < 0.5 ? "phone" : "laptop";
+		var propertype = type.charAt(0).toUpperCase() + type.slice(1);
+
+		var unique_name = false;
+		var name = ""; 
+		while(!unique_name) {
+			name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+			// Check all devices to see if this name is taken
+			var taken = false;
+			for(var j=0; j<devices.length; j++) {
+				if(devices[j].name == name) taken = true;
+			}
+			if(!taken) unique_name = true;
+		}
+		
+		var dev = new Device(name, type);
+		devices.push(dev);
+		personal_devices.push(dev);
+	}
+
+	// Create TV devices which always come in a pairs with a TV box
+	for(var i=0; i<n_tv_devices; i++) {
+		var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
+		var box_device = new Device(room + " TV Box", "tvbox");
+		var tv_device = new Device(room + " TV", "tv");
+		devices.push(box_device);
+		routing_devices.push(box_device);
+		devices.push(tv_device);
+
+		// Connect TVs to TV Box
+		connections.push(new Connection(box_device, tv_device, "wired", 1));
+
+		// Connect TV Box to Network Box
+		connections.push(new Connection(devices[0], box_device, "wired", 1));
+	}
+
+
+	// Connect each device to a router
+	$.each(personal_devices, function(index, device) {
+		var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)];	// Favor network box
+
+		var type = Math.random() < 0.5 ? "wired" : "wireless";
+		connections.push(new Connection(router, device, type, 1));	
+	});
+}
+
+function layoutDevices(type) {
+	// Fade everything out
+	$.each(devices, function(index, device) {
+		device.el.stop();
+		device.hide();
+		device.update();
+	});
+	switch (type) {
+		case "random":
+			$.each(devices, function(index, device) {
+				device.el.fadeIn(500).animate({
+					top: $(document).height()/2 - device.size.height / 2 + random(-500, 500),
+					left: $(document).width()/2 - device.size.width / 2 + random(-500, 500),
+				}, {
+					step: function(n) {
+						device.update();
+					}
+				});
+			});		
+			break;
+		case "random grid":
+			// Place the devices randomly within a grid layout
+			// -----------------------------------------------
+			var grid_width = 6;
+			var grid_height = 4;
+			var grid_interval = 200;
+
+			// Create grid structure
+			var grid = [];
+			for(var i=0; i<grid_height; i++) {
+				grid[i] = [];
+				for(var j=0; j<grid_width; j++) {
+					grid[i][j] = null; // Empty cell
+				}
+			}
+
+			$.each(devices, function(index, device) {
+				var target_i = -1;
+				var target_j = -1;
+
+				var found_space = false;
+				while(!found_space) {
+					target_i = random(0, grid_height);
+					target_j = random(0, grid_width);					
+					if(grid[target_i][target_j] == null) found_space = true;
+				}
+
+				grid[target_i][target_j] = device;
+
+				var x = (target_j - grid_width/2 + 1/2) * grid_interval;
+				var y = (target_i - grid_height/2 + 1/2) * grid_interval;
+
+				device.el.fadeIn(500).animate({
+					top: $(document).height()/2 - device.size.height / 2 + y,
+					left: $(document).width()/2 - device.size.width / 2 + x,
+				}, {
+					step: function(n) {
+						device.update();
+					}
+				});
+			});
+
+			break;
+		case "tree":
+			// Place root node
+			devices[0].el.fadeIn(500).animate({
+				top: 0,
+				left: $(document).width() / 2 - devices[0].size.width / 2
+			}, {
+				step: function(n) {
+					devices[0].update();
+				}
+			});
+
+			treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height);
+
+			break;
+	}
+}
+
+function treePlace(root, start_x, start_y) {
+	// Used to recursively place nodes in a tree
+	var children = [];
+
+	// Get connections that lead to children
+	for(var i=0; i<root.connections.length; i++) {
+		if(root.connections[i].a == root) {
+			// root is the routing device
+			children.push(root.connections[i].b);
+		}
+	}
+
+	// Put each child in its place
+	$.each(children, function(index, device) {
+		var x = (index + 1/2 - children.length / 2) * root.size.width;
+		device.el.fadeIn(500).animate({
+			top: start_y,
+			left: start_x + x
+		}, {
+			step: function(n) {
+				device.update();
+			}
+		});
+		// Call treePlace on each child
+		treePlace(device, start_x + x, start_y + root.size.height);
+
+	});
+
+
+}
+
+
+
+
+function random(low, high) {
+	return Math.floor(Math.random() * (high-low)) + low;
+}
+
+var shading = false;
+function toggleShading(indicator) {
+	if(shading) {
+		$(".device").removeClass("shaded");
+		shading = false;
+		$(indicator).removeClass("shaded");
+	}
+	else {
+		$(".device").addClass("shaded");
+		shading = true;
+		$(indicator).addClass("shaded");
+	}
+}
+</script>
+<div id="controller">
+	<div class="button" onClick="layoutDevices('random')">Random</div>
+	<div class="button" onClick="layoutDevices('random grid')">Random Grid</div>
+	<div class="button" onClick="layoutDevices('tree')">Tree</div>
+	<br /><br />
+	<div class="button" onClick="toggleShading(this)">Toggle cells</div>
+</div>
+
+<div id="container">
+
+</div>
+<div id="svg_container"></div>
+<!--<svg id="svgelem" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="0" x2="200" y2="100"
+          style="stroke:red;stroke-width:2px"></line>
+</svg>-->
+</body>
+</html>
