@@ -14,7 +14,7 @@ function Connection(a, b, type, strength) {
 	this.addToDom();
 }
 
-Connection.shapes = ["straight", "bezier", "90s"];
+Connection.shapes = ["straight", "bezier", "90s", "rounded"];
 
 Connection.prototype = {
 	addToDom: function() {
@@ -40,6 +40,21 @@ Connection.prototype = {
 				var p = svg.createPath();
 				var midY = (y2 - y1) / 2 + y1;
 				p.move(x1, y1).line(x1, midY).line(x2, midY).line(x2,y2);
+				this.el = $(svg.path(p));
+			}
+			else if(this.shape == "rounded") {
+				var r = Math.min(20, Math.abs(x2-x1));
+				r = Math.min(r,Math.abs(y2-y1));		// Make sure there's room to draw an arc
+				var rx = r * (x2 > x1 ? 1 : -1);	// Radius
+				var ry = r * (y2 > y1 ? 1 : -1);	// Radius
+				var p = svg.createPath();
+				var midY = (y2 - y1) / 2 + y1;
+				var flip = ( x2>x1 != y2 < y1 ) ? true : false;	// Simulated XOR to the rescue
+				p.move(x1, y1).line(x1, midY - ry).
+							   arc(rx,ry,0, 0,!flip, x1+rx, midY).
+							   line(x2-rx,midY).
+							   arc(rx,ry,0, 0,flip, x2, midY+ry).
+							   line(x2,y2);
 				this.el = $(svg.path(p));
 			}
 			this.el.addClass("connector");
@@ -85,6 +100,23 @@ Connection.prototype = {
 							   "L" + x1 + "," + midY + " " +
 							   "L" + x2 + "," + midY + " " +
 							   "L" + x2 + "," + y2);
+		}
+		else if(this.shape == "rounded") {
+			var r = Math.min(20, Math.abs(x2-x1));
+			r = Math.min(r,Math.abs(y2-y1));		// Make sure there's room to draw an arc
+			var rx = r * (x2 > x1 ? 1 : -1);	// Radius
+			var ry = r * (y2 > y1 ? 1 : -1);	// Radius
+			var p = svg.createPath();
+			var midY = (y2 - y1) / 2 + y1;
+			var flip = ( x2>x1 != y2 < y1 ) ? true : false;	// Simulated XOR to the rescue
+			this.el.attr("d",  "M" + x1 + "," + y1 +
+							   "L" + x1 + "," + (midY-ry) + " " +
+							   "A" + rx + "," + ry + " 0 0," + (flip ? 0 : 1) + " " + (x1+rx) + "," + midY + " " +
+							   "L" + (x2-rx) + "," + (midY) + " " +
+							   "A" + rx + "," + ry + " 0 0," + (flip ? 1 : 0) + " " + (x2) + "," + (midY+ry) + " " +
+							   "L" + x2 + "," + y2);
+
+			//A 20,20 0 0,0 215,215
 		}
 
 		if(this.a.el.is(":visible") && this.b.el.is(":visible")) {
