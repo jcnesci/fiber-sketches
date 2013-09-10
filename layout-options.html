@@ -215,10 +215,17 @@ function layoutDevices(type) {
 							if(other.physicsDistanceToSquared(device) < 1000000) {
 								var v = other.physicsVectorTo(device);
 								var m = 1/other.physicsDistanceTo(device);
-								F[0] += v[0]* m * 1;
-								F[1] += v[1]* m * 1;
+								F[0] += v[0]* m * 2;
+								F[1] += v[1]* m * 2;
 							}
 						});
+
+						// Calculate force to keep device on screen
+						if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= 10;
+						if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= 10;
+						if(device.target[0] < 0)					 					 F[0] += 10;
+						if(device.target[1] < 1)					 					 F[1] += 10;
+
 
 						// Add (force/mass = accelration) to velocity
 						device.velocity[0] += F[0] / device.mass;
