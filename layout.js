@@ -125,12 +125,20 @@ function treePlace(root, start_x, start_y) {
 }
 
 function runTinyPhysics() {
+	// TUNING PARAMETERS
+	// -------------------------------------------------------------------------------------------------------
+	var SPRING_K = 0.1;		// Spring force constant
+	var REPULSION_K = 2;	// Repulsion force between nodes to keep things spaced out
+	var BOUNDARY_K = 10; 	// Repulsion force to keep everything constrained to the screen
+	var DAMPING = 0.5;		// Percent of velocity to retain between steps (higher numbers are bouncier)
+	var STEPS = 500;		// Steps to run towards convergence. Higher numbers are slower but more stable.
+
 	// Set target to current position
 	$.each(devices, function(index, device) {
 		device.target = [device.el.offset().left, device.el.offset().top];
 
 	});
-	for(var step = 0; step<500; step++) {
+	for(var step = 0; step<STEPS; step++) {
 		$.each(devices, function(index, device) {
 			var F = [0,0];	// force summation
 			// Calculate spring force on each device
@@ -138,8 +146,8 @@ function runTinyPhysics() {
 				var sign = device == connection.a ? 1 : -1;
 				var m = (connection.getPhysicsLength() - connection.idealLength) * connection.strength * sign;
 				var v = connection.getPhysicsUnitVector();
-				F[0] += v[0] * m * 0.1;
-				F[1] += v[1] * m * 0.1;
+				F[0] += v[0] * m * SPRING_K;
+				F[1] += v[1] * m * SPRING_K;
 			});
 
 			// Calculate repulsive force on each device (SLOW AND STUPID WAY I KNOW)
@@ -149,16 +157,16 @@ function runTinyPhysics() {
 					var v = other.physicsVectorTo(device);
 					var l = Math.max(other.physicsDistanceTo(device), 0.001);
 					var m = 1/l;
-					F[0] += v[0]* m * 2;
-					F[1] += v[1]* m * 2;
+					F[0] += v[0]* m * REPULSION_K;
+					F[1] += v[1]* m * REPULSION_K;
 				}
 			});
 
 			// Calculate force to keep device on screen
-			if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= 10;
-			if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= 10;
-			if(device.target[0] < 0)					 					 F[0] += 10;
-			if(device.target[1] < 1)					 					 F[1] += 10;
+			if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= BOUNDARY_K;
+			if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
+			if(device.target[0] < 0)					 					 F[0] += BOUNDARY_K;
+			if(device.target[1] < 1)					 					 F[1] += BOUNDARY_K;
 
 
 			// Add (force/mass = accelration) to velocity
@@ -166,8 +174,8 @@ function runTinyPhysics() {
 			device.velocity[1] += F[1] / device.mass;
 
 			// Add damping to velocity
-			device.velocity[0] *= 0.5;
-			device.velocity[1] *= 0.5;
+			device.velocity[0] *= DAMPING;
+			device.velocity[1] *= DAMPING;
 			
 			device.target[0] += device.velocity[0];
 			device.target[1] += device.velocity[1];
