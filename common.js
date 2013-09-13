@@ -23,3 +23,28 @@ function toggleConnectors(indicator) {
 		conn.changeShape(Connection.shapes[current_connection_style % Connection.shapes.length]);
 	});
 }
+
+function buildSketchList() {
+	var sketches = [
+		{
+			name: "Layout Options",
+			file: "layout-options.html"
+		},
+		{
+			name: "Collapsed Nodes",
+			file: "collapsed-nodes.html"
+		},		
+	];
+	var listEl = $("#sketchList");
+	listEl.append("<h2>SKETCHES:</h2>");
+	if(listEl.length > 0) {
+		$.each(sketches, function(i, s) {
+			var link = $("<a />");
+			link.attr("href", s.file);
+			link.text(s.name);
+
+			listEl.append(link);
+		});
+	}
+}
+$(document).ready(buildSketchList);

@@ -63,11 +63,38 @@ body {
 .storage .icon  {
 	background-image: url(images/device-storage.png);
 }
+.router .icon  {
+	background-image: url(images/device-storage.png);
+}
 .tv .icon  {
 	background-image: url(images/device-tv.png);
 }
 .tvbox .icon  {
 	background-image: url(images/device-tvbox.png);
+}
+
+.collapsed { 
+	 /*background-color: rgba(200,200,200,.5); */
+}
+
+.collapsed:hover {
+	cursor: pointer;
+}
+
+.badge {
+	display: none;
+}
+.collapsed .badge {
+	display: block;
+	font-weight: bold;
+	background-color: rgba(150,150,255,0.8);
+	float: right;
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	margin-right: 50px;
+	margin-top: 40px;
 }
 
 .connector  {
@@ -85,4 +112,26 @@ SVG {
 	left: 0px;
 	top: 0px;
 	z-index: -1;
+}
+
+h2 {
+	font-size: 100%;
+	margin-bottom: 0;
+	font-style: italic;
+	font-weight: bold;
+}
+#sketchList a {
+	color: black;
+	display: block;
+	width: 200px;
+	text-decoration: none;
+}
+#sketchList a:hover {
+	font-style: italic;
+	cursor: pointer;
+	background-color: rgba(200,200,200,0.5);
+}
+
+#sketchList a:before {
+	content: "> ";
 }

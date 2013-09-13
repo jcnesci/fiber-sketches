@@ -1,4 +1,8 @@
+var _layout_type = "tree"
 function layoutDevices(type) {
+	if(!type) type = _layout_type;
+	_layout_type = type;
+
 	// Fade everything out
 	$.each(devices, function(index, device) {
 		device.el.stop();
@@ -63,7 +67,7 @@ function layoutDevices(type) {
 			break;
 		case "tree":
 			// Place root node
-			devices[0].el.fadeIn(500).animate({
+			devices[0].el.fadeIn({duration: 300, queue: false}).animate({
 				top: 0,
 				left: $(document).width() / 2 - devices[0].size.width / 2
 			}, {
@@ -72,7 +76,7 @@ function layoutDevices(type) {
 				}
 			});
 
-			treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height);
+			treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height, false);
 
 			break;
 
@@ -89,13 +93,15 @@ function layoutDevices(type) {
 				top: $(window).height()/2-devices[0].size.height/2,
 				left: $(window).width()/2-devices[0].size.width/2
 			}, function() {
-				runTinyPhysics();
+				runTinyPhysics(false);
 			});
 			break;
 	}
 }
 
-function treePlace(root, start_x, start_y) {
+function treePlace(root, start_x, start_y, hidden) {
+	if(!root.expanded) hidden = true;
+
 	// Used to recursively place nodes in a tree
 	var children = [];
 
@@ -109,22 +115,54 @@ function treePlace(root, start_x, start_y) {
 
 	// Put each child in its place
 	$.each(children, function(index, device) {
-		var x = (index + 1/2 - children.length / 2) * root.size.width;
-		device.el.fadeIn(500).animate({
-			top: start_y,
-			left: start_x + x
-		}, {
-			step: function(n) {
-				device.update();
+		if(hidden) {
+			//device.el.addClass("invisible");
+			device.el.animate({
+				top: root.el.offset().top,
+				left: root.el.offset().left
+			}, {
+				step: function(n) {
+					device.update();
+				}
+			}).fadeOut({duration: 300, complete: function() {
+				// Fade out connectors
+				$.each(device.connections, function(index, connection) {
+					connection.el.fadeOut(300);
+				});
+			}});
+		}
+		else {
+			var x = (index + 1/2 - children.length / 2) * root.size.width;
+
+			// Fade in connectors
+			$.each(device.connections, function(index, connection) {
+				connection.el.fadeIn(300);
+			});
+
+			// Move device into place
+			if(!device.el.is(":visible")) {
+				device.el.css('display', 'block');
+				device.el.css('opacity', 0);
+				device.el.offset(root.el.offset());
 			}
-		});
+
+			device.el.animate({
+				opacity: 1,
+				top: start_y,
+				left: start_x + x
+			}, {
+				step: function(n) {
+					device.update();
+				}
+			});
+		}
 		// Call treePlace on each child
-		treePlace(device, start_x + x, start_y + root.size.height);
+		treePlace(device, start_x + x, start_y + root.size.height, hidden);
 
 	});
 }
 
-function runTinyPhysics() {
+function runTinyPhysics(snapToGrid) {
 	// TUNING PARAMETERS
 	// -------------------------------------------------------------------------------------------------------
 	var SPRING_K = 0.1;		// Spring force constant
@@ -133,6 +171,8 @@ function runTinyPhysics() {
 	var BOUNDARY_K = 10; 	// Repulsion force to keep everything constrained to the screen
 	var DAMPING = 0.5;		// Percent of velocity to retain between steps (higher numbers are bouncier)
 	var STEPS = 500;		// Steps to run towards convergence. Higher numbers are slower but more stable.
+	var GRID_K = 0.1;		// Force to pull things towards grid points
+	var GRID_SIZE = 100;		// Size of grid units
 
 
 	// Set target to current position
@@ -169,6 +209,16 @@ function runTinyPhysics() {
 			if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
 			if(device.target[0] < 0)					 					 F[0] += BOUNDARY_K;
 			if(device.target[1] < 1)					 					 F[1] += BOUNDARY_K;
+
+			if(snapToGrid) {
+				// Calculate force to snap things to grid
+				// First, find the nearest grid point
+				var grid_x = Math.floor(device.target[0] / GRID_SIZE) * GRID_SIZE;
+				var grid_y = Math.floor(device.target[1] / GRID_SIZE) * GRID_SIZE;
+				var v = [device.target[0] - grid_x, device.target[1] - grid_y];
+				F[0] -= v[0] * GRID_K;
+				F[1] -= v[1] * GRID_K;
+			}
 
 
 			// Add (force/mass = accelration) to velocity
