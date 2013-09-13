@@ -9,6 +9,14 @@ body {
 #controller {
 	z-index: 1000;
 	width: 200px;
+	position: relative;
+}
+
+#container {
+	z-index: 0;
+	position: absolute;
+	left:0;
+	top:0;
 }
 
 .button {
@@ -35,6 +43,59 @@ body {
 	background-color: rgba(255,255,255,0.5);
 }
 
+.device:hover {
+	cursor: pointer;
+}
+
+#icon_palette .device {
+	position: relative;
+	display: block;
+	height: 100px;
+	margin-left: -10px;
+}
+
+.dragging {
+	pointer-events:none;
+}
+
+#icon_palette .device.dragging {
+    background-color: transparent;
+    opacity: 0.5;
+}
+
+#icon_palette {
+	/*
+	height: 300px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	*/
+}
+
+.palette {
+	width: 180px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid black;
+	padding: 10px;
+	margin-top: 2em;
+	background-color: rgba(255,255,255,0.75);
+}
+.palette h2 {
+	margin-top: 0;
+}
+
+.palette .ip {
+	background-color: rgba(200,200,200,0.5);
+	margin-bottom: 2px;
+	margin-top: 2px;
+	text-align: center;
+	font-weight: lighter;
+}
+
+.palette .ip:hover {
+	cursor: pointer;
+}
+
 .shaded {
 	background-color: rgba(200,200,200,0.5);
 }
@@ -44,6 +105,11 @@ body {
 	text-align: center;
 }
 
+.device .name:hover {
+	cursor: text;
+	background-color: rgba(200,200,200,0.5);
+}
+
 .device .icon {
 	width: 128px;
 	height: 128px;
@@ -51,26 +117,81 @@ body {
 	margin-right: auto;
 }
 
+.device input {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	font-family: "Open Sans", sans-serif;
+	font-weight: lighter;
+	font-size: 100%;
+	background-color: rgba(200,200,200,0.5);
+	border: 0;
+}
+
 .networkbox .icon  {
 	background-image: url(images/device-networkbox.png);
 }
+.networkbox .info {
+	margin-top: -40px;
+}
+
 .laptop .icon  {
 	background-image: url(images/device-laptop.png);
 }
+
+.laptop .info {
+	margin-top: -30px;
+}
+
 .phone .icon  {
 	background-image: url(images/device-phone.png);
 }
+.phone .info {
+	margin-top: -30px;
+}
+
 .storage .icon  {
 	background-image: url(images/device-storage.png);
 }
+.storage .info {
+	margin-top: -40px;
+}
+
 .router .icon  {
 	background-image: url(images/device-storage.png);
 }
+.router .info {
+	margin-top: -40px;
+}
+
 .tv .icon  {
 	background-image: url(images/device-tv.png);
 }
+.tv .info {
+	margin-top: -10px;
+}
+
 .tvbox .icon  {
 	background-image: url(images/device-tvbox.png);
+}
+.tvbox .info {
+	margin-top: -40px;
+}
+
+.device .status {
+	display: none;
+	width: 75%;
+	margin-left: auto; margin-right: auto;
+	font-weight: lighter;
+	font-style: italic;
+	font-size: 75%;
+	padding: 5px;
+	background: rgba(200,200,200, 0.6);
+}
+
+.device.highlight {
+	background-color: rgba(200,200,200,0.5);
 }
 
 .collapsed { 

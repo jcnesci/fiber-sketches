@@ -7,6 +7,8 @@ function Device(name, type) {
 	this.id = Device.count++;
 
 	this.expanded = true;
+	this.ip = "192.168.0." + (this.id+1);
+	this.static_ip = false;
 
 	this.connections = [];
 	this.n_children = 0;
@@ -27,7 +29,7 @@ Device.count = 0;
 Device.prototype = {
 	addToDom: function() {
 		// Create an element and add it to the DOM
-		this.el = $("<div><div class='badge'>0</div><div class='icon'></div><div class='name'>" + this.name + "</div></div>");
+		this.el = $("<div><div class='badge'>0</div><div class='icon'></div><div class='info'><div class='name'>" + this.name + "</div><div class='status'></div></div></div>");
 		this.el.addClass("device " + this.type + " invisible") // Start hidden
 		this.el.attr("id", "device_" + this.id);
 		this.el.offset(this.anchor);	
@@ -41,6 +43,34 @@ Device.prototype = {
 	},
 	hide: function() {
 		this.el.fadeOut(500);
+	},
+	changeType: function(t) {
+		//if(t == this.type) return;
+
+		var thisthis = this;
+		this.el.find(".icon").fadeOut({duration: 200, complete: function() {
+			thisthis.el.removeClass(thisthis.type);
+			thisthis.el.addClass(t);
+			thisthis.el.find(".icon").fadeIn({duration: 200});
+			thisthis.type = t;
+		}});
+	},
+	highlight: function(state) {
+		if(state == true) {
+			this.el.addClass("highlight");
+		}
+		else {
+			this.el.removeClass("highlight");
+		}
+	},
+	toggleStatus: function() {
+		var stat = this.el.find(".status");
+		if(stat.is(":visible"))
+			stat.slideUp();
+		else {
+			this.buildStatus();
+			stat.slideDown();		
+		}
 	},
 	update: function() {
 		if(this.el) {
@@ -65,9 +95,41 @@ Device.prototype = {
 		}
 		this.el.find(".badge").text(this.n_children);
 	},
+	buildStatus: function() {
+		this.el.find(".status").html("STATUS: ONLINE<br />IP " + (this.static_ip ? "(static)" : "(DHCP)") + ": <div class='ip_slot'>" + this.ip + "</div>");
+	},
 	toggleCollapsed: function() {
 		this.expanded = !this.expanded;
 		this.update();
+	},
+	editName: function(state) {
+		if(state == true) {
+			var name_el = this.el.find(".name");
+			name_el.after("<input type='text' class='edit_name' />");
+			var edit_el = this.el.find(".edit_name");
+
+			name_el.hide();
+
+			edit_el.attr("value", this.name);
+			edit_el.focus();
+
+			var thisthis = this;
+			edit_el.blur(function() {
+				thisthis.editName(false);
+			});
+			edit_el.keydown(function(event) {
+				if(event.keyCode == 13)
+					thisthis.editName(false);
+			});
+		}
+		if(state == false) {
+			this.name = this.el.find(".edit_name").val();
+			console.log(this);
+			console.log(this.name);
+			this.el.find(".name").text(this.name);
+			this.el.find(".edit_name").hide();
+			this.el.find(".name").show();
+		}
 	},
 	distanceTo: function(b) {
 		var dx = b.anchor.left - this.anchor.left;

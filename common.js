@@ -23,17 +23,17 @@ function toggleConnectors(indicator) {
 		conn.changeShape(Connection.shapes[current_connection_style % Connection.shapes.length]);
 	});
 }
+function setConnectorStyle(shape) {
+	$.each(connections, function(index, conn) {
+		conn.changeShape(shape);
+	});	
+}
 
 function buildSketchList() {
 	var sketches = [
-		{
-			name: "Layout Options",
-			file: "layout-options.html"
-		},
-		{
-			name: "Collapsed Nodes",
-			file: "collapsed-nodes.html"
-		},		
+		{ name: "Layout Options",		file: "layout-options.html"	},
+		{ name: "Collapsed Nodes",		file: "collapsed-nodes.html" },		
+		{ name: "Drag-and-Drop",		file: "drag-and-drop.html" },		
 	];
 	var listEl = $("#sketchList");
 	listEl.append("<h2>SKETCHES:</h2>");

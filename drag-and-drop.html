@@ -22,11 +22,16 @@ var personal_devices = [];	// Computers/laptops and mobile devices
 var routing_devices = []; 	// Network boxes, tv boxes, or other routers/switches
 var connections = [];
 
+// Drag-and-drop specific stuff
+var dragging = null; // item that is being dragged
+var hovering = null; // item currently hovering over
+
+
 $(document).ready(function() {
 	$("#svg_container").svg();	// Initialize the SVG canvas
 
 	populateDevices();
-	layoutDevices("physics");
+	layoutDevices("tree");
 
 });
 
@@ -49,8 +54,8 @@ function populateDevices() {
 	routing_devices.push(devices[0]);
 	devices[0].mass = 100;
 
-	var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
-	var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
+	var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah"];
+	var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs"]
 	var n_personal_devices = Math.round(Math.random() * 8 + 2);
 	var n_tv_devices = Math.round(Math.random() * 3);
 
@@ -100,23 +105,113 @@ function populateDevices() {
 		var type = Math.random() < 0.5 ? "wired" : "wireless";
 		connections.push(new Connection(router, device, type, 1));	
 	});
+
+	// Assign drop event handler for each device
+	$.each(devices, function(index, device) {
+		device.el.mouseup((function(dev) { return function() {
+			// DROPPED
+			if(dragging != null) {
+				if($(dragging).hasClass("device"))
+					dev.changeType($(dragging).data("type"));	
+				else if($(dragging).hasClass("ip")) {
+					dev.ip = $(dragging).text();
+					dev.static_ip = true;
+					dev.toggleStatus();
+
+					//$(dragging).appendTo(dev.el.find(".ip_slot"));
+					$(dragging).remove();
+				}
+				dev.highlight(false);
+			}
+		} })(device));
+
+		device.el.mouseenter((function(dev) { return function(ev) {
+			if(dragging != null) {
+				dev.highlight(true);	
+			}
+		} })(device));
+		device.el.mouseleave((function(dev) { return function(ev) {
+			if(dragging != null) {
+				dev.highlight(false);	
+			}
+		} })(device));
+
+		device.el.find(".name").click((function(dev) { return function(ev) {
+			dev.editName(true);
+			return true;
+		}})(device));
+
+		
+
+		device.el.find(".icon").click((function(dev) { return function(ev) {
+			dev.toggleStatus();
+			return true;
+		}})(device));
+		
+	});
+	// Clear dragging when mouseup anywhere else
+	$(document).mouseup(function() {
+		$(dragging).removeAttr("style");
+		$(dragging).removeClass("dragging");
+
+		dragging = null;
+		//return false;
+	});
+
+	// Assign drag handlers for icon palette items
+	$.each($("#icon_palette > .device"), function(item, el) {
+		$(el).mousedown(function() {
+			dragging = this;
+			return false;
+		});		
+
+	});
+
+	// Assign drag handlers for static IP address items
+	$.each($("#ip_palette > .ip"), function(item, el) {
+		$(el).mousedown(function() {
+			dragging = this;
+			return false;
+		});		
+
+	});
+
+	$(document).mousemove(function(ev) {
+		if(!dragging) return true;
+		else {
+			var w = $(dragging).width();
+			var h = $(dragging).height();
+			$(dragging).offset({left: ev.pageX-w/2, top: ev.pageY-h/2});
+			$(dragging).addClass("dragging");
+		}
+		return true;
+	});
+
+	setConnectorStyle("90s");
 }
 
 
 </script>
 <div id="sketchList"></div>
-
 <div id="controller">
 	<h2>OPTIONS:</h2>
-	<div class="button" onClick="layoutDevices('random')">Random</div>
-	<div class="button" onClick="layoutDevices('random grid')">Random Grid</div>
-	<div class="button" onClick="layoutDevices('tree')">Tree</div>
-	<div class="button" onClick="layoutDevices('physics')">Physics</div>
-	<br /><br />
-	<div class="button" onClick="toggleShading(this)">Toggle cells</div>
+	<div class="button" onClick="populateDevices(); layoutDevices()">New Network</div>
 	<div class="button" onClick="toggleConnectors(this)">Toggle connector style</div>
-	<br /><br />
-	<div class="button" onClick="populateDevices(); layoutDevices('physics')">New Network</div>
+	<div id="icon_palette" class="palette">
+		<h2>ICONS:</h2>
+		<div class="device laptop" data-type="laptop"><div class="icon"></div></div>
+		<div class="device router" data-type="router"><div class="icon"></div></div>
+		<div class="device tv" data-type="tv"><div class="icon"></div></div>
+		<div class="device phone" data-type="phone"><div class="icon"></div></div>
+	</div>
+	<div id="ip_palette" class="palette">
+		<h2>STATIC IPs:</h2>
+		<div class="ip">64.233.160.0</div>
+		<div class="ip">64.233.160.1</div>
+		<div class="ip">64.233.160.2</div>
+		<div class="ip">64.233.160.3</div>
+		<div class="ip">64.233.160.4</div>
+	</div>	
 </div>
 
 <div id="container">
