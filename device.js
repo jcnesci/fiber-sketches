@@ -34,6 +34,9 @@ Device.prototype = {
 		this.el.attr("id", "device_" + this.id);
 		this.el.offset(this.anchor);	
 		$("#container").append(this.el);
+
+		var thisthis = this;
+		this.el.find(".name").click(function() { thisthis.editName(true);});
 	},
 	moveTo: function(pos) {
 

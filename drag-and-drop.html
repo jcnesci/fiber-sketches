@@ -135,12 +135,6 @@ function populateDevices() {
 				dev.highlight(false);	
 			}
 		} })(device));
-
-		device.el.find(".name").click((function(dev) { return function(ev) {
-			dev.editName(true);
-			return true;
-		}})(device));
-
 		
 
 		device.el.find(".icon").click((function(dev) { return function(ev) {
