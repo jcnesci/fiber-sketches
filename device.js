@@ -85,6 +85,8 @@ Device.prototype = {
 
 			this.anchor = {left: e.offset().left + e.width() / 2,
 						   top: e.offset().top + e.height() / 2};
+		   // this.anchor = {left: e.position().left + e.width() / 2,
+					// 	   top: e.position().top + e.height() / 2};
 
 			// Set class based on whether this is expanded or not
 			if(this.expanded) this.el.removeClass("collapsed");

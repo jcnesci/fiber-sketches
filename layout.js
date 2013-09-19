@@ -111,6 +111,13 @@ function layoutDevices(type) {
 				}, 10);
 			});
 
+			console.log('win.height------ ' + $(window).height());
+			console.log('win.width------ ' + $(window).width());
+			console.log('devices[0].size.height------ ' + devices[0].size.height);
+			console.log('devices[0].size.width------ ' + devices[0].size.width);
+			console.log('container.height------ ' + $('#container').height());
+			console.log('container.width------ ' + $('#container').width());
+
 			devices[0].el.animate({
 				// top: $(window).height()/2-devices[0].size.height/2,
 				// left: $(window).width()/2-devices[0].size.width/2
@@ -143,8 +150,10 @@ function treePlace(root, start_x, start_y, hidden) {
 		if(hidden) {
 			//device.el.addClass("invisible");
 			device.el.animate({
-				top: root.el.offset().top,
-				left: root.el.offset().left
+				//dev_jc_19/09/2013_b : fix animation of collapsing nodes back to parent properly (with new container they would animate towards the side of the screen)
+				// replaced offset() with position()
+				top: root.el.position().top,
+				left: root.el.position().left
 			}, {
 				step: function(n) {
 					device.update();
@@ -202,8 +211,13 @@ function runTinyPhysics(snapToGrid) {
 
 	// Set target to current position
 	$.each(devices, function(index, device) {
-		device.target = [device.el.offset().left, device.el.offset().top];
-
+		// dev_jc_19/09/2013_a : replace offset with position to place items within the container.
+		// device.target = [device.el.offset().left, device.el.offset().top];
+		device.target = [device.el.position().left, device.el.position().top];
+		// console.log('runTinyPhysics----- device.el.offset().left = ' + device.el.offset().left);
+		// console.log('runTinyPhysics----- device.el.offset().top = ' + device.el.offset().top);
+		// console.log('runTinyPhysics----- device.el.position().left = ' + device.el.position().left);
+		// console.log('runTinyPhysics----- device.el.position().top = ' + device.el.position().top);
 	});
 	for(var step = 0; step<STEPS; step++) {
 		$.each(devices, function(index, device) {
@@ -230,11 +244,11 @@ function runTinyPhysics(snapToGrid) {
 			});
 
 			// Calculate force to keep device on screen
-			// if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= BOUNDARY_K;
-			// if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
+			if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= BOUNDARY_K;
+			if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
 			//dev_jc_17/09/2013_a
-			if(device.target[0] + device.size.width > $('#container').width()) 	 F[0] -= BOUNDARY_K;
-			if(device.target[1] + device.size.height > $('#container').height()) 	 F[1] -= BOUNDARY_K;
+			// if(device.target[0] + device.size.width > $('#container').width()) 	 F[0] -= BOUNDARY_K;
+			// if(device.target[1] + device.size.height > $('#container').height()) 	 F[1] -= BOUNDARY_K;
 			if(device.target[0] < 0)					 					 F[0] += BOUNDARY_K;
 			if(device.target[1] < 1)					 					 F[1] += BOUNDARY_K;
 

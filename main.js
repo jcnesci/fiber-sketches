@@ -11,12 +11,16 @@ var hovering = null; // item currently hovering over
 $(document).ready(function() {
   $("#svg_container").svg();  // Initialize the SVG canvas
 
+  $("#controller").hide();
+
   populateDevicesDefault();
   layoutDevices("tree");
 
 });
 
 function populateDevicesDefault() {
+  $("#controller").hide();
+
   // Clear out old lists. TODO: Make sure circular references are broken, too
   $.each(devices, function(index, device) {
     device.die();
@@ -30,6 +34,7 @@ function populateDevicesDefault() {
   personal_devices.length = 0;
   routing_devices.length = 0;
   connections.length = 0;
+  bool_add_last = false;
 
   // Create 1 Network Box
   devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
@@ -65,8 +70,11 @@ function populateDevicesDefault() {
     // Connect TV Box to Network Box
     // if we have 2 TV Boxes, add the second one after all personal devices, to the right completely.
     if ( i === 1 ) {
+      console.log('--------HELLO 1')
       bool_add_last = true;
     } else {
+      bool_add_last = false;
+      console.log('--------HELLO 0')
       connections.push(new Connection(devices[0], box_device, "wired", 1));
     }
 
@@ -125,12 +133,89 @@ function populateDevicesDefault() {
     connections.push(new Connection(devices[0], personal_device, connection_type, 1));
   }
   
+
   if (bool_add_last === true) {
+    console.log('--------HELLO 2')
     connections.push(new Connection(devices[0], box_device, "wired", 1));
   }
 }
 
+// Sam's original function
+function populateDevicesOriginal() {
+  // Clear out old lists. TODO: Make sure circular references are broken, too
+  $.each(devices, function(index, device) {
+    device.die();
+  });
+
+  $.each(connections, function(index, connection) {
+      connection.die();
+  });
+
+  devices.length = 0;
+  personal_devices.length = 0;
+  routing_devices.length = 0;
+  connections.length = 0;
+
+  devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
+  routing_devices.push(devices[0]);
+  devices[0].mass = 100;
+
+  var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
+  var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
+  var n_personal_devices = Math.round(Math.random() * 8 + 2);
+  var n_tv_devices = Math.round(Math.random() * 3);
+
+  // Create personal devices (phones, laptops, etc)
+  for(var i=0; i<n_personal_devices; i++) {
+    var type = Math.random() < 0.5 ? "phone" : "laptop";
+    var propertype = type.charAt(0).toUpperCase() + type.slice(1);
+
+    var unique_name = false;
+    var name = ""; 
+    while(!unique_name) {
+      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      // Check all devices to see if this name is taken
+      var taken = false;
+      for(var j=0; j<devices.length; j++) {
+        if(devices[j].name == name) taken = true;
+      }
+      if(!taken) unique_name = true;
+    }
+
+    var dev = new Device(name, type);
+    devices.push(dev);
+    personal_devices.push(dev);
+  }
+
+  // Create TV devices which always come in a pairs with a TV box
+  for(var i=0; i<n_tv_devices; i++) {
+    var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
+    var box_device = new Device(room + " TV Box", "tvbox");
+    var tv_device = new Device(room + " TV", "tv");
+    devices.push(box_device);
+    routing_devices.push(box_device);
+    devices.push(tv_device);
+
+    // Connect TVs to TV Box
+    connections.push(new Connection(box_device, tv_device, "wired", 1));
+
+    // Connect TV Box to Network Box
+    connections.push(new Connection(devices[0], box_device, "wired", 1));
+  }
+
+
+  // Connect each device to a router
+  $.each(personal_devices, function(index, device) {
+    var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
+
+    var type = Math.random() < 0.5 ? "wired" : "wireless";
+    connections.push(new Connection(router, device, type, 1));  
+  });
+}
+
 function populateDevicesCollapsedNodes() {
+  $("#controller").hide();
+
   // Break references of old devices
   $.each(devices, function(index, device) {
     device.die();
@@ -184,7 +269,23 @@ function populateDevicesCollapsedNodes() {
       box_device.expanded = false;  // Start off closed
 
       // Same as above. Closures are weird.
-      box_device.el.click((function(dev) { return function() { dev.toggleCollapsed(); layoutDevices('tree'); } })(box_device));
+      box_device.el.click((function(dev) { return function() { 
+        // dev_jc_19/09/2013_c :
+        // if opening this node, close other open nodes first
+        if ( dev.expanded === false ) {
+          $.each(routing_devices, function(index, other_dev) {
+            if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
+              other_dev.expanded = false;
+              other_dev.update();
+            }
+          });
+        }
+
+        // open this
+        dev.toggleCollapsed(); 
+        layoutDevices('tree'); 
+
+      } })(box_device));
 
       devices.push(box_device);
       routing_devices.push(box_device);
@@ -220,7 +321,6 @@ function populateDevicesCollapsedNodes() {
     personal_devices.push(dev);
   }
 
-
   // Connect each device to a router
   $.each(personal_devices, function(index, device) {
     //var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
@@ -238,6 +338,8 @@ function populateDevicesCollapsedNodes() {
 }
 
 function populateDevicesDragAndDrop() {
+  $("#controller").show();
+
   // Clear out old lists. TODO: Make sure circular references are broken, too
   $.each(devices, function(index, device) {
     device.die();
