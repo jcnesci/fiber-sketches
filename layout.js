@@ -9,12 +9,22 @@ function layoutDevices(type) {
 		//device.hide();
 		device.update();
 	});
+	
 	switch (type) {
 		case "random":
 			$.each(devices, function(index, device) {
+				
+				//dev_jc_17/09/2013_a
+				// positions devices very far from container edges, thats because the size of device is set to 200px by default....
+				var iUsableHalfHeight = $('#container').height()/2 - device.size.height/2;
+				var iUsableHalfWidth = $('#container').width()/2 - device.size.width/2;
+
 				device.el.fadeIn(500).animate({
-					top: $(document).height()/2 - device.size.height / 2 + random(-500, 500),
-					left: $(document).width()/2 - device.size.width / 2 + random(-500, 500),
+					// top: $(document).height()/2 - device.size.height / 2 + random(-500, 500),
+					// left: $(document).width()/2 - device.size.width / 2 + random(-500, 500),
+					//dev_jc_17/09/2013_a
+					top: iUsableHalfHeight + random( -iUsableHalfHeight, iUsableHalfHeight ),
+					left: iUsableHalfWidth + random( -iUsableHalfWidth, iUsableHalfWidth ),
 				}, {
 					step: function(n) {
 						device.update();
@@ -54,9 +64,17 @@ function layoutDevices(type) {
 				var x = (target_j - grid_width/2 + 1/2) * grid_interval;
 				var y = (target_i - grid_height/2 + 1/2) * grid_interval;
 
+				//dev_jc_17/09/2013_a
+				// positions devices very far from container edges, thats because the size of device is set to 200px by default....
+				var iUsableHalfHeight = $('#container').height()/2 - device.size.height/2;
+				var iUsableHalfWidth = $('#container').width()/2 - device.size.width/2;
+
 				device.el.fadeIn(500).animate({
-					top: $(document).height()/2 - device.size.height / 2 + y,
-					left: $(document).width()/2 - device.size.width / 2 + x,
+					// top: $(document).height()/2 - device.size.height / 2 + y,
+					// left: $(document).width()/2 - device.size.width / 2 + x,
+					//dev_jc_17/09/2013_a
+					top: iUsableHalfHeight + random( -iUsableHalfHeight, iUsableHalfHeight ),
+					left: iUsableHalfWidth + random( -iUsableHalfWidth, iUsableHalfWidth ),
 				}, {
 					step: function(n) {
 						device.update();
@@ -69,14 +87,18 @@ function layoutDevices(type) {
 			// Place root node
 			devices[0].el.fadeIn({duration: 300, queue: false}).animate({
 				top: 0,
-				left: $(document).width() / 2 - devices[0].size.width / 2
+				//left: $(document).width() / 2 - devices[0].size.width / 2
+				//dev_jc_17/09/2013_a
+				left: $('#container').width() / 2 - devices[0].size.width / 2
 			}, {
 				step: function(n) {
 					devices[0].update();
 				}
 			});
 
-			treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height, false);
+			// treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height, false);
+			//dev_jc_17/09/2013_a
+			treePlace(devices[0], $('#container').width() / 2 - devices[0].size.width / 2, devices[0].size.height, false);
 
 			break;
 
@@ -90,8 +112,11 @@ function layoutDevices(type) {
 			});
 
 			devices[0].el.animate({
-				top: $(window).height()/2-devices[0].size.height/2,
-				left: $(window).width()/2-devices[0].size.width/2
+				// top: $(window).height()/2-devices[0].size.height/2,
+				// left: $(window).width()/2-devices[0].size.width/2
+				//dev_jc_17/09/2013_a
+				top: $('#container').height()/2-devices[0].size.height/2,
+				left: $('#container').width()/2-devices[0].size.width/2
 			}, function() {
 				runTinyPhysics(false);
 			});
@@ -205,8 +230,11 @@ function runTinyPhysics(snapToGrid) {
 			});
 
 			// Calculate force to keep device on screen
-			if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= BOUNDARY_K;
-			if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
+			// if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= BOUNDARY_K;
+			// if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
+			//dev_jc_17/09/2013_a
+			if(device.target[0] + device.size.width > $('#container').width()) 	 F[0] -= BOUNDARY_K;
+			if(device.target[1] + device.size.height > $('#container').height()) 	 F[1] -= BOUNDARY_K;
 			if(device.target[0] < 0)					 					 F[0] += BOUNDARY_K;
 			if(device.target[1] < 1)					 					 F[1] += BOUNDARY_K;
 

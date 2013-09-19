@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Google Fiber Prototypes</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/sketches.css">
+    <script src="jquery-1.10.2.js"></script>
+    <script src="jquery-svg/jquery.svg.js"></script>
+    <script src="jquery-svg/jquery.svgdom.js"></script>
+    <script src="main.js"></script>
+    <script src="device.js"></script>
+    <script src="connection.js"></script>
+    <script src="layout.js"></script>
+    <script src="common.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Navigation Menu -->
+    <ul id="menu">
+      <li class="logo"><a href="index.html"><img src="https://fiber.google.com/static/img/nav/logo.png" alt="Google Fiber">Home</a></li>
+      <li>
+        <a href="#">Layouts</a>
+        <ul>
+          <li><a href="#" onClick="layoutDevices('tree')">Tree</a></li>
+          <li><a href="#" onClick="layoutDevices('random')">Random</a></li>
+          <li><a href="#" onClick="layoutDevices('random grid')">Random Grid</a></li>
+          <li><a href="#" onClick="layoutDevices('physics')">Physics</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Features</a>
+        <ul>
+          <li><a href="#" onClick="populateDevicesCollapsedNodes(); layoutDevices('tree')">Collapsed Nodes</a></li>
+          <li><a href="#" onClick="populateDevicesDragAndDrop(); layoutDevices('tree')">Drag-and-Drop</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Options</a>
+        <ul>
+          <li><a href="#" onClick="toggleShading(this)">Toggle Cells</a></li>
+          <li><a href="#" onClick="toggleConnectors(this)">Toggle Connector Style</a></li>
+          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('tree')">New Network</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- Sketch Content -->
+    <!-- <div id="sketchList"></div>
+    <div id="controller">
+      <h2>OPTIONS:</h2>
+      <div class="button" onClick="layoutDevices('random')">Random</div>
+      <div class="button" onClick="layoutDevices('random grid')">Random Grid</div>
+      <div class="button" onClick="layoutDevices('tree')">Tree</div>
+      <div class="button" onClick="layoutDevices('physics')">Physics</div>
+      <br /><br />
+      <div class="button" onClick="toggleShading(this)">Toggle cells</div>
+      <div class="button" onClick="toggleConnectors(this)">Toggle connector style</div>
+      <br /><br />
+      <div class="button" onClick="populateDevices(); layoutDevices('physics')">New Network</div>
+    </div> -->
+
+    <div id="container">
+
+    </div>
+    <div id="svg_container"></div>
+
+  </body>
+</html>
+

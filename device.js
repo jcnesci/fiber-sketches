@@ -3,7 +3,7 @@
 function Device(name, type) {
 	this.name = name;
 	this.type = type;
-	this.size = {width: 200, height: 200}
+	this.size = {width: 200, height: 200};
 	this.id = Device.count++;
 
 	this.expanded = true;
@@ -14,8 +14,11 @@ function Device(name, type) {
 	this.n_children = 0;
 
 	this.anchor = {
-		"left": ($(document).width() / 2 - this.size.width / 2),
-		"top": ($(document).height() / 2 - this.size.height / 2) 
+		// "left": ($(document).width() / 2 - this.size.width / 2),
+		// "top": ($(document).height() / 2 - this.size.height / 2)
+		//dev_jc_17/09/2013_a
+		"left": ($('#container').width() / 2 - this.size.width / 2),
+		"top": ($('#container').height() / 2 - this.size.height / 2)
 	}
 
 	// Physics properties
@@ -78,7 +81,6 @@ Device.prototype = {
 	update: function() {
 		if(this.el) {
 			// Update anchor position based on actual icon position
-
 			var e = this.el.find(".icon");
 
 			this.anchor = {left: e.offset().left + e.width() / 2,
@@ -96,6 +98,7 @@ Device.prototype = {
 			this.connections[i].update();
 			if(this.connections[i].a == this) this.n_children++;
 		}
+		// display number of children nodes in this element's badge
 		this.el.find(".badge").text(this.n_children);
 	},
 	buildStatus: function() {

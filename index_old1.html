@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Google Fiber Prototypes</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/sketches.css">
+    <script src="jquery-1.10.2.js"></script>
+    <script src="jquery-svg/jquery.svg.js"></script>
+    <script type="text/javascript" src="jquery-svg/jquery.svgdom.js"></script>
+    <script src="device.js"></script>
+    <script src="connection.js"></script>
+    <script src="layout.js"></script>
+    <script src="common.js"></script>
+
+    <script>
+    var devices = [];     // All devices
+    var personal_devices = [];  // Computers/laptops and mobile devices
+    var routing_devices = [];   // Network boxes, tv boxes, or other routers/switches
+    var connections = [];
+
+    $(document).ready(function() {
+      $("#svg_container").svg();  // Initialize the SVG canvas
+
+      populateDevices();
+      layoutDevices("random");
+
+    });
+
+    function populateDevices() {
+      // Clear out old lists. TODO: Make sure circular references are broken, too
+      $.each(devices, function(index, device) {
+        device.die();
+      });
+
+      $.each(connections, function(index, connection) {
+          connection.die();
+      });
+
+      devices.length = 0;
+      personal_devices.length = 0;
+      routing_devices.length = 0;
+      connections.length = 0;
+
+      devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
+      routing_devices.push(devices[0]);
+      devices[0].mass = 100;
+
+      var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
+      var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
+      var n_personal_devices = Math.round(Math.random() * 8 + 2);
+      var n_tv_devices = Math.round(Math.random() * 3);
+
+      // Create personal devices (phones, laptops, etc)
+      for(var i=0; i<n_personal_devices; i++) {
+        var type = Math.random() < 0.5 ? "phone" : "laptop";
+        var propertype = type.charAt(0).toUpperCase() + type.slice(1);
+
+        var unique_name = false;
+        var name = ""; 
+        while(!unique_name) {
+          name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+          // Check all devices to see if this name is taken
+          var taken = false;
+          for(var j=0; j<devices.length; j++) {
+            if(devices[j].name == name) taken = true;
+          }
+          if(!taken) unique_name = true;
+        }
+        
+        var dev = new Device(name, type);
+        devices.push(dev);
+        personal_devices.push(dev);
+      }
+
+      // Create TV devices which always come in a pairs with a TV box
+      for(var i=0; i<n_tv_devices; i++) {
+        var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
+        var box_device = new Device(room + " TV Box", "tvbox");
+        var tv_device = new Device(room + " TV", "tv");
+        devices.push(box_device);
+        routing_devices.push(box_device);
+        devices.push(tv_device);
+
+        // Connect TVs to TV Box
+        connections.push(new Connection(box_device, tv_device, "wired", 1));
+
+        // Connect TV Box to Network Box
+        connections.push(new Connection(devices[0], box_device, "wired", 1));
+      }
+
+
+      // Connect each device to a router
+      $.each(personal_devices, function(index, device) {
+        var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
+
+        var type = Math.random() < 0.5 ? "wired" : "wireless";
+        connections.push(new Connection(router, device, type, 1));  
+      });
+    }
+    </script>
+  </head>
+
+  <body>
+
+    <!-- Navigation Menu -->
+    <ul id="menu">
+      <li class="logo"><a href="index.html"><img src="https://fiber.google.com/static/img/nav/logo.png" alt="Google Fiber">Home</a></li>
+      <li>
+        <a href="#">Layouts</a>
+        <ul>
+          <li><a href="#" onClick="layoutDevices('tree')">Tree</a></li>
+          <li><a href="#" onClick="layoutDevices('random')">Random</a></li>
+          <li><a href="#" onClick="layoutDevices('random grid')">Random Grid</a></li>
+          <li><a href="#" onClick="layoutDevices('physics')">Physics</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Features</a>
+        <ul>
+          <li><a href="#">Collapsed Nodes</a></li>
+          <li><a href="#">Drag-and-Drop</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Options</a>
+        <ul>
+          <li><a href="#" onClick="toggleShading(this)">Toggle Cells</a></li>
+          <li><a href="#" onClick="toggleConnectors(this)">Toggle Connector Style</a></li>
+          <li><a href="#" onClick="populateDevices(); layoutDevices('tree')">New Network</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- Sketch Content -->
+    <!-- <div id="sketchList"></div>
+    <div id="controller">
+      <h2>OPTIONS:</h2>
+      <div class="button" onClick="layoutDevices('random')">Random</div>
+      <div class="button" onClick="layoutDevices('random grid')">Random Grid</div>
+      <div class="button" onClick="layoutDevices('tree')">Tree</div>
+      <div class="button" onClick="layoutDevices('physics')">Physics</div>
+      <br /><br />
+      <div class="button" onClick="toggleShading(this)">Toggle cells</div>
+      <div class="button" onClick="toggleConnectors(this)">Toggle connector style</div>
+      <br /><br />
+      <div class="button" onClick="populateDevices(); layoutDevices('physics')">New Network</div>
+    </div> -->
+
+    <div id="container">
+
+    </div>
+    <div id="svg_container"></div>
+
+  </body>
+</html>
+
