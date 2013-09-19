@@ -10,8 +10,13 @@ var hovering = null; // item currently hovering over
 
 $(document).ready(function() {
   $("#svg_container").svg();  // Initialize the SVG canvas
-
-  $("#controller").hide();
+  $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
+  // to refresh SVG lines when window is resized
+  $( window ).resize(function() {
+    $.each(devices, function(index, device) {
+      device.update();
+    });
+  });
 
   populateDevicesDefault();
   layoutDevices("tree");
@@ -270,8 +275,7 @@ function populateDevicesCollapsedNodes() {
 
       // Same as above. Closures are weird.
       box_device.el.click((function(dev) { return function() { 
-        // dev_jc_19/09/2013_c :
-        // if opening this node, close other open nodes first
+        // dev_jc_19/09/2013_c : if opening this node, close other open nodes first
         if ( dev.expanded === false ) {
           $.each(routing_devices, function(index, other_dev) {
             if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
@@ -411,7 +415,9 @@ function populateDevicesDragAndDrop() {
   });
 
   // Assign drop event handler for each device
-  $.each(devices, function(index, device) {
+  // dev_jc_19/09/2013_c : make only personal device icons customizable by drag-n-dropping new icons over them.
+  // $.each(devices, function(index, device) {
+  $.each(personal_devices, function(index, device) {
     device.el.mouseup((function(dev) { return function() {
       // DROPPED
       if(dragging != null) {

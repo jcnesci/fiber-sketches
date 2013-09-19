@@ -29,6 +29,7 @@ function setConnectorStyle(shape) {
 	});	
 }
 
+// OLD
 function buildSketchList() {
 	var sketches = [
 		{ name: "Layout Options",		file: "layout-options.html"	},
