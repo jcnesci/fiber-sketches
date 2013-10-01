@@ -26,6 +26,19 @@ function Device(name, type) {
 	this.mass = 1;
 	this.target = [0,0];
 
+	// Advanced Settings Panel html content
+	this.advanced_settings = "<div class='icon "+ this.type + "'></div>"
+		+ "<h2>Advanced Settings</h2>" 
+		+ "<ul>"
+		+	"<li>Network SSID 				<span class='right_side'>NetworkName85</span></li>"
+		+	"<li>Password 					<span class='right_side'>password1204!</span></li>"
+		+	"<li>Status 					<span class='right_side'>Connected - 1000 mbps</span></li>"
+		+	"<li>Wireless Network 			<span class='right_side'>Enabled</span></li>"
+		+	"<li>Broadcast WiFi SSID 		<span class='right_side'>Disabled</span></li>"
+		+	"<li>Dynamic DNS 				<span class='right_side'>Disabled</span></li>"
+		+	"<li>DHCP Leases 				<span class='right_side'>Disabled</span></li>"
+		+ "</ul>";
+
 	this.addToDom();
 }
 Device.count = 0;
@@ -33,13 +46,76 @@ Device.prototype = {
 	addToDom: function() {
 		// Create an element and add it to the DOM
 		this.el = $("<div><div class='badge'>0</div><div class='icon'></div><div class='info'><div class='name'>" + this.name + "</div><div class='status'></div></div></div>");
-		this.el.addClass("device " + this.type + " invisible") // Start hidden
+		// dev_jc_29/09/2013_1
+		// this.el.addClass("device " + this.type + " invisible") // Start hidden
+		this.el.addClass("device " + this.type) // Start hidden
 		this.el.attr("id", "device_" + this.id);
 		this.el.offset(this.anchor);	
 		$("#container").append(this.el);
 
 		var thisthis = this;
 		this.el.find(".name").click(function() { thisthis.editName(true);});
+	},
+	// to show or hide details of a device in hovering pane on click
+	showDetails: function (b_show) {
+		console.log(b_show);
+		var current_panel = $(".device_advanced_panel");
+
+		if ( b_show === true ) {
+			// this.el.find(".name").show();		//OLD
+			
+			// If the Avanced settings panel doesn't already exist, create it with content for this device.
+			if ( !current_panel.length ) {
+				console.log("--- New advanced settings panel.");
+
+				var new_panel = $("<div />").addClass("device_advanced_panel " + this.id);		// attach device name to as class so we know what device the panel is for.
+				thisthis = this;
+				// Bug fix found online: must wait 1 clock cycle (accomplished by the 0ms delay here) so that jQuery can succesfully retrieve the width of this newly created element. Otherwise it returns zero.
+				setTimeout(function(){
+					new_panel.css({
+						"top": thisthis.el.offset().top - $("#container").offset().top,
+						"left": (thisthis.el.offset().left - $("#container").offset().left) + thisthis.el.width()/2 - new_panel.width()/2 				//DEV - PROBLEM: cant get the calculation right to left-align panel to the clicked device.
+					});
+				},0);
+				new_panel.html(this.advanced_settings);
+				new_panel.click(function() { thisthis.showDetails(false);});
+				new_panel.prependTo("#container");
+
+				console.log('Panel OFFSET: '+ new_panel.offset().top);
+				console.log('Panel POSITION: '+ new_panel.position().top);
+				console.log('This OFFSET: '+ this.el.offset().top);
+				console.log('This POSITION: '+ this.el.position().top);
+			} else {
+				// If it already exists, check if it contains the data for this device already.
+				if (current_panel.hasClass(this.id)) {
+					console.log("----- Has data already. Don't need to reload data.");
+				}
+				// If it doesn't, load the new data for this device.
+				else {
+					console.log("-------- Doesnt have Data already. Load new Data.");
+					thisthis = this;
+					setTimeout(function(){
+						current_panel.css({
+							"top": thisthis.el.offset().top - $("#container").offset().top,
+							"left": (thisthis.el.offset().left - $("#container").offset().left) + thisthis.el.width()/2 - current_panel.width()/2 				//DEV - PROBLEM: cant get the calculation right to left-align panel to the clicked device.
+						});
+					},0);
+					current_panel.html(this.advanced_settings);
+				}
+			}
+			current_panel.show();
+
+		} else if ( b_show === false ) {
+			// this.el.find(".name").hide();		//OLD
+			current_panel.hide();
+		}
+	},
+	showName: function (b_show) {
+		if ( b_show === true ) {
+			this.el.find(".name").show();
+		} else {
+			this.el.find(".name").hide();
+		}
 	},
 	moveTo: function(pos) {
 

@@ -21,7 +21,7 @@
 	background-image: linear-gradient(#FAFAFA, #F3F3F3);
 	box-shadow: 0 1px 1px #CCC;
 	position: relative;
-	z-index: 1000000;					/*even though the sketches will be limited to a container away from the menu, we guarantee it will be at the top-level with z-index.*/
+	z-index: 100000;					/*even though the sketches will be limited to a container away from the menu, we guarantee it will be at the top-level with z-index.*/
 }
 
 /* Clear Floats */
@@ -191,6 +191,93 @@ img {
 #menu ul li:last-child > a {
 	border-radius: 0 0 3px 3px;
 }
+
+/* Wireless Icon for Wireless Zone in 2 zone layout */
+#wireless_icon {
+	position: relative;
+	width: 140px;
+	height: 102px;
+	margin: 0 auto;
+	background-image: url(../images/wireless-icon.png);
+}
+
+/*Device advanced settings panel for 2 zone layout*/
+.device_advanced_panel {
+	position: absolute;
+	width: 400px;
+	/*height: 300px;*/
+	margin: 0 auto;
+	padding: 20px 50px;
+	background: #FFF;
+	border: 1px solid #DDD;
+	border-radius: 3px;
+	box-shadow: 0 1px 1px #CCC;
+	z-index: 1000000;	
+}
+.device_advanced_panel .icon {
+	width: 140px;				/*make wide enough for all icons, including the big Net Box and Wireless icon*/
+	height: 128px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.device_advanced_panel .networkbox {
+	background-image: url(../images/network-box-icon.png);
+}
+.device_advanced_panel .phone {
+	background-image: url(../images/device-phone.png);
+}
+.device_advanced_panel .laptop {
+	background-image: url(../images/device-laptop.png);
+}
+.device_advanced_panel .storage {
+	background-image: url(../images/device-storage.png);
+}
+.device_advanced_panel .router {
+	background-image: url(../images/device-storage.png);
+}
+.device_advanced_panel .tv {
+	background-image: url(../images/device-tv.png);
+}
+.device_advanced_panel .tvbox {
+	background-image: url(../images/device-tvbox.png);
+}
+
+
+.device_advanced_panel h2 {
+	margin-bottom: 40px;
+}
+.device_advanced_panel ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 30px;
+}
+.device_advanced_panel ul li {
+	margin: 0 0 5px 0;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	color: #626D77;
+	text-decoration: none;
+}
+.device_advanced_panel .right_side {
+	float:right;
+	margin-right: 0px;
+	color: #207fd1;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

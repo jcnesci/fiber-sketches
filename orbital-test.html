@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Google Fiber Prototypes</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
+    <script src="jquery-1.10.2.js"></script>
+    <script src="jquery-svg/jquery.svg.js"></script>
+    <script src="jquery-svg/jquery.svgdom.js"></script>
+    <script type="text/javascript">
+
+      function drawCircle(selector, center, radius, x, y)
+      {
+      
+        var total = $(selector).length;
+        var alpha = Math.PI * 2 / total;
+               
+        $(selector).each(function(index)
+        {
+            var theta = Math.PI/2 - alpha * index;
+            var pointx = Math.floor(Math.cos( theta ) * radius);
+            var pointy = Math.floor(Math.sin( theta ) * radius );
+
+
+            $(this).css('margin-left', pointx + x + 'px');
+            $(this).css('margin-top', pointy + y + 'px');
+        });
+        
+      }
+
+      $(function(){
+
+        $("#container").css({
+          "position": "absolute",
+          // "top": "50%",
+          // "left": "50%"
+        });
+
+        $(".box").css({
+          "position": "absolute",
+          "width": "50px",
+          "height": "50px",
+          "background": "red"
+        });
+
+        drawCircle('.box', 0, 250, 250, 250);
+        
+
+
+
+
+
+
+
+        // var i = 0;
+        // while( i < 10 ) {
+
+        //   var x = 200 * Math.cos( i * (360/10) );
+        //   var y = 200 * Math.sin( i * (360/10) );
+
+        //   var point = $("<div />").css({
+        //     "position": "absolute",
+        //     "display": "block",
+        //     "width": "5px",
+        //     "height": "5px",
+        //     "background-color": "red",
+        //     "left": x,
+        //     "top": y
+        //   }).appendTo("#container");
+
+        //   i++;
+        // }
+
+      });
+
+    </script>
+  </head>
+
+  <body>
+
+    <div id="container">
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+    </div>
+
+  </body>
+</html>
+

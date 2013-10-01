@@ -10,12 +10,12 @@ function Connection(a, b, type, strength) {
 	this.a.connections.push(this)
 	this.b.connections.push(this)
 
-	this.shape = "bezier"; // "straight"
+	this.shape = "bezier"; // "bezier"
 
 	this.addToDom();
 }
 
-Connection.shapes = ["straight", "bezier", "90s", "rounded"];
+Connection.shapes = ["bezier", "straight", "90s", "rounded", "invisible"];
 
 Connection.prototype = {
 	addToDom: function() {
@@ -58,6 +58,9 @@ Connection.prototype = {
 							   line(x2,y2);
 				this.el = $(svg.path(p));
 			}
+			else if(this.shape == "invisible") {
+				// for Level 2 of grid layout, dont show any wires.
+			}
 			this.el.addClass("connector");
 
 			if(this.type == "wireless") this.el.addClass("wireless");
@@ -70,7 +73,7 @@ Connection.prototype = {
 
 		// Remove and re-build
 		var d = this.el.css('display');
-		console.log(d);
+		// console.log(d);
 		this.el.remove();
 		this.addToDom();
 		this.el.css('display', d);

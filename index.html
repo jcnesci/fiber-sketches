@@ -24,10 +24,11 @@
       <li>
         <a href="#">Layouts</a>
         <ul>
-          <li><a href="#" onClick="layoutDevices('tree')">Tree</a></li>
-          <li><a href="#" onClick="layoutDevices('random')">Random</a></li>
-          <li><a href="#" onClick="layoutDevices('random grid')">Random Grid</a></li>
-          <li><a href="#" onClick="layoutDevices('physics')">Physics</a></li>
+          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('tree')">Tree</a></li>
+          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('random')">Random</a></li>
+          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('random grid')">Random Grid</a></li>
+          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('physics')">Physics</a></li>
+          <li><a href="#" onClick="populateDevicesGrid(); layoutDevices('grid')">Grid</a></li>
         </ul>
       </li>
       <li>
@@ -41,12 +42,12 @@
         <a href="#">Options</a>
         <ul>
           <li><a href="#" onClick="toggleShading(this)">Toggle Cells</a></li>
-          <li><a href="#" onClick="toggleConnectors(this)">Toggle Connector Style</a></li>
+          <li><a id="toggle-button" href="#" onClick="toggleConnectors(this)">Toggle Connector Style</a></li>
           <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('tree')">New Network</a></li>
         </ul>
       </li>
     </ul>
-
+    <div id="container_background"></div>
     <div id="controller">
       <div id="icon_palette" class="palette">
         <h2>Icons</h2>
@@ -64,10 +65,8 @@
         <div class="ip">64.233.160.4</div>
       </div>
     </div>
-
-    <div id="container">
-
-    </div>
+    
+    <div id="container"></div>
     <div id="svg_container"></div>
 
   </body>
