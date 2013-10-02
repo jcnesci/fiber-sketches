@@ -36,7 +36,7 @@ function layoutDevices(type) {
 				}
 			}
 
-			// Place direct child devices of Netowkr Box.
+			// Place direct child devices of Network Box.
 			var total = children.length;
 			var alpha = Math.PI * 2 / total;
 			$.each(children, function(index, device) {
@@ -63,7 +63,6 @@ function layoutDevices(type) {
 			for ( var i = 0; i < routing_devices.length; i++ ) {
 				console.log("- i : "+ i);
 				if ( routing_devices[i] !== devices[0] ) {
-					console.log("NOT NET BOX");
 					for ( var j = 0; j < routing_devices[i].connections.length; j++ ) {
 						console.log("- j : "+ j);
 						if(routing_devices[i].connections[j].a == routing_devices[i]) {
@@ -340,6 +339,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 		}
 		// for showing nodes
 		else {
+			// For Wired Level 2 devices (ie. children of Level1 devices (ie. children of Network Box)).
 			if ( grid_level === "level2") {
 				// console.log('- - - - GRID layout - - - - - Level2');
 

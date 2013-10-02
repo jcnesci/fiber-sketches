@@ -152,10 +152,8 @@ body {
 	background-color: rgba(200,200,200,0.5);
 	border: 0;
 }
-
 .networkbox .icon  {
-	background-image: url(../images/network-box-icon.png);
-	width: 140px;
+	background-image: url(../images/device-networkbox.png);
 }
 .networkbox .info {
 	margin-top: -40px;

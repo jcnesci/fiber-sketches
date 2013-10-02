@@ -192,13 +192,17 @@ img {
 	border-radius: 0 0 3px 3px;
 }
 
-/* Wireless Icon for Wireless Zone in 2 zone layout */
+/* New icons 2 zone layout */
 #wireless_icon {
 	position: relative;
 	width: 140px;
 	height: 102px;
 	margin: 0 auto;
 	background-image: url(../images/wireless-icon.png);
+}
+#wired_container .networkbox .icon  {
+	background-image: url(../images/network-box-icon.png);
+	width: 140px;
 }
 
 /*Device advanced settings panel for 2 zone layout*/

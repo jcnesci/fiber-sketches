@@ -47,7 +47,7 @@ Device.prototype = {
 		// Create an element and add it to the DOM
 		this.el = $("<div><div class='badge'>0</div><div class='icon'></div><div class='info'><div class='name'>" + this.name + "</div><div class='status'></div></div></div>");
 		// dev_jc_29/09/2013_1
-		// this.el.addClass("device " + this.type + " invisible") // Start hidden
+		this.el.addClass("device " + this.type + " invisible") // Start hidden
 		this.el.addClass("device " + this.type) // Start hidden
 		this.el.attr("id", "device_" + this.id);
 		this.el.offset(this.anchor);	
@@ -183,6 +183,17 @@ Device.prototype = {
 		this.el.find(".status").html("STATUS: ONLINE<br />IP " + (this.static_ip ? "(static)" : "(DHCP)") + ": <div class='ip_slot'>" + this.ip + "</div>");
 	},
 	toggleCollapsed: function() {
+		console.log("--------- toggleCollapsed !");
+		// if opening this node, close other open nodes first
+        if ( this.expanded === false ) {
+          $.each(routing_devices, function(index, other_dev) {
+            if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
+              other_dev.expanded = false;
+              other_dev.update();
+            }
+          });
+        }
+        // then open this node
 		this.expanded = !this.expanded;
 		this.update();
 	},

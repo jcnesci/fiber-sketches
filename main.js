@@ -27,10 +27,10 @@ $(document).ready(function() {
   // create and display network
   
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
-  // populateDevicesGrid();
-  // layoutDevices("grid");
-  populateDevicesOrbital();
-  layoutDevices("orbital");
+  populateDevicesGrid();
+  layoutDevices("grid");
+  // populateDevicesOrbital();
+  // layoutDevices("orbital");
   
   // populateDevicesDefault();
   // layoutDevices("tree");
@@ -125,7 +125,7 @@ function populateDevicesGrid() {
   $("#container").append("<div id='wired_container'></div>");
   var network_box = new Device("Network Box", "networkbox");
   devices.push(network_box);  // devices[0] is always the network box
-  network_box.el.appendTo( $('#wired_container') );
+  network_box.el.appendTo( $("#wired_container") );
   // TODO: make Net Box icon bigger.
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -163,6 +163,7 @@ function populateDevicesGrid() {
     var box_device = new Device("TV Box", "tvbox");
     var tv_device = new Device("TV", "tv");
     devices.push(box_device);
+    routing_devices.push(box_device);
     array_level1_wired_devices.push(box_device);
     devices.push(tv_device);
     box_device.el.appendTo( $('#wired_container') );
@@ -173,15 +174,7 @@ function populateDevicesGrid() {
     connections.push(connection);
     // click function to collapse/uncollapse TV Box : it always starts uncollapsed, showing its TV
     box_device.el.click((function(dev) { return function() { 
-      if ( dev.expanded === false ) {
-        // close other routing devices
-        $.each(routing_devices, function(index, other_dev) {
-          if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
-            other_dev.expanded = false;
-            other_dev.update();
-          }
-        });
-      }
+      
       // open this clicked node
       dev.toggleCollapsed(); 
       layoutDevices('grid');
@@ -199,28 +192,7 @@ function populateDevicesGrid() {
     routing_device.expanded = false;  // Start off closed
     // Same as above. Closures are weird.
     routing_device.el.click((function(dev) { return function() { 
-      // if opening this node, close other open nodes first
-      if ( dev.expanded === false ) {
-        // close other routing devices
-        $.each(routing_devices, function(index, other_dev) {
-          if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
-            other_dev.expanded = false;
-            other_dev.update();
-          }
-        });
-        // close TV Box too
-        if ( n_level1_tv_box > 0 ) {
-          // get all tv boxes
-          var tv_boxes = $.grep(array_level1_wired_devices, function( dev, i ) {
-            return dev.type === "tvbox";
-          });
-          // collapse them to hide its children
-          $.each(tv_boxes, function(index, dev) {
-            dev.expanded = false;
-            dev.update();
-          });
-        }
-      }
+      
       // open this clicked node
       dev.toggleCollapsed(); 
       layoutDevices('grid');
@@ -256,6 +228,8 @@ function populateDevicesGrid() {
   var array_level2_wired_devices = [];
   $("#wired_container").append("<div id='level2'></div>");
   for ( var i = 0; i < routing_devices.length; i++ ) {
+    // don't create more children for the TV Box, we only want one TV connected to it.
+    if ( routing_devices[i].type === "tvbox" ) continue;
     var n_subdevices = random(1, 10);
     for ( var j = 0; j < n_subdevices; j++ ) {
       // create a personal device
@@ -330,23 +304,8 @@ function populateDevicesCollapsedNodes() {
 
       box_device.expanded = false;  // Start off closed
 
-      // Same as above. Closures are weird.
-      box_device.el.click((function(dev) { return function() { 
-        // dev_jc_19/09/2013_c : if opening this node, close other open nodes first
-        if ( dev.expanded === false ) {
-          $.each(routing_devices, function(index, other_dev) {
-            if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
-              other_dev.expanded = false;
-              other_dev.update();
-            }
-          });
-        }
-
-        // open this
-        dev.toggleCollapsed(); 
-        layoutDevices('tree'); 
-
-      } })(box_device));
+      // Same as above. Closures are weird. Open/close node if clicked on.
+      box_device.el.click((function(dev) { return function() { dev.toggleCollapsed(); layoutDevices('tree'); } })(box_device));
 
       devices.push(box_device);
       routing_devices.push(box_device);
