@@ -358,7 +358,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 				if ( grid_level === "level1" ) {
 
 					console.log('- - - - WIRED - LEVEL1 - TREE layout');
-
+console.log('- - - - - - - - - - - -  WIRED - LEVEL1 - start_x = '+ start_x);
 					var x = start_x + ( counter_wired_l1 + 1/2 - array_level1_wired_devices.length / 2) * root.size.width;
 					var y = network_box_y + devices[0].size.height;
 

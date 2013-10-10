@@ -43,6 +43,8 @@ function resetLayouts() {
 	connections.length = 0;
 	bool_add_last = false;								// used onyl in populateDevicesDefault()
 	array_wireless_devices.length = 0;					// used only in populateDevicesGrid()
+	array_wireless_devices.length = 0;
+	array_level1_wired_devices.length = 0;
 
 }
 // generates random number that is greater or equal to low-bound, and smaller than high-bound.
