@@ -10,6 +10,11 @@ var bool_add_last = false;
 var dragging = null; // item that is being dragged
 var hovering = null; // item currently hovering over
 
+// NEW_JC
+var n_tv_boxes;
+var n_wireless_devices;
+var n_wired_devices;
+
 $(document).ready(function() {
   $("#svg_container").svg();  // Initialize the SVG canvas
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
@@ -26,6 +31,9 @@ $(document).ready(function() {
   });
   // create and display network
   
+  // NEW_JC
+  setNetworkComplexity( "average" );
+
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
   populateDevicesGrid();
   layoutDevices("grid");
@@ -41,71 +49,25 @@ $(document).ready(function() {
 
 });
 
-// For Orbital layout
-function populateDevicesOrbital() {
-  resetLayouts();
-
-  devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
-  routing_devices.push(devices[0]);
-  devices[0].mass = 100;
-
-  var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
-  var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
-  var n_personal_devices = Math.round(Math.random() * 8 + 2);
-  var n_tv_devices = Math.round(Math.random() * 3);
-
-  // Create personal devices (phones, laptops, etc)
-  for(var i=0; i<n_personal_devices; i++) {
-    var type = Math.random() < 0.5 ? "phone" : "laptop";
-    var propertype = type.charAt(0).toUpperCase() + type.slice(1);
-
-    var unique_name = false;
-    var name = ""; 
-    while(!unique_name) {
-      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-      // Check all devices to see if this name is taken
-      var taken = false;
-      for(var j=0; j<devices.length; j++) {
-        if(devices[j].name == name) taken = true;
-      }
-      if(!taken) unique_name = true;
-    }
-
-    var dev = new Device(name, type);
-    devices.push(dev);
-    personal_devices.push(dev);
+// 
+function setNetworkComplexity( cur_network_complexity ) {
+  switch( cur_network_complexity ) {
+    case "low": 
+      n_tv_boxes = 1;
+      n_wireless_devices = 1;
+      n_wired_devices = 0;
+      break;
+    case "average": 
+      n_tv_boxes = 2;
+      n_wireless_devices = 4;
+      n_wired_devices = 1;
+      break;
+    case "high":
+      n_tv_boxes = 6;
+      n_wireless_devices = 10;
+      n_wired_devices = 5;
+      break;
   }
-
-  // Create TV devices which always come in a pairs with a TV box
-  for(var i=0; i<n_tv_devices; i++) {
-    var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
-    var box_device = new Device(room + " TV Box", "tvbox");
-    var tv_device = new Device(room + " TV", "tv");
-    devices.push(box_device);
-    routing_devices.push(box_device);
-    devices.push(tv_device);
-
-    // Connect TVs to TV Box
-    var connectionTV = new Connection(box_device, tv_device, "wired", 1);
-    connectionTV.changeShape("straight");
-    connections.push(connectionTV);
-
-    // Connect TV Box to Network Box
-    var connectionTVBox = new Connection(devices[0], box_device, "wired", 1);
-    connectionTVBox.changeShape("straight");
-    connections.push(connectionTVBox);
-  }
-
-
-  // Connect each device to a router
-  $.each(personal_devices, function(index, device) {
-    var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
-
-    var type = Math.random() < 0.5 ? "wired" : "wireless";
-    var connection = new Connection(router, device, type, 1);
-    connection.changeShape("straight");
-    connections.push(connection);
-  });
 }
 
 // For 2 Zone layout for Wireless and Wired devices, featuring a 4-column grid.
@@ -279,6 +241,73 @@ function populateDevicesGrid() {
     }
   }
 
+}
+
+// For Orbital layout
+function populateDevicesOrbital() {
+  resetLayouts();
+
+  devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
+  routing_devices.push(devices[0]);
+  devices[0].mass = 100;
+
+  var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
+  var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
+  var n_personal_devices = Math.round(Math.random() * 8 + 2);
+  var n_tv_devices = Math.round(Math.random() * 3);
+
+  // Create personal devices (phones, laptops, etc)
+  for(var i=0; i<n_personal_devices; i++) {
+    var type = Math.random() < 0.5 ? "phone" : "laptop";
+    var propertype = type.charAt(0).toUpperCase() + type.slice(1);
+
+    var unique_name = false;
+    var name = ""; 
+    while(!unique_name) {
+      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      // Check all devices to see if this name is taken
+      var taken = false;
+      for(var j=0; j<devices.length; j++) {
+        if(devices[j].name == name) taken = true;
+      }
+      if(!taken) unique_name = true;
+    }
+
+    var dev = new Device(name, type);
+    devices.push(dev);
+    personal_devices.push(dev);
+  }
+
+  // Create TV devices which always come in a pairs with a TV box
+  for(var i=0; i<n_tv_devices; i++) {
+    var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
+    var box_device = new Device(room + " TV Box", "tvbox");
+    var tv_device = new Device(room + " TV", "tv");
+    devices.push(box_device);
+    routing_devices.push(box_device);
+    devices.push(tv_device);
+
+    // Connect TVs to TV Box
+    var connectionTV = new Connection(box_device, tv_device, "wired", 1);
+    connectionTV.changeShape("straight");
+    connections.push(connectionTV);
+
+    // Connect TV Box to Network Box
+    var connectionTVBox = new Connection(devices[0], box_device, "wired", 1);
+    connectionTVBox.changeShape("straight");
+    connections.push(connectionTVBox);
+  }
+
+
+  // Connect each device to a router
+  $.each(personal_devices, function(index, device) {
+    var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
+
+    var type = Math.random() < 0.5 ? "wired" : "wireless";
+    var connection = new Connection(router, device, type, 1);
+    connection.changeShape("straight");
+    connections.push(connection);
+  });
 }
 
 // 
