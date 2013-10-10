@@ -35,10 +35,10 @@ $(document).ready(function() {
   setNetworkComplexity( "average" );
 
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
-  populateDevicesGrid();
-  layoutDevices("grid");
-  // populateDevicesOrbital();
-  // layoutDevices("orbital");
+  // populateDevicesGrid();
+  // layoutDevices("grid");
+  populateDevicesOrbital();
+  layoutDevices("orbital");
   
   // populateDevicesDefault();
   // layoutDevices("tree");
