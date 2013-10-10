@@ -498,7 +498,7 @@ function treePlace(root, start_x, start_y, hidden) {
 function runTinyPhysics(snapToGrid) {
 	// TUNING PARAMETERS
 	// -------------------------------------------------------------------------------------------------------
-	var SPRING_K = 0.3;		// Spring force constant
+	var SPRING_K = 0.2;		// Spring force constant
 	var SPRING_REST = 150;	// Spring resting distance
 	var REPULSION_K = 200;	// Repulsion force between nodes to keep things spaced out
 	var BOUNDARY_K = 10; 	// Repulsion force to keep everything constrained to the screen
