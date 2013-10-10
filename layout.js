@@ -230,7 +230,7 @@ function layoutDevices(type) {
 				// top: $(window).height()/2-devices[0].size.height/2,
 				// left: $(window).width()/2-devices[0].size.width/2
 				//dev_jc_17/09/2013_a
-				top: $('#container').height()/2-devices[0].size.height/2,
+				top: $('#container').height()/4-devices[0].size.height/2,
 				left: $('#container').width()/2-devices[0].size.width/2
 			}, function() {
 				runTinyPhysics(false);
