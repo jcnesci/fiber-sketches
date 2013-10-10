@@ -1,8 +1,8 @@
-var devices = [];     // All devices
-var personal_devices = [];  // Computers/laptops and mobile devices
-var routing_devices = [];   // Network boxes, tv boxes, or other routers/switches
+var devices = [];                       // All devices
+var personal_devices = [];              // Computers/laptops and mobile devices
+var routing_devices = [];               // Network boxes, tv boxes, or other routers/switches
 var array_wireless_devices = [];
-
+var array_level1_wired_devices = [];    // push devices in this storage array ; will be useful to collapse them all with one function
 var connections = [];
 var max_tv_devices = 2;
 var bool_add_last = false;
@@ -118,6 +118,7 @@ function populateDevicesGrid() {
 
   resetLayouts();
   $('#container_background').show();
+  var n_columns = 4;
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -131,16 +132,25 @@ function populateDevicesGrid() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
   // Wireless devices
-  var n_wireless_devices = 6;  //random(1, 10);
+  var n_wireless_devices = random(1, 10);
   $("#container").append("<div id='wireless_container'></div>");
   for ( var i = 0; i < n_wireless_devices; i++ ) {
+    // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
+    if ( i % n_columns === 0 ) {
+      var cur_row = $("<div class='wireless_grid_row'></div>");
+      cur_row.appendTo( $('#wireless_container') );
+    }
+
     // create a wireless device
     var type = Math.random() < 0.5 ? "phone" : "laptop";
     var wireless_device = new Device("Wireless Device "+ i, type );
-    wireless_device.isWireless = true;   // add custom attribute for layout positioning
+    wireless_device.is_wireless = true;   // add custom attribute for layout positioning
     devices.push(wireless_device);
     array_wireless_devices.push(wireless_device);
-    wireless_device.el.appendTo( $('#wireless_container') );
+    
+    wireless_device.el.appendTo( cur_row );
+    // wireless_device.el.appendTo( $('#wireless_container') );
+    
     // connections
     var connection = new Connection(devices[0], wireless_device, "wireless", 1 );
     connection.shape = "invisible";
@@ -150,14 +160,13 @@ function populateDevicesGrid() {
     // console.log(wireless_device);
   }
   $("#container").append("<div id='wireless_icon'></div>");
+  
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
   // Create 1st level of wired connections: maximum is 4 devices total.
   var n_level1_tv_box = random(0, 2); // either 0 or 1
   var n_level1_routing_devices = random(1, ( 5 - n_level1_tv_box ) ); // generate routing devices/switches: 1 to 4, minus TV Box if any
   var n_level1_personal_devices = random(0, ( 5 - n_level1_tv_box - n_level1_routing_devices) );  // generate personal devices: 1 to 4, minus TV Box & routing devices
-  // var n_level1_total_devices = n_level1_tv_box + n_level1_routing_devices + n_level1_personal_devices;     // UNUSED as of yet.
-  var array_level1_wired_devices = [];  // push devices in this storage array ; will be useful to collapse them all with one function
   // Initialize TV Box + TV : these are the only nodes that start uncollapsed (we see the TV under the TV Box) whereas all other nodes with children hide them at start.
   for ( var i = 0; i < n_level1_tv_box; i++ ) {
     var box_device = new Device("TV Box", "tvbox");
@@ -223,8 +232,7 @@ function populateDevicesGrid() {
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-
-  // For each Routing Device in Level1, create a random number of children devices in Level2
+  // // Create 2nd level of wired connections: for each Routing Device in Level1, create a random number of children devices.
   var array_level2_wired_devices = [];
   $("#wired_container").append("<div id='level2'></div>");
   for ( var i = 0; i < routing_devices.length; i++ ) {
@@ -232,13 +240,22 @@ function populateDevicesGrid() {
     if ( routing_devices[i].type === "tvbox" ) continue;
     var n_subdevices = random(1, 10);
     for ( var j = 0; j < n_subdevices; j++ ) {
+      // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
+      if ( j % n_columns === 0 ) {
+        var cur_row = $("<div class='wired_grid_row'></div>");
+        cur_row.appendTo( $('#level2') );
+      }
+
       // create a personal device
       var type = Math.random() < 0.5 ? "phone" : "laptop";
       var personal_device_level2 = new Device("Personal Device "+ (n_level1_personal_devices + j), type );
       devices.push(personal_device_level2);
       array_level2_wired_devices.push(personal_device_level2);
+      
       // move device to level2 div container, to position them centrally in #container
-      personal_device_level2.el.appendTo( $('#level2') );
+      // personal_device_level2.el.appendTo( $('#level2') );
+      personal_device_level2.el.appendTo( cur_row );
+      
       // create a connection to its routing device
       var connection = new Connection(routing_devices[i], personal_device_level2, "wired", 1 );
       connection.shape = "invisible";
@@ -246,6 +263,7 @@ function populateDevicesGrid() {
       // 
       console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
     }
+
   }
   
 
