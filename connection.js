@@ -43,6 +43,12 @@ Connection.prototype = {
 				p.move(x1, y1).line(x1, midY).line(x2, midY).line(x2,y2);
 				this.el = $(svg.path(p));
 			}
+			else if(this.shape == "90s_level2") {
+				var p = svg.createPath();
+				var midY = (y2 - y1) / 2 + y1;
+				p.move(x1, y1).line(x1, midY).line(x2, midY).line(x2,y2);
+				this.el = $(svg.path(p));
+			}
 			else if(this.shape == "rounded") {
 				var r = Math.min(20, Math.abs(x2-x1)/2);
 				r = Math.min(r,Math.abs(y2-y1)/2);		// Make sure there's room to draw an arc
@@ -120,6 +126,13 @@ Connection.prototype = {
 		}
 		else if(this.shape == "90s") {
 			var midY = (y2 - y1) / 2 + y1;
+			this.el.attr("d",  "M" + x1 + "," + y1 +
+							   "L" + x1 + "," + midY + " " +
+							   "L" + x2 + "," + midY + " " +
+							   "L" + x2 + "," + y2);
+		}
+		else if(this.shape == "90s_level2") {
+			var midY = 3*(y2 - y1) / 4 + y1;
 			this.el.attr("d",  "M" + x1 + "," + y1 +
 							   "L" + x1 + "," + midY + " " +
 							   "L" + x2 + "," + midY + " " +

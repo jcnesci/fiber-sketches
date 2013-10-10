@@ -32,7 +32,7 @@ $(document).ready(function() {
   // create and display network
   
   // NEW_JC
-  setNetworkComplexity( "average" );
+  setNetworkComplexity( "high" );
 
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
   populateDevicesGrid();
@@ -49,7 +49,7 @@ $(document).ready(function() {
 
 });
 
-// 
+// NEW_JC
 function setNetworkComplexity( cur_network_complexity ) {
   switch( cur_network_complexity ) {
     case "low": 
@@ -94,7 +94,8 @@ function populateDevicesGrid() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
   // Wireless devices
-  var n_wireless_devices = random(1, 10);
+  
+  // var n_wireless_devices = random(1, 10);
   $("#container").append("<div id='wireless_container'></div>");
   for ( var i = 0; i < n_wireless_devices; i++ ) {
     // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
@@ -126,11 +127,24 @@ function populateDevicesGrid() {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
   // Create 1st level of wired connections: maximum is 4 devices total.
-  var n_level1_tv_box = random(0, 2); // either 0 or 1
-  var n_level1_routing_devices = random(1, ( 5 - n_level1_tv_box ) ); // generate routing devices/switches: 1 to 4, minus TV Box if any
-  var n_level1_personal_devices = random(0, ( 5 - n_level1_tv_box - n_level1_routing_devices) );  // generate personal devices: 1 to 4, minus TV Box & routing devices
+  
+  // var n_level1_tv_box = random(0, 2); // either 0 or 1
   // Initialize TV Box + TV : these are the only nodes that start uncollapsed (we see the TV under the TV Box) whereas all other nodes with children hide them at start.
-  for ( var i = 0; i < n_level1_tv_box; i++ ) {
+  
+  //NEW_JC
+  if (n_tv_boxes > 3) {
+    // we need to place surplus TV Boxes in level 2
+    var n_tv_boxes_level1 = 3;
+    var n_tv_boxes_level2 = n_tv_boxes - 3;
+    //  TODO
+  } else {
+    var n_tv_boxes_level1 = n_tv_boxes;
+    var n_tv_boxes_level2 = 0;
+  }
+  var n_remaining_slots_level1 = 4 - n_tv_boxes_level1;
+
+  // Create Level1 TV Boxes
+  for ( var i = 0; i < n_tv_boxes_level1; i++ ) {
     var box_device = new Device("TV Box", "tvbox");
     var tv_device = new Device("TV", "tv");
     devices.push(box_device);
@@ -151,82 +165,177 @@ function populateDevicesGrid() {
       layoutDevices('grid');
     } })(box_device));
   } 
-  // Initialize Routing Devices/Switches
-  for ( var i = 0; i < n_level1_routing_devices; i++ ) {
-    var routing_device = new Device("Routing Device " + i, "router");
-    devices.push(routing_device);
-    routing_devices.push(routing_device);
-    array_level1_wired_devices.push(routing_device);
-    routing_device.el.appendTo( $('#wired_container') );
+  
 
-    // collapse router so we don't see it's children at start.
-    routing_device.expanded = false;  // Start off closed
-    // Same as above. Closures are weird.
-    routing_device.el.click((function(dev) { return function() { 
+
+  // NEW_JC
+  var array_level2_wired_devices = [];
+  $("#wired_container").append("<div id='level2'></div>");
+  var n_personal_devices = 0;
+
+  if ( n_wired_devices > n_remaining_slots_level1 ) {
+    // need routers
+    var n_cur_wired = 0;
+    var n_so_far = 0;
+
+    for (var i = 0; i < n_remaining_slots_level1; i++) {
+
+      if (i != n_remaining_slots_level1-1) {
+        n_cur_wired = n_wired_devices / n_remaining_slots_level1;
+      } else {
+        n_cur_wired = n_wired_devices - n_so_far;
+      }
+      n_so_far += n_cur_wired;
+
+      console.log("----- i = "+ i);
+      console.log("n_cur_wired = "+ n_cur_wired);
+      console.log("n_so_far = "+ n_so_far);
+
+      var routing_device = new Device("Routing Device " + i, "router");
+      devices.push(routing_device);
+      routing_devices.push(routing_device);
+      array_level1_wired_devices.push(routing_device);
+      routing_device.el.appendTo( $('#wired_container') );
+      routing_device.expanded = false;  // Start off closed
+      routing_device.el.click((function(dev) { return function() {
+        // open this clicked node
+        dev.toggleCollapsed(); 
+        layoutDevices('grid');
+      } })(routing_device));
       
-      // open this clicked node
-      dev.toggleCollapsed(); 
-      layoutDevices('grid');
-    } })(routing_device));
+
+      // LEVEL 2 personal devices
+      for ( var j = 0; j < n_cur_wired; j++ ) {
+        // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
+        if ( j % n_columns === 0 ) {
+          var cur_row = $("<div class='wired_grid_row'></div>");
+          cur_row.appendTo( $('#level2') );
+        }
+        // create a personal device
+        var type = Math.random() < 0.5 ? "storage" : "laptop";
+        n_personal_devices++;
+        var personal_device_level2 = new Device("Personal Device "+ j, type );
+        devices.push(personal_device_level2);
+        array_level2_wired_devices.push(personal_device_level2);
+        // move device to level2 div container, to position them centrally in #container
+        // personal_device_level2.el.appendTo( $('#level2') );
+        personal_device_level2.el.appendTo( cur_row );
+        // create a connection to its routing device
+        var connection = new Connection(routing_device, personal_device_level2, "wired", 1 );
+        connection.shape = "90s";
+        connections.push( connection );
+        // 
+        console.log("************** j = "+ j);
+        console.log(personal_device_level2);
+        console.log(array_level2_wired_devices);
+        console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
+      }
+      // LEVEL 2 extra routers
+      if ( n_tv_boxes_level2 > 0 ) {
+        for ( var w = 0; w < n_tv_boxes_level2; w++ ) {
+          var box_device = new Device("TV Box", "tvbox");
+          devices.push(box_device);
+          routing_devices.push(box_device);
+          array_level2_wired_devices.push(box_device);
+          box_device.el.appendTo( cur_row );
+          // In advance, connect TV to TV Box (but it wont display until TV Box is connected to Network Box).
+          var connectionTVBox = new Connection(routing_device, box_device, "wired", 1 );
+          connectionTVBox.shape = "90s_level2";
+          connections.push( connectionTVBox );
+        }
+      }
+
+
+    }
+
+  } else {
+    // add wired devices to Level1 directly...
+    console.log(" - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  - -- - - - -  YO")
   }
-  // Initialize Personal Devices
-  for ( var i = 0; i < n_level1_personal_devices; i++ ) {
-    var type = Math.random() < 0.5 ? "phone" : "laptop";
-    var personal_device = new Device("Personal Device " + i, type);
-    devices.push(personal_device);
-    array_level1_wired_devices.push(personal_device);
-    personal_device.el.appendTo( $('#wired_container') );
-  }
+
   // Display all level 1 devices by creating connections for each to Network Box.
   for ( var i = 0; i < array_level1_wired_devices.length; i++ ) {
     var connection = new Connection(devices[0], array_level1_wired_devices[i], "wired", 1);
     connection.shape = "90s";
     connections.push(connection);
   }
-  // 
-  console.log('n_level1_tv_box = ' + n_level1_tv_box);
-  console.log('n_level1_routing_devices = ' + n_level1_routing_devices);
-  console.log('n_level1_personal_devices = ' + n_level1_personal_devices);
-  console.log('array_level1_wired_devices.length = ' + array_level1_wired_devices.length);
-  console.log(array_level1_wired_devices);
-  console.log('- - - - - - - - - - -');
+
+
+  // for ( var i = 0; i < n_level1_routing_devices; i++ ) {
+  //   var routing_device = new Device("Routing Device " + i, "router");
+  //   devices.push(routing_device);
+  //   routing_devices.push(routing_device);
+  //   array_level1_wired_devices.push(routing_device);
+  //   routing_device.el.appendTo( $('#wired_container') );
+
+  //   // collapse router so we don't see it's children at start.
+  //   routing_device.expanded = false;  // Start off closed
+  //   // Same as above. Closures are weird.
+  //   routing_device.el.click((function(dev) { return function() { 
+      
+  //     // open this clicked node
+  //     dev.toggleCollapsed(); 
+  //     layoutDevices('grid');
+  //   } })(routing_device));
+  // }
+  // // Initialize Personal Devices
+  // for ( var i = 0; i < n_level1_personal_devices; i++ ) {
+  //   var type = Math.random() < 0.5 ? "phone" : "laptop";
+  //   var personal_device = new Device("Personal Device " + i, type);
+  //   devices.push(personal_device);
+  //   array_level1_wired_devices.push(personal_device);
+  //   personal_device.el.appendTo( $('#wired_container') );
+  // }
+  // // Display all level 1 devices by creating connections for each to Network Box.
+  // for ( var i = 0; i < array_level1_wired_devices.length; i++ ) {
+  //   var connection = new Connection(devices[0], array_level1_wired_devices[i], "wired", 1);
+  //   connection.shape = "90s";
+  //   connections.push(connection);
+  // }
+  // // 
+  // console.log('n_level1_tv_box = ' + n_level1_tv_box);
+  // console.log('n_level1_routing_devices = ' + n_level1_routing_devices);
+  // console.log('n_level1_personal_devices = ' + n_level1_personal_devices);
+  // console.log('array_level1_wired_devices.length = ' + array_level1_wired_devices.length);
+  // console.log(array_level1_wired_devices);
+  // console.log('- - - - - - - - - - -');
 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-  // // Create 2nd level of wired connections: for each Routing Device in Level1, create a random number of children devices.
-  var array_level2_wired_devices = [];
-  $("#wired_container").append("<div id='level2'></div>");
-  for ( var i = 0; i < routing_devices.length; i++ ) {
-    // don't create more children for the TV Box, we only want one TV connected to it.
-    if ( routing_devices[i].type === "tvbox" ) continue;
-    var n_subdevices = random(1, 10);
-    for ( var j = 0; j < n_subdevices; j++ ) {
-      // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
-      if ( j % n_columns === 0 ) {
-        var cur_row = $("<div class='wired_grid_row'></div>");
-        cur_row.appendTo( $('#level2') );
-      }
+  // // // Create 2nd level of wired connections: for each Routing Device in Level1, create a random number of children devices.
+  // var array_level2_wired_devices = [];
+  // $("#wired_container").append("<div id='level2'></div>");
+  // for ( var i = 0; i < routing_devices.length; i++ ) {
+  //   // don't create more children for the TV Box, we only want one TV connected to it.
+  //   if ( routing_devices[i].type === "tvbox" ) continue;
+  //   var n_subdevices = random(1, 10);
+  //   for ( var j = 0; j < n_subdevices; j++ ) {
+  //     // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
+  //     if ( j % n_columns === 0 ) {
+  //       var cur_row = $("<div class='wired_grid_row'></div>");
+  //       cur_row.appendTo( $('#level2') );
+  //     }
 
-      // create a personal device
-      var type = Math.random() < 0.5 ? "phone" : "laptop";
-      var personal_device_level2 = new Device("Personal Device "+ (n_level1_personal_devices + j), type );
-      devices.push(personal_device_level2);
-      array_level2_wired_devices.push(personal_device_level2);
+  //     // create a personal device
+  //     var type = Math.random() < 0.5 ? "phone" : "laptop";
+  //     var personal_device_level2 = new Device("Personal Device "+ (n_level1_personal_devices + j), type );
+  //     devices.push(personal_device_level2);
+  //     array_level2_wired_devices.push(personal_device_level2);
       
-      // move device to level2 div container, to position them centrally in #container
-      // personal_device_level2.el.appendTo( $('#level2') );
-      personal_device_level2.el.appendTo( cur_row );
+  //     // move device to level2 div container, to position them centrally in #container
+  //     // personal_device_level2.el.appendTo( $('#level2') );
+  //     personal_device_level2.el.appendTo( cur_row );
       
-      // create a connection to its routing device
-      var connection = new Connection(routing_devices[i], personal_device_level2, "wired", 1 );
-      connection.shape = "invisible";
-      connections.push( connection );
-      // 
-      console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
-    }
+  //     // create a connection to its routing device
+  //     var connection = new Connection(routing_devices[i], personal_device_level2, "wired", 1 );
+  //     connection.shape = "invisible";
+  //     connections.push( connection );
+  //     // 
+  //     console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
+  //   }
 
-  }
+  // }
   
 
   // - - - - - - - - - - - - - - - LAST - - - - - - - - - - - - - - - - - 
@@ -404,6 +513,7 @@ function populateDevicesCollapsedNodes() {
   });
 }
 
+// 
 function populateDevicesDefault() {
   resetLayouts();
 
@@ -510,6 +620,7 @@ function populateDevicesDefault() {
     connections.push(new Connection(devices[0], box_device, "wired", 1));
   }
 }
+
 // 
 function populateDevicesDragAndDrop() {
   resetLayouts();
