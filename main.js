@@ -67,7 +67,7 @@ function setNetworkComplexity( cur_network_complexity ) {
       break;
     case "high":
       n_tv_boxes = 6;
-      n_wireless_devices = 10;
+      n_wireless_devices = 0;//10;
       n_wired_devices = 5;
       break;
   }
