@@ -11,7 +11,7 @@ function Connection(a, b, type, strength) {
 	this.b.connections.push(this)
 
 	this.shape = "bezier"; // "bezier"
-
+  this.containerWidth = 600;
 	this.addToDom();
 }
 
@@ -45,8 +45,10 @@ Connection.prototype = {
 			}
 			else if(this.shape == "90s_level2") {
 				var p = svg.createPath();
-				var midY = (y2 - y1) / 2 + y1;
-				p.move(x1, y1).line(x1, midY).line(x2, midY).line(x2,y2);
+				var quarterY = (y2 - y1) / 4 + y1;
+				var threeQuarterY = 3*(y2 - y1) / 4 + y1;
+				var midX = $("#container").width()/2 + $("#container").offset().left;
+				p.move(x1, y1).line(x1,quarterY).line(this.containerWidth/2, quarterY).line(this.containerWidth/2, threeQuarterY).line(x2, threeQuarterY).line(x2,y2);
 				this.el = $(svg.path(p));
 			}
 			else if(this.shape == "rounded") {
@@ -133,9 +135,14 @@ Connection.prototype = {
 		}
 		else if(this.shape == "90s_level2") {
 			var midY = 3*(y2 - y1) / 4 + y1;
+			var quarterY = (y2 - y1) / 4 + y1;
+			var threeQuarterY = 3*(y2 - y1) / 4 + y1;
+			var midX = $("#container").width()/2 + $("#container").offset().left;			
 			this.el.attr("d",  "M" + x1 + "," + y1 +
-							   "L" + x1 + "," + midY + " " +
-							   "L" + x2 + "," + midY + " " +
+							   "L" + x1 + "," + quarterY + " " +
+							   "L" + midX + "," + quarterY + " " +
+							   "L" + midX + "," + threeQuarterY + " " +
+								 "L" + x2 + "," + threeQuarterY + " " +
 							   "L" + x2 + "," + y2);
 		}
 		else if(this.shape == "rounded") {
