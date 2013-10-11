@@ -11,7 +11,7 @@ function Connection(a, b, type, strength) {
 	this.b.connections.push(this)
 
 	this.shape = "bezier"; // "bezier"
-  this.containerWidth = 600;
+    this.halfCell = devices[0].size.width / 2;
 	this.addToDom();
 }
 
@@ -43,10 +43,11 @@ Connection.prototype = {
 				p.move(x1, y1).line(x1, midY).line(x2, midY).line(x2,y2);
 				this.el = $(svg.path(p));
 			}
+			// Special connector for last row in grid layout. Connectors pierce through the middle of the grid to get to the devices.
 			else if(this.shape == "90s_level2") {
 				var p = svg.createPath();
-				var quarterY = (y2 - y1) / 4 + y1;
-				var threeQuarterY = 3*(y2 - y1) / 4 + y1;
+				var quarterY = y1 + this.halfCell;//(y2 - y1) / 4 + y1;
+				var threeQuarterY = y2 - this.halfCell;//3*(y2 - y1) / 4 + y1;
 				var midX = $("#container").width()/2 + $("#container").offset().left;
 				p.move(x1, y1).line(x1,quarterY).line(this.containerWidth/2, quarterY).line(this.containerWidth/2, threeQuarterY).line(x2, threeQuarterY).line(x2,y2);
 				this.el = $(svg.path(p));
@@ -134,10 +135,15 @@ Connection.prototype = {
 							   "L" + x2 + "," + y2);
 		}
 		else if(this.shape == "90s_level2") {
-			var midY = 3*(y2 - y1) / 4 + y1;
-			var quarterY = (y2 - y1) / 4 + y1;
-			var threeQuarterY = 3*(y2 - y1) / 4 + y1;
-			var midX = $("#container").width()/2 + $("#container").offset().left;			
+			if (y2-y1 >= 200) {
+				var quarterY = y1 + this.halfCell;//(y2 - y1) / 4 + y1;
+				var threeQuarterY = y2 - this.halfCell;//3*(y2 - y1) / 4 + y1;
+				var midX = $("#container").width()/2 + $("#container").offset().left;					
+			} else {
+				var quarterY = (y2 - y1) / 2 + y1;
+				var threeQuarterY = (y2 - y1) / 2 + y1;
+				var midX = (x2 - x1) / 2 + x1;					
+			}		
 			this.el.attr("d",  "M" + x1 + "," + y1 +
 							   "L" + x1 + "," + quarterY + " " +
 							   "L" + midX + "," + quarterY + " " +

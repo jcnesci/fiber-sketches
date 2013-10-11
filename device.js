@@ -39,6 +39,9 @@ function Device(name, type) {
 		+	"<li>DHCP Leases 				<span class='right_side'>Disabled</span></li>"
 		+ "</ul>";
 
+	//  for routers
+	this.router_visibility = true;
+
 	this.addToDom();
 }
 Device.count = 0;
@@ -81,7 +84,8 @@ Device.prototype = {
 				new_panel.click(function() { thisthis.showDetails(false);});
 				new_panel.prependTo("#container");
 
-				console.log('Panel OFFSET: '+ new_panel.offset().top);
+				console.log('Panel OFFSET top: '+ new_panel.offset().top);
+				console.log('Panel OFFSET left: '+ new_panel.offset().left);
 				console.log('Panel POSITION: '+ new_panel.position().top);
 				console.log('This OFFSET: '+ this.el.offset().top);
 				console.log('This POSITION: '+ this.el.position().top);
@@ -178,24 +182,37 @@ Device.prototype = {
 		}
 		// display number of children nodes in this element's badge
 		this.el.find(".badge").text(this.n_children);
+		
+		// hide this node if its a router
+		if ( this.router_visibility === false ) {
+			this.el.children().css("opacity", 0);
+		} else {
+			this.el.children().css("opacity", 1);
+		}
+
 	},
 	buildStatus: function() {
 		this.el.find(".status").html("STATUS: ONLINE<br />IP " + (this.static_ip ? "(static)" : "(DHCP)") + ": <div class='ip_slot'>" + this.ip + "</div>");
 	},
-	toggleCollapsed: function() {
-		console.log("--------- toggleCollapsed !");
-		// if opening this node, close other open nodes first
+	expandSubnodes: function() {
+		console.log("--------- expandSubnodes !");
+		// if opening this node... 
         if ( this.expanded === false ) {
-          $.each(routing_devices, function(index, other_dev) {
-            if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
-              other_dev.expanded = false;
-              other_dev.update();
-            }
-          });
+        	// close other open nodes first
+        	$.each(routing_devices, function(index, other_dev) {
+	            if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
+	              other_dev.expanded = false;
+	              if ( other_dev.type === "router" ) this.router_visibility = true;				// re-display router nodes that we are collapsing back.
+	              other_dev.update();
+	            }
+	        });
+        	// hide this node if it is a router
+        	if ( this.type === "router" ) this.router_visibility = false;
+	        // then show my subnodes
+			this.expanded = true;
+			this.update();
         }
-        // then open this node
-		this.expanded = !this.expanded;
-		this.update();
+        
 	},
 	editName: function(state) {
 		if(state == true) {

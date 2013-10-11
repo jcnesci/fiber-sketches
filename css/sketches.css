@@ -181,9 +181,10 @@ body {
 }
 
 .router .icon  {
-	background-image: url(../images/device-storage.png);
+	background-image: url(../images/device-router.png);
 }
 .router .info {
+	display: none;
 	margin-top: -40px;
 }
 
@@ -227,7 +228,10 @@ body {
 .badge {
 	display: none;
 }
-.collapsed .badge {
+.wired_grid_row .collapsed .badge  {
+	display: none;
+}
+.collapsed .badge  {
 	display: block;
 	font-weight: bold;
 	background-color: rgba(150,150,255,0.8);
@@ -236,13 +240,13 @@ body {
 	height: 25px;
 	line-height: 25px;
 	text-align: center;
-	margin-right: 50px;
+	margin-right: 55px;
 	margin-top: 40px;
 }
 
 .connector  {
 	stroke: #AAA;
-	stroke-width: 1;
+	stroke-width: 2;
 	fill: none;
 }
 

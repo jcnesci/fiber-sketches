@@ -34,7 +34,7 @@ $(document).ready(function() {
   });
   
   // set network complexity
-  setNetworkComplexity( "high" );
+  setNetworkComplexity( "average" );
 
   // create and display network
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -67,7 +67,7 @@ function setNetworkComplexity( cur_network_complexity ) {
       break;
     case "high":
       n_tv_boxes = 6;
-      n_wireless_devices = 0;//10;
+      n_wireless_devices = 10;
       n_wired_devices = 5;
       break;
   }
@@ -161,7 +161,7 @@ function populateDevicesGrid() {
     box_device.el.click((function(dev) { return function() { 
       
       // open this clicked node
-      dev.toggleCollapsed(); 
+      dev.expandSubnodes(); 
       layoutDevices('grid');
     } })(box_device));
   } 
@@ -196,7 +196,8 @@ function populateDevicesGrid() {
 
       // If this slot has more than 1 device, create a router then connect those devices to it.
       if ( n_cur_wired > 1 ) {
-        var routing_device = new Device("HIDE ME!", "router");
+        var is_last_row = false;
+        var routing_device = new Device("Router", "router");
         devices.push(routing_device);
         routing_devices.push(routing_device);
         array_level1_wired_devices.push(routing_device);
@@ -204,7 +205,7 @@ function populateDevicesGrid() {
         routing_device.expanded = false;  // Start off closed
         routing_device.el.click((function(dev) { return function() {
           // open this clicked node
-          dev.toggleCollapsed(); 
+          dev.expandSubnodes(); 
           layoutDevices('grid');
         } })(routing_device));
         
@@ -214,6 +215,8 @@ function populateDevicesGrid() {
           if ( j % n_columns === 0 ) {
             var cur_row = $("<div class='wired_grid_row'></div>");
             cur_row.appendTo( $('#level2') );                             // move device to level2 div container, to position them centrally in #container
+            // if this is the last row, set bool to true
+            if ( j + n_columns >= n_cur_wired ) is_last_row = true;
           }
           // create a personal device
           n_personal_devices++;   //unused : for sequentially numbering devices correctly below...
@@ -226,7 +229,12 @@ function populateDevicesGrid() {
           personal_device_level2.el.appendTo( cur_row );
           // create a connection to its routing device
           var connection = new Connection(routing_device, personal_device_level2, "wired", 1 );
-          connection.shape = "90s";
+          // if this is the last row, use a special type of connector: 90s_level2
+          if (is_last_row) { 
+            connection.shape = "90s_level2"; 
+          } else {
+            connection.shape = "90s"; 
+          }
           connections.push( connection );
           // 
           console.log("************** j = "+ j);
@@ -245,7 +253,12 @@ function populateDevicesGrid() {
             box_device.el.appendTo( cur_row );
             // In advance, connect TV to TV Box (but it wont display until TV Box is connected to Network Box).
             var connectionTVBox = new Connection(routing_device, box_device, "wired", 1 );
-            connectionTVBox.shape = "90s_level2";
+            // if this is the last row, use a special type of connector: 90s_level2
+            if (is_last_row) { 
+              connectionTVBox.shape = "90s_level2"; 
+            } else {
+              connectionTVBox.shape = "90s"; 
+            }
             connections.push( connectionTVBox );
           }
         }
@@ -289,10 +302,8 @@ function populateDevicesGrid() {
 
   // Do stuff to all devices...
   for ( var i = 0; i < devices.length; i++ ) {
-    // Hide devices names for this layout.
-    // devices[i].showName(false);
-    // Clicking a device (except placeholder wired routers) reveals the device's settings.
-    if ( devices[i].type !== "router" ) {
+    // Show details panels of certain devices.
+    if ( devices[i].type != "router" && devices[i].type != "tvbox"  &&  devices[i].type != "tv" ) {
       devices[i].el.click((function(clickedDevice) { return function() { clickedDevice.showDetails(true); } })(devices[i]));
     }
   }
@@ -390,8 +401,8 @@ function populateDevicesCollapsedNodes() {
       router.el.parent = router;
       console.log(router.el);
       // Closures are weird. A function that returns a function is needed to make sure the context of router is correct
-      router.el.click((function(dev) { return function() { dev.toggleCollapsed(); layoutDevices('tree'); } })(router));
-      //router.el.click(function() { router.toggleCollapsed() });
+      router.el.click((function(dev) { return function() { dev.expandSubnodes(); layoutDevices('tree'); } })(router));
+      //router.el.click(function() { router.expandSubnodes() });
 
       devices.push(router);
       routing_devices.push(router);
@@ -408,7 +419,7 @@ function populateDevicesCollapsedNodes() {
       box_device.expanded = false;  // Start off closed
 
       // Same as above. Closures are weird. Open/close node if clicked on.
-      box_device.el.click((function(dev) { return function() { dev.toggleCollapsed(); layoutDevices('tree'); } })(box_device));
+      box_device.el.click((function(dev) { return function() { dev.expandSubnodes(); layoutDevices('tree'); } })(box_device));
 
       devices.push(box_device);
       routing_devices.push(box_device);
