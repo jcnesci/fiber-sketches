@@ -34,7 +34,7 @@ $(document).ready(function() {
   });
   
   // set network complexity
-  setNetworkComplexity( "average" );
+  setNetworkComplexity( "high" );
 
   // create and display network
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
