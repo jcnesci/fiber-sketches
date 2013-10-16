@@ -208,45 +208,32 @@ img {
 /*Device advanced settings panel for 2 zone layout*/
 .device_advanced_panel {
 	position: absolute;
-	width: 400px;
-	/*height: 300px;*/
+	width: 500px;
 	margin: 0 auto;
-	padding: 20px 50px;
 	background: #FFF;
-	border: 1px solid #DDD;
+	outline: 1px solid #DDD;				/*Use outline instead of border because border affects the width of the div, messes the perfect positioning over the device icon.*/
 	border-radius: 3px;
 	box-shadow: 0 1px 1px #CCC;
-	z-index: 1000000;	
+	z-index: 1000000;
+	/*opacity: 0.5;*/
+	display: none;
 }
 .device_advanced_panel .icon {
-	width: 140px;				/*make wide enough for all icons, including the big Net Box and Wireless icon*/
+	width: 128px;
 	height: 128px;
 	margin-left: auto;
 	margin-right: auto;
 }
-.device_advanced_panel .networkbox {
+.device_advanced_panel.networkbox .icon {
+	width: 140px;												/*This icon is an exception and is wider than the others.*/
 	background-image: url(../images/network-box-icon.png);
 }
-.device_advanced_panel .phone {
-	background-image: url(../images/device-phone.png);
+.device_advanced_panel .name {
+	font-weight: lighter;
+	text-align: center;
+	padding: 7px;
+	margin-bottom: 40px;
 }
-.device_advanced_panel .laptop {
-	background-image: url(../images/device-laptop.png);
-}
-.device_advanced_panel .storage {
-	background-image: url(../images/device-storage.png);
-}
-.device_advanced_panel .router {
-	background-image: url(../images/device-storage.png);
-}
-.device_advanced_panel .tv {
-	background-image: url(../images/device-tv.png);
-}
-.device_advanced_panel .tvbox {
-	background-image: url(../images/device-tvbox.png);
-}
-
-
 .device_advanced_panel h2 {
 	margin-bottom: 40px;
 }

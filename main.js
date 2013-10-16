@@ -304,7 +304,7 @@ function populateDevicesGrid() {
   for ( var i = 0; i < devices.length; i++ ) {
     // Show details panels of certain devices.
     if ( devices[i].type != "router" && devices[i].type != "tvbox"  &&  devices[i].type != "tv" ) {
-      devices[i].el.click((function(clickedDevice) { return function() { clickedDevice.showDetails(true); } })(devices[i]));
+      devices[i].el.find(".icon").click((function(clickedDevice) { return function() { clickedDevice.showDetails(true); } })(devices[i]));
     }
   }
 
