@@ -116,7 +116,7 @@ function populateDevicesGrid() {
     // console.log(' WIRELESS --------');
     // console.log(wireless_device);
   }
-  $("#container").append("<div id='wireless_icon'></div>");
+  // $("#container").append("<div id='wireless_icon'></div>");
   var wireless_network = new Device("Wireless Network", "wireless_network" );
   devices.push(wireless_network);
   

@@ -209,7 +209,7 @@ img {
 	width: 140px;
 }
 .wireless_network .info {
-	margin-top: -20px;
+	margin-top: -10px;
 }
 
 /*Device advanced settings panel for 2 zone layout*/
@@ -237,6 +237,12 @@ img {
 .device_advanced_panel.networkbox .icon {
 	width: 140px;												/*This icon is an exception and is wider than the others.*/
 	background-image: url(../images/network-box-icon.png);
+}
+.device_advanced_panel.wireless_network {
+	width: 500px;
+}
+.device_advanced_panel.wireless_network .icon {
+	width: 140px;												/*This icon is an exception and is wider than the others.*/
 }
 .device_advanced_panel .name {
 	font-weight: lighter;
@@ -327,7 +333,6 @@ img {
 	background-image: url(../images/device_panel_upnp.png);
 }
 
-/**/
 
 
 

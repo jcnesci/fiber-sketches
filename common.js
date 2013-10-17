@@ -75,7 +75,24 @@ function getDevicePanelHTML(device) {
 	} 																																						// For network box : TODO !!!!!
 	else if ( device_type === "wireless_network" ) {
 		console.log("* * * * * * * * * * * * * getDevicePanelHTML WIRELESS !!!");
-		device_panel_html = "";
+		device_panel_html = "<div class='icon'></div>"
+			+ "<div class='info'><div class='name'>" + device_name + "</div></div>"
+			+ "<ul>"
+			+	"<li class='left_side'>Device Name</li> 										<li class='text_box'>" + this.name + "</li>"
+			+	"<li class='left_side'>Status</li> 												<li>Connected - 100 mbps <span class='help'>?</span></li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>Device Icon</li> 										<li><span class='device_icons'></span></li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>IPv6 address</li> 										<li class='text_box'>2001:0db8:3c4d:0015:0000:00</li>"
+			+	"<li class='left_side'>IPv4 address</li> 										<li class='text_box'>63.28.214.97</li>"
+			+	"<li class='left_side'>MAC address</li> 										<li class='text_box'>1a:2b:3c:4d:5e:6f</li>"
+			+	"<li class='left_side'>Reserved IPv4 address</li> 								<li><span class='toggle_off'></span></li>"
+			+	"<li class='left_side'></li> 				 									<li class='text_box'>192.168.1.195</li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+ 	"<li class='left_side'>Demilitarized Zone (DNS)</li>							<li><span class='toggle_on'></span></li>" 
+			+ 	"<li class='left_side'></li><li></li>"
+			+ 	"<li class='left_side'>UPnP Port Forwarding</li>								<li><span class='toggle_on'></span></li>" 
+			+ "</ul>";
 	}
 	return device_panel_html;
 }
