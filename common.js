@@ -1,20 +1,14 @@
 // 
-function drawCircle(selector, center, radius, x, y) {
+$(document).bind('click', function (e) {
 
-	var total = $(selector).length;
-	var alpha = Math.PI * 2 / total;
-	       
-	$(selector).each(function(index)
-	{
-	    var theta = Math.PI/2 - alpha * index;
-	    var pointx = Math.floor(Math.cos( theta ) * radius);
-	    var pointy = Math.floor(Math.sin( theta ) * radius );
-
-
-	    $(this).css('margin-left', pointx + x + 'px');
-	    $(this).css('margin-top', pointy + y + 'px');
-	});
-}
+	// When clicking on anything outside of an open device settings panel, close the panel.
+    if( $(".device_advanced_panel").length && !$(e.target).is(".device_advanced_panel") && !$(e.target).closest(".device_advanced_panel").length ) {
+        var current_panel_id = $(".device_advanced_panel").attr("id");
+		var current_panel_device = $.grep(devices, function(device){ return device.id == current_panel_id; });
+		console.log(current_panel_device);
+		current_panel_device[0].showDetails(false);
+    }
+});
 
 // reset variables and DOM elements for a new layout
 function resetLayouts() {

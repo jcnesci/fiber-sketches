@@ -302,9 +302,9 @@ function populateDevicesGrid() {
 
   // Do stuff to all devices...
   for ( var i = 0; i < devices.length; i++ ) {
-    // Show details panels of certain devices.
+    // Clicking on a device's icon display its settings panel. Stop propagation so the event doesn't go to the document.click fct in common.js which would immediately close the panel.
     if ( devices[i].type != "router" && devices[i].type != "tvbox"  &&  devices[i].type != "tv" ) {
-      devices[i].el.find(".icon").click((function(clickedDevice) { return function() { clickedDevice.showDetails(true); } })(devices[i]));
+      devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { e.stopPropagation(); clickedDevice.showDetails(true); } })(devices[i]));
     }
   }
 
