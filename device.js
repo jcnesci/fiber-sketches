@@ -39,6 +39,11 @@ Device.prototype = {
 	addToDom: function() {
 		// Create an element and add it to the DOM
 		this.el = $("<div><div class='badge'>0</div><div class='icon'></div><div class='info'><div class='name'>" + this.name + "</div><div class='status'></div></div></div>");
+		if (this.type === "wireless_network") {
+			console.log(" - - - - - - - - - - - - - - --  - HEY: ");
+			console.log(this.el);
+		}
+
 		// dev_jc_29/09/2013_1
 		this.el.addClass("device " + this.type + " invisible") // Start hidden
 		// this.el.addClass("device " + this.type) // Start hidden

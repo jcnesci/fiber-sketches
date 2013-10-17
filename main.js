@@ -89,7 +89,6 @@ function populateDevicesGrid() {
 
   // Wireless devices
   
-  // var n_wireless_devices = random(1, 10);
   $("#container").append("<div id='wireless_container'></div>");
   for ( var i = 0; i < n_wireless_devices; i++ ) {
     // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
@@ -118,6 +117,8 @@ function populateDevicesGrid() {
     // console.log(wireless_device);
   }
   $("#container").append("<div id='wireless_icon'></div>");
+  var wireless_network = new Device("Wireless Network", "wireless_network" );
+  devices.push(wireless_network);
   
   // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
 

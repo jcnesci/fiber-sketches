@@ -73,7 +73,8 @@ function getDevicePanelHTML(device) {
 			+ 	"<li class='row_upnp'><span class='upnp'></span></li>"
 			+ "</ul>";
 	} 																																						// For network box : TODO !!!!!
-	else if ( device_type === "wireless_icon" ) {
+	else if ( device_type === "wireless_network" ) {
+		console.log("* * * * * * * * * * * * * getDevicePanelHTML WIRELESS !!!");
 		device_panel_html = "";
 	}
 	return device_panel_html;
