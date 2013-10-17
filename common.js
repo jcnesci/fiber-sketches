@@ -1,3 +1,14 @@
+// to refresh SVG lines when window is resized or scrolled
+$( window ).resize(function() {
+	$.each(devices, function(index, device) {
+	  device.update();
+	});
+});
+$( window ).scroll(function() {
+	$.each(devices, function(index, device) {
+	  device.update();
+	});
+});
 // 
 $(document).bind('click', function (e) {
 
@@ -9,7 +20,6 @@ $(document).bind('click', function (e) {
 		current_panel_device[0].showDetails(false);
     }
 });
-
 // reset variables and DOM elements for a new layout
 function resetLayouts() {
 	

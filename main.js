@@ -21,17 +21,6 @@ var a_random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs"
 $(document).ready(function() {
   $("#svg_container").svg();  // Initialize the SVG canvas
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
-  // to refresh SVG lines when window is resized or scrolled
-  $( window ).resize(function() {
-    $.each(devices, function(index, device) {
-      device.update();
-    });
-  });
-  $( window ).scroll(function() {
-    $.each(devices, function(index, device) {
-      device.update();
-    });
-  });
   
   // set network complexity
   setNetworkComplexity( "high" );
@@ -303,7 +292,7 @@ function populateDevicesGrid() {
   // Do stuff to all devices...
   for ( var i = 0; i < devices.length; i++ ) {
     // Clicking on a device's icon display its settings panel. Stop propagation so the event doesn't go to the document.click fct in common.js which would immediately close the panel.
-    if ( devices[i].type != "router" && devices[i].type != "tvbox"  &&  devices[i].type != "tv" ) {
+    if ( devices[i].type !== "router" && devices[i].type !== "tvbox"  &&  devices[i].type !== "tv" ) {
       devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { e.stopPropagation(); clickedDevice.showDetails(true); } })(devices[i]));
     }
   }

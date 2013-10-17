@@ -213,10 +213,13 @@ img {
 	background: #FFF;
 	outline: 1px solid #DDD;				/*Use outline instead of border because border affects the width of the div, messes the perfect positioning over the device icon.*/
 	border-radius: 3px;
-	box-shadow: 0 1px 1px #CCC;
+	box-shadow: 1px 1px 3px #CCC;
 	z-index: 1000000;
 	display: none;
 	/*opacity: 0.5;*/
+}
+.device_advanced_panel.networkbox {
+	width: 500px;
 }
 .device_advanced_panel .icon {
 	width: 128px;
@@ -234,33 +237,88 @@ img {
 	padding: 7px;
 	margin-bottom: 40px;
 }
-.device_advanced_panel h2 {
-	margin-bottom: 40px;
-}
 .device_advanced_panel ul {
 	list-style: none;
 	margin: 0;
-	padding: 0;
+	/*padding: 10px;*/
+	padding:0;
 	padding-bottom: 30px;
+	float:left;
+	margin-left:0px;
+	overflow: hidden;
+	width: 100%;
 }
 .device_advanced_panel ul li {
+	/*border-bottom: 1px solid black;*/
+    float: left;
+    width: 50%;
 	margin: 0 0 5px 0;
+    line-height: 20px;
+    min-height: 20px;
+    overflow: hidden;
+    text-align: justify;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	color: #626D77;
 	text-decoration: none;
 }
-.device_advanced_panel .right_side {
-	float:right;
-	margin-right: 0px;
-	color: #207fd1;
-
+.device_advanced_panel ul li.text_box {
+	width: 48%;/*47%;*/
+	padding-left: 5px;
+	border: 1px solid #CCCCCC;
 }
-
-
-
-
-
+/*.device_advanced_panel h2 {
+	margin-bottom: 40px;
+}*/
+.device_advanced_panel .help {
+    width:15px;
+    height:15px;
+    -moz-border-radius: 15px/15px;
+    -webkit-border-radius: 15px 15px;
+    border-radius: 15px/15px;;
+    margin-right:5px;
+    background-color: #CCCCCC;
+    text-align: center;
+    padding: 0 6px;
+    margin-left:5px;
+    /*box-shadow: 1px 1px 3px #626D77;*/
+}
+.device_advanced_panel .toggle_on {
+	width: 64px;
+	height: 21px;
+	display:inline-block;
+	background-image: url(../images/device_panel_btn_on.png);
+}
+.device_advanced_panel .toggle_off {
+	width: 64px;
+	height: 21px;
+	display:inline-block;
+	background-image: url(../images/device_panel_btn_off.png);
+}
+.device_advanced_panel .device_icons {
+	width: 195px;
+	height: 27px;
+	display:inline-block;
+	background-image: url(../images/device_panel_device_icons.png);
+}
+.device_advanced_panel .restart {
+	width: 75px;
+	height: 21px;
+	display:inline-block;
+	background-image: url(../images/device_panel_btn_restart.png);
+}
+.device_advanced_panel ul li.row_dhcp {
+	width: 499px;
+	height: 119px;
+	display:inline-block;
+	background-image: url(../images/device_panel_dhcp.png);
+}
+.device_advanced_panel ul li.row_upnp {
+	width: 499px;
+	height: 80px;
+	display:inline-block;
+	background-image: url(../images/device_panel_upnp.png);
+}
 
 
 

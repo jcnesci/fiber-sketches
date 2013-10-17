@@ -26,29 +26,59 @@ function Device(name, type) {
 	this.mass = 1;
 	this.target = [0,0];
 
-	// Advanced Settings Panel html content
-	this.advanced_settings = "<div class='icon'></div>"
-		+ "<div class='info'><div class='name'>" + this.name + "</div></div>"
-		+ "<h2>Settings</h2>" 
-		+ "<ul>"
-		+	"<li>Device Name 										<span class='right_side'>" + this.name + "</span></li>"
-		+	"<li>Status 											<span class='right_side'>Connected - 100 mbps</span></li>"
-		+	"<li>Device Icon 										<span class='right_side'></span></li>"
-		+ "</ul>"
-		+ "<h2>Addresses</h2>" 
-		+ "<ul>"
-		+	"<li>IPv6 address 										<span class='right_side'>2001:0db8:3c4d:0015:0000:00</span></li>"
-		+	"<li>IPv4 address 										<span class='right_side'>63.28.214.97</span></li>"
-		+	"<li>MAC address 										<span class='right_side'>1a:2b:3c:4d:5e:6f</span></li>"
-		+	"<li>Reserved IPv4 address 								<span class='right_side'>Off</span></li>"
-		+	"<li>				 									<span class='right_side'>192.168.1.195</span></li>"
-		+ "</ul>"
-		+ "<ul>"
-		+ 	"<li><h2>Demilitarized Zone (DNS)</h2>					<span class='right_side'>On</span></li>" 
-		+ "</ul>"
-		+ "<ul>"
-		+ 	"<li><h2>UPnP Port Forwarding</h2>						<span class='right_side'>On</span></li>" 
-		+ "</ul>";
+	// Content of device settings panel
+	// For personal devices
+	if ( this.type === "laptop" || this.type === "phone" || this.type === "storage" ) {
+		this.advanced_settings = "<div class='icon'></div>"
+			+ "<div class='info'><div class='name'>" + this.name + "</div></div>"
+			+ "<ul>"
+			+	"<li class='left_side'>Device Name</li> 										<li class='text_box'>" + this.name + "</li>"
+			+	"<li class='left_side'>Status</li> 												<li>Connected - 100 mbps <span class='help'>?</span></li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>Device Icon</li> 										<li><span class='device_icons'></span></li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>IPv6 address</li> 										<li class='text_box'>2001:0db8:3c4d:0015:0000:00</li>"
+			+	"<li class='left_side'>IPv4 address</li> 										<li class='text_box'>63.28.214.97</li>"
+			+	"<li class='left_side'>MAC address</li> 										<li class='text_box'>1a:2b:3c:4d:5e:6f</li>"
+			+	"<li class='left_side'>Reserved IPv4 address</li> 								<li><span class='toggle_off'></span></li>"
+			+	"<li class='left_side'></li> 				 									<li class='text_box'>192.168.1.195</li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+ 	"<li class='left_side'>Demilitarized Zone (DNS)</li>							<li><span class='toggle_on'></span></li>" 
+			+ 	"<li class='left_side'></li><li></li>"
+			+ 	"<li class='left_side'>UPnP Port Forwarding</li>								<li><span class='toggle_on'></span></li>" 
+			+ "</ul>";
+	} // For network box
+	else if ( this.type === "networkbox" ) {
+		this.advanced_settings = "<div class='icon'></div>"
+			+ "<div class='info'><div class='name'>" + this.name + "</div></div>"
+			+ "<ul>"
+			+	"<li class='left_side'>Fiber Status</li> 										<li>Connected - 100 mbps <span class='help'>?</span></li>"
+			+	"<li class='left_side'></li>					 								<li><span class='restart'></span></li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>Router IPv6 address</li> 								<li>2001:0db8:3c4d:0015:0000:0000:abcd:ef12</li>"
+			+	"<li class='left_side'>Router WAN IPv4 address</li> 							<li>63.28.214.97</li>"
+			+	"<li class='left_side'>Router LAN MAC address</li> 								<li>1a:2b:3c:4d:5e:6f</li>"
+			+	"<li class='left_side'>Router LAN IPv4 address</li> 							<li class='text_box'>192.168.1.1</li>"
+			+	"<li class='left_side'>Subnet Mask</li> 										<li class='text_box'>255.255.255.0</li>"
+			+	"<li class='left_side'>DHCP Start Address</li> 									<li class='text_box'>192.168.1.100</li>"
+			+	"<li class='left_side'>DHCP End Address</li> 									<li class='text_box'>192.168.1.254</li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>Dynamic DNS service</li> 								<li class='text_box'>DynDNS</li>"
+			+	"<li class='left_side'>Username</li> 											<li class='text_box'>BransonFamily</li>"
+			+	"<li class='left_side'>Password</li> 											<li class='text_box'>branson11235</li>"
+			+	"<li class='left_side'>Domain/hostname</li> 									<li class='text_box'>home.bransonfamily.com</li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+	"<li class='left_side'>DHCP Leases</li><li></li>"
+			+ 	"<li class='row_dhcp'><span class='dhcp'></span></li>"
+			+ 	"<li class='left_side'></li><li></li>"
+			+ 	"<li class='left_side'>UPnP Port Forwarding</li>								<li><span class='toggle_off'></span></li>" 
+			+ 	"<li class='row_upnp'><span class='upnp'></span></li>"
+			+ "</ul>";
+	} 																																						// For network box : TODO !!!!!
+	else if ( this.type === "wireless_icon" ) {
+		this.advanced_settings = "";
+	}
+
 
 	//  for routers
 	this.router_visibility = true;
@@ -96,10 +126,10 @@ Device.prototype = {
 			// Bug fix found online: must wait 1 clock cycle (accomplished by the 0ms delay here) so that jQuery can succesfully retrieve the width of this newly created element. Otherwise it returns zero.
 			setTimeout(function(){
 				new_panel.css({
-					"top": thisthis.el.offset().top - $("#container").offset().top - padding_topAndBottom,
+					"top": thisthis.el.offset().top - $("#container").offset().top,// - padding_topAndBottom,
 					"left": ( (thisthis.el.offset().left - $("#container").offset().left) + thisthis.el.width()/2 - new_panel.width()/2 ) - padding_leftAndRight,				//DEV - PROBLEM: cant get the calculation right to left-align panel to the clicked device.
-					"padding-top": padding_topAndBottom,
-					"padding-bottom": padding_topAndBottom,
+					// "padding-top": padding_topAndBottom,
+					// "padding-bottom": padding_topAndBottom,
 					"padding-left": padding_leftAndRight,
 					"padding-right": padding_leftAndRight
 				});
