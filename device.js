@@ -39,14 +39,7 @@ Device.prototype = {
 	addToDom: function() {
 		// Create an element and add it to the DOM
 		this.el = $("<div><div class='badge'>0</div><div class='icon'></div><div class='info'><div class='name'>" + this.name + "</div><div class='status'></div></div></div>");
-		if (this.type === "wireless_network") {
-			console.log(" - - - - - - - - - - - - - - --  - HEY: ");
-			console.log(this.el);
-		}
-
-		// dev_jc_29/09/2013_1
 		this.el.addClass("device " + this.type + " invisible") // Start hidden
-		// this.el.addClass("device " + this.type) // Start hidden
 		this.el.attr("id", "device_" + this.id);
 		this.el.offset(this.anchor);	
 		$("#container").append(this.el);
@@ -87,6 +80,14 @@ Device.prototype = {
 					"padding-left": padding_leftAndRight,
 					"padding-right": padding_leftAndRight
 				});
+				// Addtional CSS for the Wireless Network device.
+				if ( thisthis.type === "wireless_network" ) {
+					new_panel.css({
+						"top": thisthis.el.offset().top - $("#container").offset().top - padding_topAndBottom,
+						"padding-top": padding_topAndBottom,
+						"padding-bottom": padding_topAndBottom
+					});
+				}
 			},0);
 			new_panel.html(this.advanced_settings);
 			new_panel.click(function() { thisthis.showDetails(false);});

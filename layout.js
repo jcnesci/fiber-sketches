@@ -194,7 +194,6 @@ function layoutDevices(type) {
 
 			// Once devices placed, fade in devices and show connectors.
 			$.each(devices, function(index, device) {
-				if (device.type === "wireless_network") { console.log("% % % % % % % % % %% % % % SHOWN "); }
 				device.el.animate({
 					opacity: 1,
 				}, {
@@ -261,7 +260,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 	var n_columns = 4;
 	var n_device_width = n_device_height = 200;
 	// Wired vars, general
-	var in_between_space_wired_wireless = 100;
+	var in_between_space_wired_wireless = 40;
 	var network_box_y;
 	// Wired vars, Level 1 (Tree)
 	var counter_wired_l1 = 0;
@@ -334,13 +333,9 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 					// Place the Wireless Signal icon
 					var n_total_rows = Math.ceil(array_wireless_devices.length/n_columns);						// need to know the total number of rows to know where to wireless icon after the devices.
 					var n_total_rows_height = n_total_rows * n_device_height;
-					// $("#wireless_icon").css("top", n_total_rows_height );			//DEV - PROBLEM: top attribute here is relative to the last wireless device, which is not the lowest one in Y, so it messes up the calculation... need to be able to position icon below container of devices, but container has no height value. Clearfix does not change that. How to fix?
-					// console.log('wireless icon TOP: '+ $("#wireless_icon").css("top"));
-
-					$(".wireless_network").css("top", n_total_rows_height );
-					$(".wireless_network").css('display', 'block');
-					$(".wireless_network").css('opacity', 0);
-					
+					$(".device.wireless_network").css("top", n_total_rows_height );								// Use ".device.wireless_network" and not just ".wireless_network" so it's not confused with ".device_advanced_panel.wireless_network".
+					$(".device.wireless_network").css('display', 'block');
+					$(".device.wireless_network").css('opacity', 0);
 				}
 				
 			}
@@ -350,7 +345,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 				if ( counter_wired_l1 === 0 && counter_wired_l2 === 0 ) {
 					// start by placing the Network Box under the wireless devices.
 					// network_box_y = $("#wireless_icon").position().top + $("#wireless_icon").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
-					network_box_y = $(".wireless_network").position().top + $(".wireless_network").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
+					network_box_y = $(".device.wireless_network").position().top + $(".device.wireless_network").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
 					devices[0].el.css("top", network_box_y);
 					// console.log('Net box TOP: ' + devices[0].el.css("top"));
 
