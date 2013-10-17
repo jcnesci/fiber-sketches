@@ -208,15 +208,15 @@ img {
 /*Device advanced settings panel for 2 zone layout*/
 .device_advanced_panel {
 	position: absolute;
-	width: 500px;
+	width: 400px;
 	margin: 0 auto;
 	background: #FFF;
 	outline: 1px solid #DDD;				/*Use outline instead of border because border affects the width of the div, messes the perfect positioning over the device icon.*/
 	border-radius: 3px;
 	box-shadow: 0 1px 1px #CCC;
 	z-index: 1000000;
-	/*opacity: 0.5;*/
 	display: none;
+	/*opacity: 0.5;*/
 }
 .device_advanced_panel .icon {
 	width: 128px;
