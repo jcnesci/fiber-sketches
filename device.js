@@ -198,9 +198,9 @@ Device.prototype = {
         if ( this.expanded === false ) {
         	// close other open nodes first
         	$.each(routing_devices, function(index, other_dev) {
-	            if ( other_dev.expanded === true && other_dev.name !== "Network Box" ) {
-	              other_dev.expanded = false;
-	              if ( other_dev.type === "router" ) this.router_visibility = true;				// re-display router nodes that we are collapsing back.
+	            if ( other_dev.expanded === true && other_dev.name !== "Network Box" && other_dev.name !== "Wireless Network" ) {
+	              other_dev.expanded = false;													// Set this to false so when its updated, it closes.
+	              if ( other_dev.type === "router" ) this.router_visibility = true;				// Set to true so its icon is re-displayed once closed.
 	              other_dev.update();
 	            }
 	        });
@@ -210,7 +210,6 @@ Device.prototype = {
 			this.expanded = true;
 			this.update();
         }
-        
 	},
 	editName: function(state) {
 		if(state == true) {

@@ -291,6 +291,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 		}
 		// for displaying nodes
 		else {
+
 			if ( device.is_wireless === true ) {
 				
 				console.log('- - - - WIRELESS - GRID layout');
@@ -330,12 +331,12 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 						"position": "relative",
 						"top": n_full_rows_height
 					});
-					// Place the Wireless Signal icon
+					// Place the Wireless Signal icon. Must do it this way, amnually, because it has no conections, technically (meaning, it won't be in this loop).
 					var n_total_rows = Math.ceil(array_wireless_devices.length/n_columns);						// need to know the total number of rows to know where to wireless icon after the devices.
 					var n_total_rows_height = n_total_rows * n_device_height;
 					$(".device.wireless_network").css("top", n_total_rows_height );								// Use ".device.wireless_network" and not just ".wireless_network" so it's not confused with ".device_advanced_panel.wireless_network".
 					$(".device.wireless_network").css('display', 'block');
-					$(".device.wireless_network").css('opacity', 0);
+					// $(".device.wireless_network").css('opacity', 0);											// dev_jc_17/10/2013: make wireless icon not flcikr on update()
 				}
 				
 			}
@@ -347,6 +348,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 					// network_box_y = $("#wireless_icon").position().top + $("#wireless_icon").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
 					network_box_y = $(".device.wireless_network").position().top + $(".device.wireless_network").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
 					devices[0].el.css("top", network_box_y);
+					$(".device.wireless_network").attr("spacing", in_between_space_wired_wireless);
 					// console.log('Net box TOP: ' + devices[0].el.css("top"));
 
 					// Re-adjust position of Wired Zone background to align with position of Net Box.

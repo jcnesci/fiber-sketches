@@ -3,6 +3,13 @@ $( window ).resize(function() {
 	$.each(devices, function(index, device) {
 	  device.update();
 	});
+	// For Grid layout, re-position the Wired background div (grey container) when user resizes window.
+	if (_layout_type === "grid") {
+		$("#container_background").css({
+			"top": $(".device.networkbox").offset().top - $(".device.wireless_network").attr("spacing")/2,
+			"left": $('#container').width()/2 - $('#container_background').width()/2 + $('#container').offset().left
+		});
+	}
 });
 $( window ).scroll(function() {
 	$.each(devices, function(index, device) {
