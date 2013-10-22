@@ -582,8 +582,13 @@ function populateDevicesDragAndDrop() {
 
   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah"];
   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs"]
-  var n_personal_devices = Math.round(Math.random() * 8 + 2);
+  // We wish to limit the number of total Level1 devices (direct children of Network box) to 6.
+  // Start by creating a few routers, then create personal devices with number of remaining slots.
+  var n_max_devices = 6;
   var n_tv_devices = Math.round(Math.random() * 3);
+  var n_personal_devices = Math.round(Math.random() * ( n_max_devices - n_tv_devices - 2 ) + 2 );       // guaranteed at least 2 devices.
+  // var n_personal_devices = Math.round(Math.random() * 8 + 2);
+  
 
   // Create personal devices (phones, laptops, etc)
   for(var i=0; i<n_personal_devices; i++) {
@@ -624,10 +629,10 @@ function populateDevicesDragAndDrop() {
   }
 
 
-  // Connect each device to a router
+  // Connect each personal device to a router : only connect them to the Network box, not to the TV boxes. This is to make sure no children of TV boxes overlap with each other, and will keep things simple.
   $.each(personal_devices, function(index, device) {
-    var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
-
+    // var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
+    var router = devices[0];
     var type = Math.random() < 0.5 ? "wired" : "wireless";
     connections.push(new Connection(router, device, type, 1));  
   });
