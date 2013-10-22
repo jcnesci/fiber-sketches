@@ -10,8 +10,11 @@ function Connection(a, b, type, strength) {
 	this.a.connections.push(this)
 	this.b.connections.push(this)
 
-	this.shape = "bezier"; // "bezier"
-    this.halfCell = devices[0].size.width / 2;
+	this.halfCell = devices[0].size.width / 2;
+	
+	//this.shape = "bezier"; // "bezier"
+	this.shape = Connection.shapes[current_connection_style % Connection.shapes.length]
+	
 	this.addToDom();
 }
 

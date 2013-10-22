@@ -230,7 +230,7 @@ function layoutDevices(type) {
 				// top: $(window).height()/2-devices[0].size.height/2,
 				// left: $(window).width()/2-devices[0].size.width/2
 				//dev_jc_17/09/2013_a
-				top: $('#container').height()/2-devices[0].size.height/2,
+				top: $('#container').height()/4-devices[0].size.height/2,
 				left: $('#container').width()/2-devices[0].size.width/2
 			}, function() {
 				runTinyPhysics(false);
@@ -501,9 +501,9 @@ function treePlace(root, start_x, start_y, hidden) {
 function runTinyPhysics(snapToGrid) {
 	// TUNING PARAMETERS
 	// -------------------------------------------------------------------------------------------------------
-	var SPRING_K = 0.1;		// Spring force constant
-	var SPRING_REST = 100;	// Spring resting distance
-	var REPULSION_K = 2;	// Repulsion force between nodes to keep things spaced out
+	var SPRING_K = 0.2;		// Spring force constant
+	var SPRING_REST = 150;	// Spring resting distance
+	var REPULSION_K = 200;	// Repulsion force between nodes to keep things spaced out
 	var BOUNDARY_K = 10; 	// Repulsion force to keep everything constrained to the screen
 	var DAMPING = 0.5;		// Percent of velocity to retain between steps (higher numbers are bouncier)
 	var STEPS = 500;		// Steps to run towards convergence. Higher numbers are slower but more stable.
@@ -539,7 +539,7 @@ function runTinyPhysics(snapToGrid) {
 				if(other.physicsDistanceToSquared(device) < 1000000) {
 					var v = other.physicsVectorTo(device);
 					var l = Math.max(other.physicsDistanceTo(device), 0.001);
-					var m = 1/l;
+					var m = 1/(l*l);
 					F[0] += v[0]* m * REPULSION_K;
 					F[1] += v[1]* m * REPULSION_K;
 				}

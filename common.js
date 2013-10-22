@@ -132,6 +132,10 @@ function random(low, high) {
 	return Math.floor(Math.random() * (high-low)) + low;
 }
 
+function random_item(array) {
+	return array[random(0, array.length)];
+}
+
 var shading = false;
 function toggleShading(indicator) {
 	if(shading) {
