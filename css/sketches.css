@@ -3,6 +3,8 @@
 
 body {
 	font-family: 'Open Sans', sans-serif;
+	/*overflow: auto;
+	height: 100%;*/
 }
 
 #controller {
@@ -24,10 +26,12 @@ body {
 }
 #container_background {
 	position: absolute;
-	top:100;
+	top:100px;
 	left: 25%;
 	width: 960px;
-	height: 90%;
+	/*height: 500px;*/
+	/*bottom: 50px;*/
+	/*margin-bottom: 50px;*/
 	background-color: #F3F3F3;
 	z-index: -2;
 	border-radius: 6px;
@@ -267,7 +271,13 @@ SVG {
 	left: 0px;
 	top: 0px;
 	z-index: -1;
+	/*height: 4000px;*/
 }
+/*#svg_container {
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+}*/
 
 h2 {
 	text-transform: uppercase;

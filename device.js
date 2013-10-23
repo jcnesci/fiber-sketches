@@ -188,6 +188,9 @@ Device.prototype = {
 			this.el.children().css("opacity", 1);
 		}
 
+		// Sometimes expanding nodes will make the page longer, and SVG lines won't draw below the edge of the screen unless we reset the document height on the SVG div.
+		resetSvgDivHeight();
+
 	},
 	buildStatus: function() {
 		this.el.find(".status").html("STATUS: ONLINE<br />IP " + (this.static_ip ? "(static)" : "(DHCP)") + ": <div class='ip_slot'>" + this.ip + "</div>");

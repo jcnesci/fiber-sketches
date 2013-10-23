@@ -1,5 +1,6 @@
-// to refresh SVG lines when window is resized or scrolled
+// 
 $( window ).resize(function() {
+
 	$.each(devices, function(index, device) {
 	  device.update();
 	});
@@ -11,11 +12,12 @@ $( window ).resize(function() {
 		});
 	}
 });
-$( window ).scroll(function() {
-	$.each(devices, function(index, device) {
-	  device.update();
-	});
-});
+// Was used to update SVG lines so they draw lines below edge of screen when user scrolls. Stopped working somehow.
+// $( window ).scroll(function() {
+// 	$.each(devices, function(index, device) {
+// 	  device.update();
+// 	});
+// });
 // 
 $(document).bind('click', function (e) {
 
@@ -27,6 +29,15 @@ $(document).bind('click', function (e) {
 		current_panel_device[0].showDetails(false);
     }
 });
+// Sometimes expanding nodes will make the page longer, and SVG lines won't draw below the edge of the screen unless we reset the document height on the SVG div.
+function resetSvgDivHeight() {
+	var body = document.body,
+    	html = document.documentElement;
+	// Get the height of the document by choosing the largest number of all possible height document attributes.
+	var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );	
+	// console.log(" * * * * * height = "+ height);
+	$('svg').height( height );
+}
 // Provide HTML content for a specified device's settings panel.
 function getDevicePanelHTML(device) {
 	var device_panel_html;

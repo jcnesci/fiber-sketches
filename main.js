@@ -11,6 +11,7 @@ var dragging = null; // item that is being dragged
 var hovering = null; // item currently hovering over
 
 // for network complexities
+var network_complexity = undefined;
 var n_tv_boxes;
 var n_wireless_devices;
 var n_wired_devices;
@@ -43,7 +44,8 @@ $(document).ready(function() {
 
 // Choose one of three prototypical networks, based on Google's specifications.
 function setNetworkComplexity( cur_network_complexity ) {
-  switch( cur_network_complexity ) {
+  network_complexity = cur_network_complexity;
+  switch( network_complexity ) {
     case "low": 
       n_tv_boxes = 1;
       n_wireless_devices = 1;
@@ -88,7 +90,6 @@ function populateDevicesGrid() {
   // - - - - - - - - - - - - - - - WIRELESS DEVICES - - - - - - - - - - - - - - - - - 
 
   // Wireless devices
-  
   $("#container").append("<div id='wireless_container'></div>");
   for ( var i = 0; i < n_wireless_devices; i++ ) {
     // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
@@ -122,6 +123,11 @@ function populateDevicesGrid() {
   devices.push(wireless_network);
   
   // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
+
+  // Set height of container_background, grey background to wired devices. Harcoded for now.
+  if ( network_complexity === "low" ) $("#container_background").css("height", 3 * devices[0].size.height);
+  else if ( network_complexity === "average" ) $("#container_background").css("height", 3 * devices[0].size.height);
+  else if ( network_complexity === "high" ) $("#container_background").css("height", 4 * devices[0].size.height);
 
   // WIRED - TV Boxes and TVs
   if (n_tv_boxes > 3) {
@@ -419,7 +425,7 @@ function populateDevicesCollapsedNodes() {
 
       box_device.expanded = false;  // Start off closed
 
-      // Same as above. Closures are weird. Open/close node if clicked on.
+      // Same as above. Closures are weird. Open/closede node if clicked on.
       box_device.el.click((function(dev) { return function() { dev.expandSubnodes(); layoutDevices('tree'); } })(box_device));
 
       devices.push(box_device);

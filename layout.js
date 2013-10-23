@@ -120,6 +120,7 @@ function layoutDevices(type) {
 			});		
 			break;
 		case "random grid":
+			
 			// Place the devices randomly within a grid layout
 			// -----------------------------------------------
 			var grid_width = 6;
