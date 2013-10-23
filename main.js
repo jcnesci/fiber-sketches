@@ -23,7 +23,7 @@ $(document).ready(function() {
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
   
   // set network complexity
-  setNetworkComplexity( "high" );
+  setNetworkComplexity( "low" );
 
   // create and display network
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
