@@ -39,11 +39,19 @@
         </ul>
       </li>
       <li>
+        <a href="#">Complexity</a>
+        <ul>
+          <li><a href="#" onClick="setNetworkComplexity('low'); populateDevicesGrid(); layoutDevices('grid');">Low</a></li>
+          <li><a href="#" onClick="setNetworkComplexity('average'); populateDevicesGrid(); layoutDevices('grid');">Average</a></li>
+          <li><a href="#" onClick="setNetworkComplexity('high'); populateDevicesGrid(); layoutDevices('grid');">High</a></li>
+        </ul>
+      </li>
+      <li>
         <a href="#">Options</a>
         <ul>
           <li><a href="#" onClick="toggleShading(this)">Toggle Cells</a></li>
           <li><a id="toggle-button" href="#" onClick="toggleConnectors(this)">Toggle Connector Style</a></li>
-          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('tree')">New Network</a></li>
+          <!-- <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('tree')">New Network</a></li> -->
         </ul>
       </li>
     </ul>

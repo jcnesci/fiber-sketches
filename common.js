@@ -126,6 +126,10 @@ function resetLayouts() {
 	array_wireless_devices.length = 0;					// used only in populateDevicesGrid()
 	array_level1_wired_devices.length = 0;				// used only in populateDevicesGrid()
 
+	// Re-populate name arrays
+	a_random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Mom", "Dad", "Steve", "Kengo", "Kumar"];
+	a_random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room", "Den", "Library", "Man Cave", "Garage", "Gameroom"];
+
 }
 // generates random number that is greater or equal to low-bound, and smaller than high-bound.
 function random(low, high) {
