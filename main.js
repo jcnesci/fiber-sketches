@@ -378,9 +378,18 @@ function populateDevicesCollapsedNodes() {
 
   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"]
-  var n_personal_devices = Math.round(Math.random() * 8 + 2);
-  var n_tv_devices = Math.round(Math.random() * 3);
-  var n_routers = random(1,4);
+  
+  // var n_personal_devices = Math.round(Math.random() * 8 + 2);
+  // var n_tv_devices = Math.round(Math.random() * 3);
+  // var n_routers = random(1,4);
+  
+  // We wish to limit the number of personal devices to 4 per router (not including the Network box, although it will be getting some of these devices).
+  var n_routers = random(1,4);                            // routers here means either normal routers or TV boxes.
+  var n_max_devices = 3;
+  var n_personal_devices = Math.round(Math.random() * (( n_routers * n_max_devices ) - n_routers) + n_routers);         // guaranteed at least as many devices as there are routers.
+  console.log(" --- --- - - - - - - - - - - - n_routers : "+ n_routers);
+  console.log(" --- --- - - - - - - - - - - - n_personal_devices : "+ n_personal_devices);
+
 
   // Create a few routers
   for(var i=0; i<n_routers; i++) {
@@ -395,13 +404,14 @@ function populateDevicesCollapsedNodes() {
       router.el.click((function(dev) { return function() { dev.expandSubnodes(); layoutDevices('tree'); } })(router));
       //router.el.click(function() { router.expandSubnodes() });
 
-      devices.push(router);
-      routing_devices.push(router);
-
       // Connect to an existing router or the Network box
-      var parent = Math.random() < 0.5 ? devices[0] : routing_devices[random(0,routing_devices.length)];
+      // var parent = Math.random() < 0.5 ? devices[0] : routing_devices[random(0,routing_devices.length)];
+      var parent = devices[0];
       connections.push(new Connection(parent, router, "wired", 1));
 
+      // 
+      devices.push(router);
+      routing_devices.push(router);
     }
     else {
       var box_device = new Device(room + " TV Box", "tvbox");
@@ -448,12 +458,70 @@ function populateDevicesCollapsedNodes() {
 
   // Connect each device to a router
   $.each(personal_devices, function(index, device) {
-    //var router = Math.random() < 0.8 ? devices[0] : routing_devices[random(0, routing_devices.length)]; // Favor network box
-    var router = routing_devices[random(0, routing_devices.length)];
+    
+    var empty_routers = [];
+    var one_child_routers = [];
+    var other_routers = [];
+
+    $.each(routing_devices, function(i, routing_device) {
+      var router_children = 0;
+      for(var y=0; y<routing_device.connections.length; y++) {
+        if(routing_device.connections[y].a == routing_device) router_children++;
+      }
+      if (router_children === 0) empty_routers.push(routing_device);
+      else if (router_children === 1) one_child_routers.push(routing_device);
+      else if (router_children < 4) other_routers.push(routing_device);
+    });
+
+    if (empty_routers.length > 0) var cur_router = empty_routers[random(0, empty_routers.length)];
+    else if (one_child_routers.length > 0) var cur_router = one_child_routers[random(0, one_child_routers.length)];
+    else {
+      console.log(" - - - - - - - - - * other_routers: "+ other_routers);
+      var cur_router = other_routers[random(0, other_routers.length)];
+    } 
+
+    console.log("Selected router: "+ cur_router.name);
 
     var type = Math.random() < 0.5 ? "wired" : "wireless";
-    connections.push(new Connection(router, device, type, 1));  
+    connections.push(new Connection(cur_router, device, type, 1));  
   });
+
+  // OLD
+  // // Connect each device to a router
+  // $.each(personal_devices, function(index, device) {
+  //   // Start by populating empty routers, if any.
+  //   var empty_routers = $.grep(routing_devices, function(router){ 
+  //     var router_children = 0;
+  //     for(var i=0; i<router.connections.length; i++) {
+  //       if(router.connections[i].a == router) router_children++;
+  //     }
+  //     return router_children === 0; 
+  //   });
+  //   // console.log("- - - - - empty_routers: "+ empty_routers.length);
+
+  //   // Select an empty router.
+  //   if ( empty_routers.length > 0 ) {
+  //     var cur_router = empty_routers[random(0, empty_routers.length)];
+  //   }
+  //   // Select any router that has less than 4 children, to avoid clutter.
+  //   else {
+  //     var potential_routers = $.grep(routing_devices, function(router){ 
+  //       var router_children = 0;
+  //       for(var i=0; i<router.connections.length; i++) {
+  //         if(router.connections[i].a == router) router_children++;
+  //       }
+  //       // console.log("*** name: "+ router.name + "router_children = "+ router_children);
+  //       return router_children < 4; 
+  //     });
+  //     // console.log(" --- --- - - - - - - - - - - - potential_routers : ");
+  //     var cur_router = potential_routers[random(0, potential_routers.length)];
+  //   }
+
+  //   // console.log("Selected router: "+ cur_router.name);
+
+  //   var type = Math.random() < 0.5 ? "wired" : "wireless";
+  //   connections.push(new Connection(cur_router, device, type, 1));  
+  // });
 
   // Expand routers with only 1 device
   $.each(routing_devices, function(index, device) {
