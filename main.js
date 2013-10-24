@@ -25,12 +25,12 @@ $(document).ready(function() {
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
   
   // set network complexity
-  setNetworkComplexity( "high" );
+  setNetworkComplexity( "low" );
 
   // create and display network
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
-  populateDevicesGrid();
-  layoutDevices("grid");
+  populateDevicesDefault();
+  layoutDevices("tree");
   // populateDevicesOrbital();
   // layoutDevices("orbital");
   
@@ -63,6 +63,14 @@ function setNetworkComplexity( cur_network_complexity ) {
       n_wired_devices = 5;
       break;
   }
+}
+// Refresh the current layout. Useful after changing the network complexity, to run the same layout we already had.
+function refreshLayout() {
+  if ( _layout_type === "grid" ) { populateDevicesGrid(); layoutDevices('grid'); }
+  else if ( _layout_type === "tree" ) { populateDevicesDefault(); layoutDevices('tree'); }
+  else if ( _layout_type === "physics" ) { populateDevicesPhysics(); layoutDevices('physics'); }
+  else if ( _layout_type === "random" ) { populateDevicesDefault(); layoutDevices('random'); }
+  else if ( _layout_type === "random grid" ) { populateDevicesDefault(); layoutDevices('random grid'); }
 }
 
 // TODO: decide if we keep this or not. It is technicaly correct, but is highly undesirable. Thus, proves necessity of a collapsible network.
@@ -482,7 +490,7 @@ function populateDevicesGrid() {
       devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { e.stopPropagation(); clickedDevice.showDetails(true); } })(devices[i]));
     }
   }
-  
+
 }
 
 // Unaffected by network complexities.

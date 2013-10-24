@@ -37,7 +37,7 @@ function resetSvgDivHeight() {
 	var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );	
 	// use the global multiplier var
 	if (svg_div_height_multiplier === undefined) svg_div_height_multiplier = 1;
-	console.log(" * * * * * height * "+svg_div_height_multiplier+" = "+ height * svg_div_height_multiplier);
+	// console.log(" * * * * * height * "+svg_div_height_multiplier+" = "+ height * svg_div_height_multiplier);
 	$('svg').height( height * svg_div_height_multiplier );
 }
 // Provide HTML content for a specified device's settings panel.

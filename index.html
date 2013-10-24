@@ -28,7 +28,7 @@
           <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('tree')">Tree</a></li>
           <li><a href="#" onClick="populateDevicesPhysics(); layoutDevices('physics')">Physics</a></li>
           <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('random')">Random</a></li>
-          <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('random grid')">Random Grid</a></li>
+          <!-- <li><a href="#" onClick="populateDevicesDefault(); layoutDevices('random grid')">Random Grid</a></li>  -->
         </ul>
       </li>
       <li>
@@ -41,9 +41,9 @@
       <li>
         <a href="#">Complexity</a>
         <ul>
-          <li><a href="#" onClick="setNetworkComplexity('low'); populateDevicesGrid(); layoutDevices('grid');">Low</a></li>
-          <li><a href="#" onClick="setNetworkComplexity('average'); populateDevicesGrid(); layoutDevices('grid');">Average</a></li>
-          <li><a href="#" onClick="setNetworkComplexity('high'); populateDevicesGrid(); layoutDevices('grid');">High</a></li>
+          <li><a href="#" onClick="setNetworkComplexity('low'); refreshLayout();">Low</a></li>
+          <li><a href="#" onClick="setNetworkComplexity('average'); refreshLayout();">Average</a></li>
+          <li><a href="#" onClick="setNetworkComplexity('high'); refreshLayout();">High</a></li>
         </ul>
       </li>
       <li>

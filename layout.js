@@ -228,7 +228,7 @@ function layoutDevices(type) {
 			console.log('container.width------ ' + $('#container').width());
 
 			if ( network_complexity !== "high" ) { var y_adjuster = 2; }
-			else { var y_adjuster = 1; }
+			else { var y_adjuster = 1.5; }
 			devices[0].el.animate({
 				top: $('#container').height()/y_adjuster-devices[0].size.height/2,
 				left: $('#container').width()/2-devices[0].size.width/2
