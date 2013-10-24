@@ -227,15 +227,25 @@ function layoutDevices(type) {
 			console.log('container.height------ ' + $('#container').height());
 			console.log('container.width------ ' + $('#container').width());
 
+			if ( network_complexity !== "high" ) { var y_adjuster = 2; }
+			else { var y_adjuster = 1; }
 			devices[0].el.animate({
-				// top: $(window).height()/2-devices[0].size.height/2,
-				// left: $(window).width()/2-devices[0].size.width/2
-				//dev_jc_17/09/2013_a
-				top: $('#container').height()/4-devices[0].size.height/2,
+				top: $('#container').height()/y_adjuster-devices[0].size.height/2,
 				left: $('#container').width()/2-devices[0].size.width/2
 			}, function() {
 				runTinyPhysics(false);
 			});
+
+			// Shrink the entire physics layout to make it less massive overall. Must shrink the entire container but also the SVG div.
+			if ( network_complexity === "high" ) {
+				var zoom_shrink_layout = 0.8;
+				$("#container").css("zoom", zoom_shrink_layout);
+				$("#svg_container").css("zoom", zoom_shrink_layout);
+				var zoom_factor = 1 / zoom_shrink_layout;
+				svg_div_height_multiplier = zoom_factor;
+				resetSvgDivHeight();
+			}
+
 			break;
 	}
 }
@@ -504,10 +514,10 @@ function runTinyPhysics(snapToGrid) {
 	// -------------------------------------------------------------------------------------------------------
 	var SPRING_K = 0.2;		// Spring force constant
 	var SPRING_REST = 150;	// Spring resting distance
-	var REPULSION_K = 200;	// Repulsion force between nodes to keep things spaced out
+	var REPULSION_K = 700;//200;	// Repulsion force between nodes to keep things spaced out
 	var BOUNDARY_K = 10; 	// Repulsion force to keep everything constrained to the screen
 	var DAMPING = 0.5;		// Percent of velocity to retain between steps (higher numbers are bouncier)
-	var STEPS = 500;		// Steps to run towards convergence. Higher numbers are slower but more stable.
+	var STEPS = 150;		// Steps to run towards convergence. Higher numbers are slower but more stable.
 	var GRID_K = 0.1;		// Force to pull things towards grid points
 	var GRID_SIZE = 100;		// Size of grid units
 

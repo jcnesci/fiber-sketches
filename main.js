@@ -9,22 +9,23 @@ var bool_add_last = false;
 // Drag-and-drop specific stuff
 var dragging = null; // item that is being dragged
 var hovering = null; // item currently hovering over
-
 // for network complexities
 var network_complexity = undefined;
 var n_tv_boxes;
 var n_wireless_devices;
 var n_wired_devices;
-
+// Dvice names
 var a_random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Mom", "Dad", "Steve", "Kengo", "Kumar"];
 var a_random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room", "Den", "Library", "Man Cave", "Garage", "Gameroom"];
+// For SVG div, when it needs to be resized to make sure lines that go beyond bottom of screen are drawn.
+var svg_div_height_multiplier = 1;
 
 $(document).ready(function() {
   $("#svg_container").svg();  // Initialize the SVG canvas
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
   
   // set network complexity
-  setNetworkComplexity( "low" );
+  setNetworkComplexity( "high" );
 
   // create and display network
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -63,6 +64,183 @@ function setNetworkComplexity( cur_network_complexity ) {
       break;
   }
 }
+
+// TODO: decide if we keep this or not. It is technicaly correct, but is highly undesirable. Thus, proves necessity of a collapsible network.
+function populateDevicesDefault() {
+  resetLayouts();
+
+  // Create 1 Network Box
+  devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
+  routing_devices.push(devices[0]);
+  devices[0].mass = 100;
+  
+  // var n_tv_devices = Math.round(Math.random() * max_tv_devices);
+  var n_tv_devices = n_tv_boxes;
+  var a_random_names_grid = a_random_names;
+  var a_random_rooms_grid = a_random_rooms;
+  var personal_device_types = ["phone", "laptop", "storage"];
+  
+  // Create TV Boxes with their TVs for Network Box.
+  for ( var i = 0; i < n_tv_devices; i++ ) {
+    var room = a_random_rooms_grid[ random(0, a_random_rooms_grid.length) ];
+    var box_device = new Device(room + " TV Box", "tvbox");
+    var tv_device = new Device(room + " TV", "tv");
+    devices.push(box_device);
+    routing_devices.push(box_device);
+    devices.push(tv_device);
+
+    // Connect TVs to TV Box
+    connections.push(new Connection(box_device, tv_device, "wired", 1));
+
+    var parent_router = routing_devices[random(0, routing_devices.length)];
+    while ( parent_router === box_device ) {
+      // console.log("-populateDevicesDefault() ---- parent_router === box_device ");
+      parent_router = routing_devices[random(0, routing_devices.length)];
+    }
+    connections.push(new Connection(parent_router, box_device, "wired", 1));
+  }
+  
+  // 
+  for ( var i = 0; i < n_wireless_devices; i++ ) {
+    var type = personal_device_types[ random(0, personal_device_types.length) ];
+    if (type === "laptop" || type === "phone") var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
+    if (type === "storage") var name = a_random_rooms_grid[ random(0, a_random_rooms_grid.length) ] + " " + type.charAt(0).toUpperCase() + type.slice(1);
+    // create the device
+    var personal_device = new Device(name, type);
+    devices.push(personal_device);
+    personal_devices.push(personal_device);
+    // choose which connection type to make this device
+    var connection_type = "wireless";
+    // Connect Personal Device to Network Box.
+    var parent_router = routing_devices[random(0, routing_devices.length)];
+    connections.push(new Connection(parent_router, personal_device, connection_type, 1));
+  }
+
+  // 
+  for ( var i = 0; i < n_wired_devices; i++ ) {
+    var type = personal_device_types[ random(0, personal_device_types.length) ];
+    if (type === "laptop" || type === "phone") var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
+    if (type === "storage") var name = a_random_rooms_grid[ random(0, a_random_rooms_grid.length) ] + " " + type.charAt(0).toUpperCase() + type.slice(1);
+    // create the device
+    var personal_device = new Device(name, type);
+    devices.push(personal_device);
+    personal_devices.push(personal_device);
+    // choose which connection type to make this device
+    var connection_type = "wired";
+    // Connect Personal Device to Network Box.
+    var parent_router = routing_devices[random(0, routing_devices.length)];
+    connections.push(new Connection(parent_router, personal_device, connection_type, 1));
+  }
+  
+}
+
+// // 
+// function populateDevicesDefault() {
+//   resetLayouts();
+
+//   // Create 1 Network Box
+//   devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
+//   routing_devices.push(devices[0]);
+//   devices[0].mass = 100;
+  
+//   // Setup children devices of the Network Box. Total maximum of Network Box devices is 4, minimum is 2.
+//   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
+//   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
+//   // maximum 2 TV boxes (each with a TV)
+//   var n_tv_devices = Math.round(Math.random() * max_tv_devices);
+//   // number of minimum & maximum personal devices depends on amount of TV Boxes
+//   if ( n_tv_devices === 0 ) var n_personal_devices_network_box = Math.round(random(2, 5));
+//   if ( n_tv_devices === 1 ) var n_personal_devices_network_box = Math.round(random(1, 4));
+//   if ( n_tv_devices === 2 ) var n_personal_devices_network_box = Math.round(random(1, 3));
+//   // var n_personal_devices_network_box = Math.round(random( (2 - n_tv_devices) , (5 - n_tv_devices) ));      //OLD
+//   console.log('A------ ' + n_tv_devices);
+//   console.log('B------ ' + n_personal_devices_network_box);
+//   console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
+  
+//   // Create TV Boxes with their TVs for Network Box.
+//   for ( var i = 0; i < n_tv_devices; i++ ) {
+//     var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
+//     var box_device = new Device(room + " TV Box", "tvbox");
+//     var tv_device = new Device(room + " TV", "tv");
+//     devices.push(box_device);
+//     routing_devices.push(box_device);
+//     devices.push(tv_device);
+
+//     // Connect TVs to TV Box
+//     connections.push(new Connection(box_device, tv_device, "wired", 1));
+
+//     // Connect TV Box to Network Box
+//     // if we have 2 TV Boxes, add the second one after all personal devices, to the right completely.
+//     if ( i === 1 ) {
+//       console.log('--------HELLO 1')
+//       bool_add_last = true;
+//     } else {
+//       bool_add_last = false;
+//       console.log('--------HELLO 0')
+//       connections.push(new Connection(devices[0], box_device, "wired", 1));
+//     }
+
+//     // For each TV Box, create Personal Devices
+//     var n_personal_devices_tv_box = Math.round(random(0, 3));      // range is 0 to 2
+//     console.log('D------ ' + n_personal_devices_tv_box);
+//     for ( var j = 0; j < n_personal_devices_tv_box; j++ ) {
+//       var device_type = Math.random() < 0.5 ? "phone" : "laptop";
+//       var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
+//       //  give the device a unique name
+//       var unique_name = false;
+//       var name = ""; 
+//       while(!unique_name) {
+//         name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+//         // Check all devices to see if this name is taken
+//         var taken = false;
+//         for(var w=0; w<devices.length; w++) {
+//           if(devices[w].name == name) taken = true;
+//         }
+//         if(!taken) unique_name = true;
+//       }
+//       // create the device
+//       var personal_device = new Device(name, device_type);
+//       devices.push(personal_device);
+//       personal_devices.push(personal_device);
+//       // choose which connection type to make this device
+//       var connection_type = Math.random() < 0.5 ? "wired" : "wireless";
+//       // Connect Personal Device to TV Box.
+//       connections.push(new Connection(box_device, personal_device, connection_type, 1));
+//     }
+//   }
+  
+//   // Create Personal Devices for Network Box.
+//   for ( var i = 0; i < n_personal_devices_network_box; i++ ) {
+//     var device_type = Math.random() < 0.5 ? "phone" : "laptop";
+//     var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
+//     //  give the device a unique name
+//     var unique_name = false;
+//     var name = ""; 
+//     while(!unique_name) {
+//       name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+//       // Check all devices to see if this name is taken
+//       var taken = false;
+//       for(var j=0; j<devices.length; j++) {
+//         if(devices[j].name == name) taken = true;
+//       }
+//       if(!taken) unique_name = true;
+//     }
+//     // create the device
+//     var personal_device = new Device(name, device_type);
+//     devices.push(personal_device);
+//     personal_devices.push(personal_device);
+//     // choose which connection type to make this device
+//     var connection_type = Math.random() < 0.5 ? "wired" : "wireless";
+//     // Connect Personal Device to Network Box.
+//     connections.push(new Connection(devices[0], personal_device, connection_type, 1));
+//   }
+  
+
+//   if (bool_add_last === true) {
+//     console.log('--------HELLO 2')
+//     connections.push(new Connection(devices[0], box_device, "wired", 1));
+//   }
+// }
 
 // For 2 Zone layout for Wireless and Wired devices, featuring a 4-column grid.
 function populateDevicesGrid() {
@@ -304,7 +482,7 @@ function populateDevicesGrid() {
       devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { e.stopPropagation(); clickedDevice.showDetails(true); } })(devices[i]));
     }
   }
-
+  
 }
 
 // Unaffected by network complexities.
@@ -467,118 +645,6 @@ function populateDevicesCollapsedNodes() {
     device.update();
     if(device.n_children <= 1) device.expanded = true;
   });
-}
-
-// 
-function populateDevicesDefault() {
-  // n_tv_boxes = 1;
-  // n_wireless_devices = 1;
-  // n_wired_devices = 0;
-
-  resetLayouts();
-
-  // Create 1 Network Box
-  devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
-  routing_devices.push(devices[0]);
-  devices[0].mass = 100;
-  
-  // Setup children devices of the Network Box. Total maximum of Network Box devices is 4, minimum is 2.
-  var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
-  var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
-  // maximum 2 TV boxes (each with a TV)
-  var n_tv_devices = Math.round(Math.random() * max_tv_devices);
-  // number of minimum & maximum personal devices depends on amount of TV Boxes
-  if ( n_tv_devices === 0 ) var n_personal_devices_network_box = Math.round(random(2, 5));
-  if ( n_tv_devices === 1 ) var n_personal_devices_network_box = Math.round(random(1, 4));
-  if ( n_tv_devices === 2 ) var n_personal_devices_network_box = Math.round(random(1, 3));
-  // var n_personal_devices_network_box = Math.round(random( (2 - n_tv_devices) , (5 - n_tv_devices) ));      //OLD
-  console.log('A------ ' + n_tv_devices);
-  console.log('B------ ' + n_personal_devices_network_box);
-  console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
-  
-  // Create TV Boxes with their TVs for Network Box.
-  for ( var i = 0; i < n_tv_devices; i++ ) {
-    var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
-    var box_device = new Device(room + " TV Box", "tvbox");
-    var tv_device = new Device(room + " TV", "tv");
-    devices.push(box_device);
-    routing_devices.push(box_device);
-    devices.push(tv_device);
-
-    // Connect TVs to TV Box
-    connections.push(new Connection(box_device, tv_device, "wired", 1));
-
-    // Connect TV Box to Network Box
-    // if we have 2 TV Boxes, add the second one after all personal devices, to the right completely.
-    if ( i === 1 ) {
-      console.log('--------HELLO 1')
-      bool_add_last = true;
-    } else {
-      bool_add_last = false;
-      console.log('--------HELLO 0')
-      connections.push(new Connection(devices[0], box_device, "wired", 1));
-    }
-
-    // For each TV Box, create Personal Devices
-    var n_personal_devices_tv_box = Math.round(random(0, 3));      // range is 0 to 2
-    console.log('D------ ' + n_personal_devices_tv_box);
-    for ( var j = 0; j < n_personal_devices_tv_box; j++ ) {
-      var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-      var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-      //  give the device a unique name
-      var unique_name = false;
-      var name = ""; 
-      while(!unique_name) {
-        name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-        // Check all devices to see if this name is taken
-        var taken = false;
-        for(var w=0; w<devices.length; w++) {
-          if(devices[w].name == name) taken = true;
-        }
-        if(!taken) unique_name = true;
-      }
-      // create the device
-      var personal_device = new Device(name, device_type);
-      devices.push(personal_device);
-      personal_devices.push(personal_device);
-      // choose which connection type to make this device
-      var connection_type = Math.random() < 0.5 ? "wired" : "wireless";
-      // Connect Personal Device to TV Box.
-      connections.push(new Connection(box_device, personal_device, connection_type, 1));
-    }
-  }
-  
-  // Create Personal Devices for Network Box.
-  for ( var i = 0; i < n_personal_devices_network_box; i++ ) {
-    var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-    var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-    //  give the device a unique name
-    var unique_name = false;
-    var name = ""; 
-    while(!unique_name) {
-      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-      // Check all devices to see if this name is taken
-      var taken = false;
-      for(var j=0; j<devices.length; j++) {
-        if(devices[j].name == name) taken = true;
-      }
-      if(!taken) unique_name = true;
-    }
-    // create the device
-    var personal_device = new Device(name, device_type);
-    devices.push(personal_device);
-    personal_devices.push(personal_device);
-    // choose which connection type to make this device
-    var connection_type = Math.random() < 0.5 ? "wired" : "wireless";
-    // Connect Personal Device to Network Box.
-    connections.push(new Connection(devices[0], personal_device, connection_type, 1));
-  }
-  
-
-  if (bool_add_last === true) {
-    console.log('--------HELLO 2')
-    connections.push(new Connection(devices[0], box_device, "wired", 1));
-  }
 }
 
 // Unaffected by network complexities.
@@ -816,8 +882,10 @@ function populateDevicesOriginal() {
     connections.push(new Connection(router, device, type, 1));  
   });
 }
-
-
+// 
+ // n_tv_boxes = 6;
+ //      n_wireless_devices = 10;
+ //      n_wired_devices = 5;
 function populateDevicesPhysics() {
   resetLayouts();
 
@@ -826,65 +894,28 @@ function populateDevicesPhysics() {
   routing_devices.push(devices[0]);
   devices[0].mass = 100;
   
-  // Setup children devices of the Network Box. Total maximum of Network Box devices is 4, minimum is 2.
-  var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Jack", "Bob", "Linda", "Sadie", "Pauline", "Jose", "Elizabeth"];
+  // 
+  var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Jack", "Bob", "Linda", "Sadie", "Pauline", "Jose", "Elizabeth", "Mom", "Dad", "Steve", "Kengo", "Kumar", "Sebastien", "Arnaud", "Soyeon", "Mimi"];
   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
-  // maximum 2 TV boxes (each with a TV)
-  var n_tv_devices = Math.round(Math.random() * max_tv_devices);
-  // number of minimum & maximum personal devices depends on amount of TV Boxes
-  if ( n_tv_devices === 0 ) var n_personal_devices_network_box = Math.round(random(2, 5));
-  if ( n_tv_devices === 1 ) var n_personal_devices_network_box = Math.round(random(1, 4));
-  if ( n_tv_devices === 2 ) var n_personal_devices_network_box = Math.round(random(1, 3));
-  // var n_personal_devices_network_box = Math.round(random( (2 - n_tv_devices) , (5 - n_tv_devices) ));      //OLD
-
-  // Create 0, 1, or 2 wireless networks
-  var n_wireless_networks = random(0,100) < 20 ? 2 : 1;
-  for(var k=0; k<n_wireless_networks; k++) {
-
-    var random_nouns = ["mollusk", "tail", "front", "thneed", "house", "corner", "plant", "ether", "tortoise", "array", "node", "square", "zone", "block", "index", "network", "freedom", "party", "date"]
-    var random_adjectives = ["frothy", "angular", "slow", "limber", "lethargic", "passable", "twisted", "plastic", "jinxed", "pliable", "rotated", "tall", "ansible", "large", "needy", "anxious"];
-    var ssid = random_item(random_adjectives) + "_" + random_item(random_nouns);
-    console.log("Adding wireless network '" + ssid + "' (" + k + "/" + n_wireless_networks + ")");
-    var wifi_device = new Device(ssid, "wifi");
-    devices.push(wifi_device);
-    routing_devices.push(wifi_device);
-    connections.push(new Connection(devices[0], wifi_device, "wireless", 1));
-
-    // Add some personal devices to wifi network
-    var n_wifi_connections = random(1,8);
-    for ( var i = 0; i < n_wifi_connections; i++ ) {
-      var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-      var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-      //  give the device a unique name
-      var unique_name = false;
-      var name = ""; 
-      while(!unique_name) {
-        name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-        // Check all devices to see if this name is taken
-        var taken = false;
-        for(var j=0; j<devices.length; j++) {
-          if(devices[j].name == name) taken = true;
-        }
-        if(!taken) unique_name = true;
-      }
-      // create the device
-      var personal_device = new Device(name, device_type);
-      devices.push(personal_device);
-      personal_devices.push(personal_device);
-      
-      // Connect Personal Device to Network Box.
-      connections.push(new Connection(wifi_device, personal_device, "wireless", 1));
-    }    
-  }
-
-  console.log('A------ ' + n_tv_devices);
-  console.log('B------ ' + n_personal_devices_network_box);
-  console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
+  var random_nouns = ["mollusk", "tail", "front", "thneed", "house", "corner", "plant", "ether", "tortoise", "array", "node", "square", "zone", "block", "index", "network", "freedom", "party", "date"]
+  var random_adjectives = ["frothy", "angular", "slow", "limber", "lethargic", "passable", "twisted", "plastic", "jinxed", "pliable", "rotated", "tall", "ansible", "large", "needy", "anxious"];
+  var n_tv_devices = n_tv_boxes;
+  var personal_device_types = ["phone", "laptop", "storage"];
+  var n_wifi_devices = 1;
+  
+  // Create a Wifi network
+  var ssid = random_item(random_adjectives) + "_" + random_item(random_nouns);
+  console.log("Adding wireless network '" + ssid);
+  var wifi_device = new Device(ssid, "wifi");
+  devices.push(wifi_device);
+  routing_devices.push(wifi_device);
+  connections.push(new Connection(devices[0], wifi_device, "wireless", 1));
   
   // Create TV Boxes with their TVs for Network Box.
   for ( var i = 0; i < n_tv_devices; i++ ) {
     var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
     var box_device = new Device(room + " TV Box", "tvbox");
+    // box_device.mass = 100;         // rmeove mass to spread-out TV boxes more.
     var tv_device = new Device(room + " TV", "tv");
     devices.push(box_device);
     routing_devices.push(box_device);
@@ -894,53 +925,19 @@ function populateDevicesPhysics() {
     connections.push(new Connection(box_device, tv_device, "wired", 1));
 
     // Connect TV Box to Network Box
-    // if we have 2 TV Boxes, add the second one after all personal devices, to the right completely.
-    if ( i === 1 ) {
-      console.log('--------HELLO 1')
-      bool_add_last = true;
-    } else {
-      bool_add_last = false;
-      console.log('--------HELLO 0')
-      connections.push(new Connection(devices[0], box_device, "wired", 1));
-    }
-
-    // For each TV Box, create Personal Devices
-    var n_personal_devices_tv_box = Math.round(random(0, 3));      // range is 0 to 2
-    console.log('D------ ' + n_personal_devices_tv_box);
-    for ( var j = 0; j < n_personal_devices_tv_box; j++ ) {
-      var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-      var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-      //  give the device a unique name
-      var unique_name = false;
-      var name = ""; 
-      while(!unique_name) {
-        name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-        // Check all devices to see if this name is taken
-        var taken = false;
-        for(var w=0; w<devices.length; w++) {
-          if(devices[w].name == name) taken = true;
-        }
-        if(!taken) unique_name = true;
-      }
-      // create the device
-      var personal_device = new Device(name, device_type);
-      devices.push(personal_device);
-      personal_devices.push(personal_device);
-    
-      // Connect Personal Device to TV Box.
-      connections.push(new Connection(box_device, personal_device, "wired", 1));
-    }
+    connections.push(new Connection(devices[0], box_device, "wired", 1));
   }
   
-  // Create Personal Devices for Network Box.
-  for ( var i = 0; i < n_personal_devices_network_box; i++ ) {
-    var device_type = Math.random() < 0.5 ? "phone" : "laptop";
+  // Add some personal devices to Wifi network
+  for ( var i = 0; i < n_wireless_devices; i++ ) {
+    var device_type = personal_device_types[ random(0, personal_device_types.length) ];
     var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
     //  give the device a unique name
     var unique_name = false;
     var name = ""; 
     while(!unique_name) {
-      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (device_type === "laptop" || device_type === "phone") name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (device_type === "storage") name = random_rooms[Math.round(Math.random() * (random_rooms.length-1))] + "'s " + propertype;
       // Check all devices to see if this name is taken
       var taken = false;
       for(var j=0; j<devices.length; j++) {
@@ -954,12 +951,190 @@ function populateDevicesPhysics() {
     personal_devices.push(personal_device);
     
     // Connect Personal Device to Network Box.
-    connections.push(new Connection(devices[0], personal_device, "wired", 1));
+    connections.push(new Connection(wifi_device, personal_device, "wireless", 1));
+  }
+  // console.log('A------ ' + n_tv_devices);
+  // console.log('B------ ' + n_personal_devices_network_box);
+  // console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
+  
+  // Create Personal Devices for Network Box.
+  for ( var i = 0; i < n_wired_devices; i++ ) {
+    var device_type = personal_device_types[ random(0, personal_device_types.length) ];
+    var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
+    //  give the device a unique name
+    var unique_name = false;
+    var name = ""; 
+    while(!unique_name) {
+      if (device_type === "laptop" || device_type === "phone") name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (device_type === "storage") name = random_rooms[Math.round(Math.random() * (random_rooms.length-1))] + "'s " + propertype;
+      // Check all devices to see if this name is taken
+      var taken = false;
+      for(var j=0; j<devices.length; j++) {
+        if(devices[j].name == name) taken = true;
+      }
+      if(!taken) unique_name = true;
+    }
+    // create the device
+    var personal_device = new Device(name, device_type);
+    devices.push(personal_device);
+    personal_devices.push(personal_device);
+    
+    // Connect Personal Device to Network Box.
+    var potential_routers = $.grep(routing_devices, function(router){ 
+      return ( router.type  !== "wifi" ); 
+    });
+    console.log(" ------- POTENTIAL ROUTERS :");
+    console.log(potential_routers);
+    var selected_router = potential_routers[random(0, potential_routers.length)];
+    console.log(" ------- SELECTED ROUTERS : ");
+    console.log(selected_router);
+    connections.push(new Connection(selected_router, personal_device, "wired", 1));
   }
   
-
-  if (bool_add_last === true) {
-    console.log('--------HELLO 2')
-    connections.push(new Connection(devices[0], box_device, "wired", 1));
-  }
 }
+
+// function populateDevicesPhysics() {
+//   resetLayouts();
+
+//   // Create 1 Network Box
+//   devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
+//   routing_devices.push(devices[0]);
+//   devices[0].mass = 100;
+  
+//   // Setup children devices of the Network Box. Total maximum of Network Box devices is 4, minimum is 2.
+//   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Jack", "Bob", "Linda", "Sadie", "Pauline", "Jose", "Elizabeth"];
+//   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
+//   // maximum 2 TV boxes (each with a TV)
+//   var n_tv_devices = Math.round(Math.random() * max_tv_devices);
+//   // number of minimum & maximum personal devices depends on amount of TV Boxes
+//   if ( n_tv_devices === 0 ) var n_personal_devices_network_box = Math.round(random(2, 5));
+//   if ( n_tv_devices === 1 ) var n_personal_devices_network_box = Math.round(random(1, 4));
+//   if ( n_tv_devices === 2 ) var n_personal_devices_network_box = Math.round(random(1, 3));
+//   // var n_personal_devices_network_box = Math.round(random( (2 - n_tv_devices) , (5 - n_tv_devices) ));      //OLD
+
+//   // Create 0, 1, or 2 wireless networks
+//   var n_wireless_networks = random(0,100) < 20 ? 2 : 1;
+//   for(var k=0; k<n_wireless_networks; k++) {
+
+//     var random_nouns = ["mollusk", "tail", "front", "thneed", "house", "corner", "plant", "ether", "tortoise", "array", "node", "square", "zone", "block", "index", "network", "freedom", "party", "date"]
+//     var random_adjectives = ["frothy", "angular", "slow", "limber", "lethargic", "passable", "twisted", "plastic", "jinxed", "pliable", "rotated", "tall", "ansible", "large", "needy", "anxious"];
+//     var ssid = random_item(random_adjectives) + "_" + random_item(random_nouns);
+//     console.log("Adding wireless network '" + ssid + "' (" + k + "/" + n_wireless_networks + ")");
+//     var wifi_device = new Device(ssid, "wifi");
+//     devices.push(wifi_device);
+//     routing_devices.push(wifi_device);
+//     connections.push(new Connection(devices[0], wifi_device, "wireless", 1));
+
+//     // Add some personal devices to wifi network
+//     var n_wifi_connections = random(1,8);
+//     for ( var i = 0; i < n_wifi_connections; i++ ) {
+//       var device_type = Math.random() < 0.5 ? "phone" : "laptop";
+//       var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
+//       //  give the device a unique name
+//       var unique_name = false;
+//       var name = ""; 
+//       while(!unique_name) {
+//         name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+//         // Check all devices to see if this name is taken
+//         var taken = false;
+//         for(var j=0; j<devices.length; j++) {
+//           if(devices[j].name == name) taken = true;
+//         }
+//         if(!taken) unique_name = true;
+//       }
+//       // create the device
+//       var personal_device = new Device(name, device_type);
+//       devices.push(personal_device);
+//       personal_devices.push(personal_device);
+      
+//       // Connect Personal Device to Network Box.
+//       connections.push(new Connection(wifi_device, personal_device, "wireless", 1));
+//     }    
+//   }
+
+//   console.log('A------ ' + n_tv_devices);
+//   console.log('B------ ' + n_personal_devices_network_box);
+//   console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
+  
+//   // Create TV Boxes with their TVs for Network Box.
+//   for ( var i = 0; i < n_tv_devices; i++ ) {
+//     var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
+//     var box_device = new Device(room + " TV Box", "tvbox");
+//     var tv_device = new Device(room + " TV", "tv");
+//     devices.push(box_device);
+//     routing_devices.push(box_device);
+//     devices.push(tv_device);
+
+//     // Connect TVs to TV Box
+//     connections.push(new Connection(box_device, tv_device, "wired", 1));
+
+//     // Connect TV Box to Network Box
+//     // if we have 2 TV Boxes, add the second one after all personal devices, to the right completely.
+//     if ( i === 1 ) {
+//       console.log('--------HELLO 1')
+//       bool_add_last = true;
+//     } else {
+//       bool_add_last = false;
+//       console.log('--------HELLO 0')
+//       connections.push(new Connection(devices[0], box_device, "wired", 1));
+//     }
+
+//     // For each TV Box, create Personal Devices
+//     var n_personal_devices_tv_box = Math.round(random(0, 3));      // range is 0 to 2
+//     console.log('D------ ' + n_personal_devices_tv_box);
+//     for ( var j = 0; j < n_personal_devices_tv_box; j++ ) {
+//       var device_type = Math.random() < 0.5 ? "phone" : "laptop";
+//       var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
+//       //  give the device a unique name
+//       var unique_name = false;
+//       var name = ""; 
+//       while(!unique_name) {
+//         name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+//         // Check all devices to see if this name is taken
+//         var taken = false;
+//         for(var w=0; w<devices.length; w++) {
+//           if(devices[w].name == name) taken = true;
+//         }
+//         if(!taken) unique_name = true;
+//       }
+//       // create the device
+//       var personal_device = new Device(name, device_type);
+//       devices.push(personal_device);
+//       personal_devices.push(personal_device);
+    
+//       // Connect Personal Device to TV Box.
+//       connections.push(new Connection(box_device, personal_device, "wired", 1));
+//     }
+//   }
+  
+//   // Create Personal Devices for Network Box.
+//   for ( var i = 0; i < n_personal_devices_network_box; i++ ) {
+//     var device_type = Math.random() < 0.5 ? "phone" : "laptop";
+//     var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
+//     //  give the device a unique name
+//     var unique_name = false;
+//     var name = ""; 
+//     while(!unique_name) {
+//       name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+//       // Check all devices to see if this name is taken
+//       var taken = false;
+//       for(var j=0; j<devices.length; j++) {
+//         if(devices[j].name == name) taken = true;
+//       }
+//       if(!taken) unique_name = true;
+//     }
+//     // create the device
+//     var personal_device = new Device(name, device_type);
+//     devices.push(personal_device);
+//     personal_devices.push(personal_device);
+    
+//     // Connect Personal Device to Network Box.
+//     connections.push(new Connection(devices[0], personal_device, "wired", 1));
+//   }
+  
+
+//   if (bool_add_last === true) {
+//     console.log('--------HELLO 2')
+//     connections.push(new Connection(devices[0], box_device, "wired", 1));
+//   }
+// }

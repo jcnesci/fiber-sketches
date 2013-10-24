@@ -31,12 +31,14 @@ $(document).bind('click', function (e) {
 });
 // Sometimes expanding nodes will make the page longer, and SVG lines won't draw below the edge of the screen unless we reset the document height on the SVG div.
 function resetSvgDivHeight() {
+	// Get the height of the document by choosing the largest number of all possible height document attributes.
 	var body = document.body,
     	html = document.documentElement;
-	// Get the height of the document by choosing the largest number of all possible height document attributes.
 	var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );	
-	// console.log(" * * * * * height = "+ height);
-	$('svg').height( height );
+	// use the global multiplier var
+	if (svg_div_height_multiplier === undefined) svg_div_height_multiplier = 1;
+	console.log(" * * * * * height * "+svg_div_height_multiplier+" = "+ height * svg_div_height_multiplier);
+	$('svg').height( height * svg_div_height_multiplier );
 }
 // Provide HTML content for a specified device's settings panel.
 function getDevicePanelHTML(device) {
@@ -136,6 +138,12 @@ function resetLayouts() {
 	array_wireless_devices.length = 0;					// used only in populateDevicesGrid()
 	array_wireless_devices.length = 0;					// used only in populateDevicesGrid()
 	array_level1_wired_devices.length = 0;				// used only in populateDevicesGrid()
+	svg_div_height_multiplier = 1;
+
+	// reset zooms caused by certain layouts (physics>high complexity)
+	$("#container").css("zoom", 1);
+	$("#svg_container").css("zoom", 1);
+	resetSvgDivHeight();
 
 	// Re-populate name arrays
 	a_random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Mom", "Dad", "Steve", "Kengo", "Kumar"];

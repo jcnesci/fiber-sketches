@@ -128,8 +128,9 @@ body {
 .device .name {
 	font-weight: lighter;
 	text-align: center;
-	/*background-color: #FFF;*/				/*dev_jc*/
+	/*background-color: rgba(255,255,255,0.8);*/
 	padding: 7px;
+	text-shadow: 1px 1px 0px #FFF;	
 }
 
 .device .name:hover {
@@ -155,6 +156,7 @@ body {
 	background-color: rgba(200,200,200,0.5);
 	border: 0;
 }
+
 .networkbox .icon  {
 	background-image: url(../images/device-networkbox.png);
 }
@@ -205,7 +207,6 @@ body {
 .tvbox .info {
 	margin-top: -40px;
 }
-
 
 .wifi .icon  {
 	background-image: url(../images/device-wifi.png);
