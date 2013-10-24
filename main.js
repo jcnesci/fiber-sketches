@@ -374,7 +374,7 @@ function populateDevicesOrbital() {
   });
 }
 
-// 
+// Unaffected by network complexities.
 function populateDevicesCollapsedNodes() {
   resetLayouts();
 
@@ -538,6 +538,10 @@ function populateDevicesCollapsedNodes() {
 
 // 
 function populateDevicesDefault() {
+  // n_tv_boxes = 1;
+  // n_wireless_devices = 1;
+  // n_wired_devices = 0;
+
   resetLayouts();
 
   // Create 1 Network Box
@@ -644,7 +648,7 @@ function populateDevicesDefault() {
   }
 }
 
-// 
+// Unaffected by network complexities.
 function populateDevicesDragAndDrop() {
   resetLayouts();
 
@@ -714,41 +718,57 @@ function populateDevicesDragAndDrop() {
   // Assign drop event handler for each device
   // dev_jc_19/09/2013_c : make only personal device icons customizable by drag-n-dropping new icons over them.
   // $.each(devices, function(index, device) {
-  $.each(personal_devices, function(index, device) {
-    device.el.mouseup((function(dev) { return function() {
-      // DROPPED
-      if(dragging != null) {
-        if($(dragging).hasClass("device"))
-          dev.changeType($(dragging).data("type")); 
-        else if($(dragging).hasClass("ip")) {
-          dev.ip = $(dragging).text();
-          dev.static_ip = true;
-          dev.toggleStatus();
+  $.each(devices, function(index, device) {
+    // For all devices except Network box, have drag-n-drop events.
+    if (device.type !== "networkbox") {
+      
+      device.el.mouseup((function(dev) { return function() {
+        // If device DROPPED.
+        if(dragging != null) {
+          // If not a TV or TV box, then drop device and change it's target's attributes.
+          if (device.type !== "tv" && device.type !== "tvbox") {
+            if($(dragging).hasClass("device"))
+              dev.changeType($(dragging).data("type")); 
+            else if($(dragging).hasClass("ip")) {
+              dev.ip = $(dragging).text();
+              dev.static_ip = true;
+              dev.toggleStatus();
 
-          //$(dragging).appendTo(dev.el.find(".ip_slot"));
-          $(dragging).remove();
+              //$(dragging).appendTo(dev.el.find(".ip_slot"));
+              $(dragging).remove();
+            }
+            dev.highlight(false);
+          } 
+          // Else, if it is dropped on a TV or TV box, ignore the drop and remove the highlight image.
+          else {
+            device.el.mouseleave();
+          }
         }
-        dev.highlight(false);
+      } })(device));
+      
+      // We dont want to to allow click on TV or TV box.
+      if (device.type !== "tv" && device.type !== "tvbox") {
+        // Click on device icon.
+        device.el.find(".icon").click((function(dev) { return function(ev) {
+          dev.toggleStatus();
+          return true;
+        }})(device));
       }
-    } })(device));
-
-    device.el.mouseenter((function(dev) { return function(ev) {
-      if(dragging != null) {
-        dev.highlight(true);  
-      }
-    } })(device));
-    device.el.mouseleave((function(dev) { return function(ev) {
-      if(dragging != null) {
-        dev.highlight(false); 
-      }
-    } })(device));
-    
-
-    device.el.find(".icon").click((function(dev) { return function(ev) {
-      dev.toggleStatus();
-      return true;
-    }})(device));
-    
+      // Hover on.
+      device.el.mouseenter((function(dev) { return function(ev) {
+        if(dragging != null) {
+          dev.highlight(true); 
+          console.log("^ ^ ^ ^ ^ ^ HILITE 1");
+        }
+      } })(device));
+      // Hover off.
+      device.el.mouseleave((function(dev) { return function(ev) {
+        if(dragging != null) {
+          dev.highlight(false); 
+        }
+      } })(device));
+      
+    }
   });
   // Clear dragging when mouseup anywhere else
   $(document).mouseup(function() {
