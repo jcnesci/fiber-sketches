@@ -25,6 +25,7 @@ $(document).bind('click', function (e) {
     if( $(".device_advanced_panel").length && !$(e.target).is(".device_advanced_panel") && !$(e.target).closest(".device_advanced_panel").length ) {
         var current_panel_id = $(".device_advanced_panel").attr("id");
 		var current_panel_device = $.grep(devices, function(device){ return device.id == current_panel_id; });
+		console.log("HELLO!!!")
 		console.log(current_panel_device);
 		current_panel_device[0].showDetails(false);
     }
@@ -52,7 +53,7 @@ function getDevicePanelHTML(device) {
 			+ "<div class='info'><div class='name'>" + device_name + "</div></div>"
 			+ "<ul>"
 			+	"<li>Device name</li> 															<li class='text_box'>" + device_name + "</li>"
-			+	"<li>Status</li> 																<li>Connected - 100 mbps <span class='help'>?</span></li>"
+			+	"<li>Status</li> 																<li>Connected - 1000 mbps <span class='help'>?</span></li>"
 			+ 	"<li></li><li></li>"
 			+	"<li>Device icon</li> 															<li><span class='device_icons'></span></li>"
 			+ 	"<li></li><li></li>"
@@ -71,7 +72,7 @@ function getDevicePanelHTML(device) {
 		device_panel_html = "<div class='icon'></div>"
 			+ "<div class='info'><div class='name'>" + device_name + "</div></div>"
 			+ "<ul>"
-			+	"<li>Fiber status</li> 															<li>Connected - 100 mbps <span class='help'>?</span></li>"
+			+	"<li>Fiber status</li> 															<li>Connected - 1000 mbps <span class='help'>?</span></li>"
 			+	"<li></li>					 													<li><span class='restart'></span></li>"
 			+ 	"<li></li><li></li>"
 			+	"<li>Router IPv6 address</li> 													<li>2001:0db8:3c4d:0015:0000:0000:abcd:ef12</li>"
@@ -105,6 +106,20 @@ function getDevicePanelHTML(device) {
 			+ 	"<li></li><li></li>"
 			+	"<li>Other 5GHZ wireless network</li> 											<li><span class='toggle_off'></span></li>"
 			+	"<li>5GHZ Wi-Fi name</li> 														<li class='text_box'>JESS3_Guest</li>"
+			+ "</ul>";
+	}
+	else if ( device_type === "tvbox" ) {
+		device_panel_html = "<div class='icon'></div>"
+			+ "<div class='info'><div class='name'>" + device_name + "</div></div>"
+			+ "<ul>"
+			+	"<li>TV box name</li> 															<li class='text_box'>"+ device.name +"</li>"
+			+	"<li>Status</li>		 														<li>Connected - 400 mbps (coaxial) <span class='help'>?</span></li>"
+			+ 	"<li></li><li></li>"
+			+	"<li>Wi-Fi radio</li> 															<li><span class='toggle_off'></span></li>"
+			+ 	"<li></li><li></li>"
+			+	"<li>IPv6 address</li> 															<li class='text_box'>2001:0db8:3c4d:0015:0000:00</li>"
+			+	"<li>IPv4 address</li> 															<li class='text_box'>63.28.214.97</li>"
+			+	"<li>MAC address</li> 															<li class='text_box'>1a:2b:3c:4d:5e:6f</li>"
 			+ "</ul>";
 	}
 	return device_panel_html;

@@ -358,7 +358,6 @@ function populateDevicesGrid() {
     connections.push(connection);
     // click function to collapse/uncollapse TV Box : it always starts uncollapsed, showing its TV
     box_device.el.click((function(dev) { return function() { 
-      
       // open this clicked node
       dev.expandSubnodes(); 
       layoutDevices('grid');
@@ -502,8 +501,21 @@ function populateDevicesGrid() {
   // Do stuff to all devices...
   for ( var i = 0; i < devices.length; i++ ) {
     // Clicking on a device's icon display its settings panel. Stop propagation so the event doesn't go to the document.click fct in common.js which would immediately close the panel.
-    if ( devices[i].type !== "router" && devices[i].type !== "tvbox"  &&  devices[i].type !== "tv" ) {
-      devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { e.stopPropagation(); clickedDevice.showDetails(true); } })(devices[i]));
+    if ( devices[i].type !== "router"  &&  devices[i].type !== "tv" ) {
+      
+        devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { 
+          e.stopPropagation(); 
+          
+          // Doing this checking because of TV boxes. We want to show details if node is open, but expand it if node is closed.
+          if (clickedDevice.expanded === true) {
+            clickedDevice.showDetails(true);
+          } else {
+            clickedDevice.expandSubnodes(); 
+            layoutDevices('grid');
+          }
+
+        } })(devices[i]));
+      
     }
   }
 
