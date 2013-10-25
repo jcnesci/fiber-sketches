@@ -672,6 +672,10 @@ function populateDevicesCollapsedNodes() {
     device.update();
     if(device.n_children <= 1) device.expanded = true;
   });
+
+  // Force connector style
+  setConnectorStyle("rounded");
+
 }
 
 // Unaffected by network complexities.
@@ -834,7 +838,9 @@ function populateDevicesDragAndDrop() {
     return true;
   });
 
+  // Force connector style
   setConnectorStyle("90s");
+
 }
 // Sam's original function
 function populateDevicesOriginal() {

@@ -11,94 +11,10 @@ function layoutDevices(type) {
 	});
 	
 	switch (type) {
-		case "orbital":
-
-			var radius = 250;
-
-			// Place root node
-			devices[0].el.fadeIn({duration: 300, queue: false}).animate({
-				left: $('#container').width() / 2 - devices[0].size.width/2,
-				top: radius + 100 									// lower by the radius, so a device at the very top of the circle is not higher than the top of the container, then give 100px extra as padding.
-			}, {
-				step: function(n) {
-					devices[0].update();
-				}
-			});
-
-			// Get direct children to Network Box (does not include subnodes).
-			var children = [];
-			for(var i=0; i<devices[0].connections.length; i++) {
-				// Only select children that are Wired, not Wireless.
-				// if(root.connections[i].a == root && root.connections[i].b.is_wireless !== true) {
-				if(devices[0].connections[i].a == devices[0]) {
-					// then Network Box is the routing device
-					children.push(devices[0].connections[i].b);
-				}
-			}
-
-			// Place direct child devices of Network Box.
-			var total = children.length;
-			var alpha = Math.PI * 2 / total;
-			$.each(children, function(index, device) {
-
-				var theta = Math.PI/2 - alpha * index;
-			    var pointx = Math.floor(Math.cos( theta ) * radius );
-			    var pointy = Math.floor(Math.sin( theta ) * radius );
-
-				console.log('Children i = '+ index +' | x = '+ pointx +' | y = '+ pointy);
-
-				device.el.fadeIn(500).animate({
-					left: pointx - device.el.width()/2 + $("#container").width()/2,
-					top: pointy - device.el.height()/2 + devices[0].el.position().top
-				}, {
-					step: function(n) {
-						device.update();
-					}
-				});
-
-			});
-
-			// Get subchildren
-			var subchildren = [];
-			for ( var i = 0; i < routing_devices.length; i++ ) {
-				console.log("- i : "+ i);
-				if ( routing_devices[i] !== devices[0] ) {
-					for ( var j = 0; j < routing_devices[i].connections.length; j++ ) {
-						console.log("- j : "+ j);
-						if(routing_devices[i].connections[j].a == routing_devices[i]) {
-							subchildren.push(routing_devices[i].connections[j].b);
-						}
-					}
-				}
-			}
-			console.log("------ SUBCHILDREN");
-			console.log(subchildren);
-
-			// Place subchildren in outer ring.
-			var radius = 450;
-			var total = subchildren.length;
-			var alpha = Math.PI * 2 / total;
-			$.each(subchildren, function(index, device) {
-
-				var theta = Math.PI/2 - alpha * index;
-			    var pointx = Math.floor(Math.cos( theta ) * radius );
-			    var pointy = Math.floor(Math.sin( theta ) * radius );
-
-				console.log('Subchildren i = '+ index +' | x = '+ pointx +' | y = '+ pointy);
-
-				device.el.fadeIn(500).animate({
-					left: pointx - device.el.width()/2 + $("#container").width()/2,
-					top: pointy - device.el.height()/2 + devices[0].el.position().top
-				}, {
-					step: function(n) {
-						device.update();
-					}
-				});
-
-			});
-
-			break;
 		case "random":
+			// Force connector style
+  			setConnectorStyle("90s");
+
 			$.each(devices, function(index, device) {
 				
 				//dev_jc_17/09/2013_a
@@ -172,6 +88,8 @@ function layoutDevices(type) {
 
 			break;
 		case "tree":
+			// Not forcing connector style here, as this layout is too general. Style is defined in populateDevicesCollapsedNodes() and populateDevicesDragAndDrop(), for example.
+
 			// Place root node
 			devices[0].el.fadeIn({duration: 300, queue: false}).animate({
 				top: 0,
@@ -189,6 +107,9 @@ function layoutDevices(type) {
 
 			break;
 		case "tree cascading":
+			// Force connector style
+  			setConnectorStyle("rounded");
+
 			// Place root node
 			devices[0].el.fadeIn({duration: 300, queue: false}).animate({
 				top: 0,
@@ -204,6 +125,8 @@ function layoutDevices(type) {
 
 			break;
 		case "grid":
+			// Not forcing connector style here, since this layout uses many different ones. They are set in populateDevicesGrid() directly.
+			
 			// Place all Devices.
 			gridPlace(devices[0], $('#container').width() / 2 - devices[0].size.width / 2, 0, false, "level1");
 
@@ -238,6 +161,9 @@ function layoutDevices(type) {
 
 			break;
 		case "physics":
+			// Force connector style
+  			setConnectorStyle("straight");
+
 			// Tiny physics simulator
 			$.each(devices, function(i, dev) {
 				dev.el.fadeIn({duration: 1000, queue: false}).animate({
