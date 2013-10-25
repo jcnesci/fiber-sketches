@@ -524,17 +524,18 @@ function populateDevicesCollapsedNodes() {
 
   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine"];
   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"]
+  var personal_device_types = ["phone", "laptop", "storage"];
   
   // var n_personal_devices = Math.round(Math.random() * 8 + 2);
   // var n_tv_devices = Math.round(Math.random() * 3);
   // var n_routers = random(1,4);
   
   // We wish to limit the number of personal devices to 4 per router (not including the Network box, although it will be getting some of these devices).
-  var n_routers = random(1,4);                            // routers here means either normal routers or TV boxes.
-  var n_max_devices = 3;
-  var n_personal_devices = Math.round(Math.random() * (( n_routers * n_max_devices ) - n_routers) + n_routers);         // guaranteed at least as many devices as there are routers.
-  console.log(" --- --- - - - - - - - - - - - n_routers : "+ n_routers);
-  console.log(" --- --- - - - - - - - - - - - n_personal_devices : "+ n_personal_devices);
+  var n_routers = random(2,4);                            // routers here means either normal routers or TV boxes.
+  var n_max_devices = 4;
+  var n_personal_devices = Math.round(Math.random() * (( n_routers * n_max_devices ) - 4) + 4);         // guaranteed at least 4 devices.
+  // console.log(" - n_routers : "+ n_routers);
+  // console.log(" - n_personal_devices : "+ n_personal_devices);
 
 
   // Create a few routers
@@ -582,13 +583,14 @@ function populateDevicesCollapsedNodes() {
 
   // Create personal devices (phones, laptops, etc)
   for(var i=0; i<n_personal_devices; i++) {
-    var type = Math.random() < 0.5 ? "phone" : "laptop";
+    var type = personal_device_types[ random(0, personal_device_types.length) ];
     var propertype = type.charAt(0).toUpperCase() + type.slice(1);
-
     var unique_name = false;
     var name = ""; 
     while(!unique_name) {
-      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (type === "laptop" || type === "phone") name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (type === "storage") name = random_rooms[Math.round(Math.random() * (random_rooms.length-1))] + "'s " + propertype;
+
       // Check all devices to see if this name is taken
       var taken = false;
       for(var j=0; j<devices.length; j++) {
@@ -616,13 +618,13 @@ function populateDevicesCollapsedNodes() {
       }
       if (router_children === 0) empty_routers.push(routing_device);
       else if (router_children === 1) one_child_routers.push(routing_device);
-      else if (router_children < 4) other_routers.push(routing_device);
+      else other_routers.push(routing_device);
     });
 
     if (empty_routers.length > 0) var cur_router = empty_routers[random(0, empty_routers.length)];
     else if (one_child_routers.length > 0) var cur_router = one_child_routers[random(0, one_child_routers.length)];
     else {
-      console.log(" - - - - - - - - - * other_routers: "+ other_routers);
+      // console.log(" - - - - - - - - - * other_routers: "+ other_routers);
       var cur_router = other_routers[random(0, other_routers.length)];
     } 
 
