@@ -24,27 +24,22 @@ $(document).ready(function() {
   $("#svg_container").svg();  // Initialize the SVG canvas
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
   
-  // set network complexity
-  setNetworkComplexity( "low" );
-
-  // create and display network
-  // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
-  populateDevicesDefault();
-  layoutDevices("tree cascading");
-  // populateDevicesOrbital();
-  // layoutDevices("orbital");
-  
+  // OLD - Set network complexity, populate and layout network.
+  // setNetworkComplexity( "low" );
   // populateDevicesDefault();
-  // layoutDevices("tree");
+  // layoutDevices("tree cascading");
 
-  // Not necessary for now: display which connector style is currently displayed in button
-  // var button_label = 'Toggle Connector Style (' + ((current_connection_style % Connection.shapes.length)+1) + '/' + Connection.shapes.length +')';
-  // $('li #toggle-button').text(button_label);
-
+  // NEW - Set network complexity, populate and layout network.
+  _layout_type = "tree cascading";
+  setNetworkComplexity( "low" );
+  
 });
 
 // Choose one of three prototypical networks, based on Google's specifications.
 function setNetworkComplexity( cur_network_complexity ) {
+  
+
+  // Set the network complexity.
   network_complexity = cur_network_complexity;
   switch( network_complexity ) {
     case "low": 
@@ -63,11 +58,12 @@ function setNetworkComplexity( cur_network_complexity ) {
       n_wired_devices = 5;
       break;
   }
+  // Then, refresh the layout with this new complexity.
+  refreshLayout();
 }
 // Refresh the current layout. Useful after changing the network complexity, to run the same layout we already had.
 function refreshLayout() {
   if ( _layout_type === "grid" ) { populateDevicesGrid(); layoutDevices('grid'); }
-  else if ( _layout_type === "tree" ) { populateDevicesDefault(); layoutDevices('tree'); }
   else if ( _layout_type === "tree cascading" ) { populateDevicesDefault(); layoutDevices('tree cascading'); }
   else if ( _layout_type === "physics" ) { populateDevicesPhysics(); layoutDevices('physics'); }
   else if ( _layout_type === "random" ) { populateDevicesDefault(); layoutDevices('random'); }
