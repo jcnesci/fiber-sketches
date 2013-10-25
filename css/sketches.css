@@ -125,15 +125,18 @@ body {
 	background-color: rgba(200,200,200,0.5);
 }
 
-.device .name {
+.device .name, .device .password {
 	font-weight: lighter;
 	text-align: center;
 	/*background-color: rgba(255,255,255,0.8);*/
 	padding: 7px;
 	text-shadow: 1px 1px 0px #FFF;	
 }
+.device .password {
+	/*font-size: 80%;*/
+}
 
-.device .name:hover {
+.device .name:hover, .device .password:hover {
 	cursor: text;
 	background-color: rgba(200,200,200,0.5);
 }

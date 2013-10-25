@@ -333,7 +333,7 @@ img {
 	background-image: url(../images/device_panel_upnp.png);
 }
 
-/* For Drag-n-drop, show that you can't drop on TVs or TV boxes. */
+/* For Drag-n-drop, show that you can't drop on Network box or TV boxes. */
 /* Highlight class is for when you drag and hover on a device. */
 .device.networkbox.highlight, .device.tvbox.highlight {
 	background-color: rgba(0,0,0,0);

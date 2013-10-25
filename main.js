@@ -321,7 +321,7 @@ function populateDevicesGrid() {
   }
 
   // Create the Wireless Network device/icon.
-  var wireless_network = new Device("Wireless Network", "wireless_network" );
+  var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
   devices.push(wireless_network);
   
   // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
@@ -804,7 +804,7 @@ function populateDevicesDragAndDrop() {
         dev.highlight(false); 
       }
     } })(device));
-    
+
   });
   // Clear dragging when mouseup anywhere else
   $(document).mouseup(function() {

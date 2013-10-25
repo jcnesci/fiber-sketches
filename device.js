@@ -33,6 +33,9 @@ function Device(name, type) {
 	//  for routers
 	this.router_visibility = true;
 
+	// for grid layout wireless icon
+	if (this.type ==="wireless_network") this.password = "myP@$$w0rd!";
+
 	this.addToDom();
 }
 Device.count = 0;
@@ -47,6 +50,12 @@ Device.prototype = {
 
 		var thisthis = this;
 		this.el.find(".name").click(function() { thisthis.editName(true);});
+
+		// For a Wireless network icon (only used in grid layout) do this. NB: not to confuse with other wireless device type "wifi" used in physics layout.
+		if (this.type === "wireless_network") {
+			this.el.find(".name").after("<div class='password'>"+ this.password +"</div>");
+			this.el.find(".password").click(function() { thisthis.editPassword(true);});
+		}
 	},
 	// to show or hide details of a device in hovering pane on click
 	showDetails: function (b_show) {
@@ -243,6 +252,35 @@ Device.prototype = {
 			this.el.find(".name").text(this.name);
 			this.el.find(".edit_name").hide();
 			this.el.find(".name").show();
+		}
+	},
+	editPassword: function(state) {
+		if(state == true) {
+			var name_el = this.el.find(".password");
+			name_el.after("<input type='text' class='edit_password' />");
+			var edit_el = this.el.find(".edit_password");
+
+			name_el.hide();
+
+			edit_el.attr("value", this.password);
+			edit_el.focus();
+
+			var thisthis = this;
+			edit_el.blur(function() {
+				thisthis.editPassword(false);
+			});
+			edit_el.keydown(function(event) {
+				if(event.keyCode == 13)
+					thisthis.editPassword(false);
+			});
+		}
+		if(state == false) {
+			this.password = this.el.find(".edit_password").val();
+			console.log(this);
+			console.log(this.password);
+			this.el.find(".password").text(this.password);
+			this.el.find(".edit_password").hide();
+			this.el.find(".password").show();
 		}
 	},
 	distanceTo: function(b) {
