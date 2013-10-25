@@ -335,11 +335,11 @@ img {
 
 /* For Drag-n-drop, show that you can't drop on TVs or TV boxes. */
 /* Highlight class is for when you drag and hover on a device. */
-.device.tv.highlight, .device.tvbox.highlight {
+.device.networkbox.highlight, .device.tvbox.highlight {
 	background-color: rgba(0,0,0,0);
 }
-.device.tv.highlight .icon {
-	background-image: url(../images/device-tv-crossed.png);
+.device.networkbox.highlight .icon {
+	background-image: url(../images/device-networkbox-crossed.png);
 }
 .device.tvbox.highlight .icon {
 	background-image: url(../images/device-tvbox-crossed.png);

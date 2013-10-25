@@ -143,7 +143,7 @@ Device.prototype = {
 	highlight: function(state) {
 		if(state == true) {
 			this.el.addClass("highlight");
-			console.log("^ ^ ^ ^ ^ ^ * * * * * HILITE 2");
+			// console.log("^ ^ ^ ^ ^ ^ * * * * * HILITE 2");
 		}
 		else {
 			this.el.removeClass("highlight");

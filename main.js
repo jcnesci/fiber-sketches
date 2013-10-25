@@ -698,6 +698,7 @@ function populateDevicesDragAndDrop() {
 
   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah"];
   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs"]
+  var personal_device_types = ["phone", "laptop", "storage"];
   // We wish to limit the number of total Level1 devices (direct children of Network box) to 6.
   // Start by creating a few routers, then create personal devices with number of remaining slots.
   var n_max_devices = 6;
@@ -708,13 +709,13 @@ function populateDevicesDragAndDrop() {
 
   // Create personal devices (phones, laptops, etc)
   for(var i=0; i<n_personal_devices; i++) {
-    var type = Math.random() < 0.5 ? "phone" : "laptop";
+    var type = personal_device_types[ random(0, personal_device_types.length) ];
     var propertype = type.charAt(0).toUpperCase() + type.slice(1);
-
     var unique_name = false;
     var name = ""; 
     while(!unique_name) {
-      name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (type === "laptop" || type === "phone") name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
+      if (type === "storage") name = random_rooms[Math.round(Math.random() * (random_rooms.length-1))] + "'s " + propertype;
       // Check all devices to see if this name is taken
       var taken = false;
       for(var j=0; j<devices.length; j++) {
@@ -758,55 +759,52 @@ function populateDevicesDragAndDrop() {
   // $.each(devices, function(index, device) {
   $.each(devices, function(index, device) {
     // For all devices except Network box, have drag-n-drop events.
-    if (device.type !== "networkbox") {
-      
-      device.el.mouseup((function(dev) { return function() {
-        // If device DROPPED.
-        if(dragging != null) {
-          // If not a TV or TV box, then drop device and change it's target's attributes.
-          if (device.type !== "tv" && device.type !== "tvbox") {
-            if($(dragging).hasClass("device"))
-              dev.changeType($(dragging).data("type")); 
-            else if($(dragging).hasClass("ip")) {
-              dev.ip = $(dragging).text();
-              dev.static_ip = true;
-              dev.toggleStatus();
+    device.el.mouseup((function(dev) { return function() {
+      // If device DROPPED.
+      if(dragging != null) {
+        // If not a Network box or TV box, then drop device and change it's target's attributes.
+        if (device.type !== "networkbox" && device.type !== "tvbox") {
+          if($(dragging).hasClass("device"))
+            dev.changeType($(dragging).data("type")); 
+          else if($(dragging).hasClass("ip")) {
+            dev.ip = $(dragging).text();
+            dev.static_ip = true;
+            dev.toggleStatus();
 
-              //$(dragging).appendTo(dev.el.find(".ip_slot"));
-              $(dragging).remove();
-            }
-            dev.highlight(false);
-          } 
-          // Else, if it is dropped on a TV or TV box, ignore the drop and remove the highlight image.
-          else {
-            device.el.mouseleave();
+            //$(dragging).appendTo(dev.el.find(".ip_slot"));
+            $(dragging).remove();
           }
+          dev.highlight(false);
+        } 
+        // Else, if it is dropped on a TV or TV box, ignore the drop and remove the highlight image.
+        else {
+          device.el.mouseleave();
         }
-      } })(device));
-      
-      // We dont want to to allow click on TV or TV box.
-      if (device.type !== "tv" && device.type !== "tvbox") {
-        // Click on device icon.
-        device.el.find(".icon").click((function(dev) { return function(ev) {
-          dev.toggleStatus();
-          return true;
-        }})(device));
       }
-      // Hover on.
-      device.el.mouseenter((function(dev) { return function(ev) {
-        if(dragging != null) {
-          dev.highlight(true); 
-          console.log("^ ^ ^ ^ ^ ^ HILITE 1");
-        }
-      } })(device));
-      // Hover off.
-      device.el.mouseleave((function(dev) { return function(ev) {
-        if(dragging != null) {
-          dev.highlight(false); 
-        }
-      } })(device));
-      
+    } })(device));
+    
+    // We dont want to to allow click on Network box or TV box.
+    if (device.type !== "networkbox" && device.type !== "tvbox") {
+      // Click on device icon.
+      device.el.find(".icon").click((function(dev) { return function(ev) {
+        dev.toggleStatus();
+        return true;
+      }})(device));
     }
+    // Hover on.
+    device.el.mouseenter((function(dev) { return function(ev) {
+      if(dragging != null) {
+        dev.highlight(true); 
+        console.log("^ ^ ^ ^ ^ ^ HILITE 1");
+      }
+    } })(device));
+    // Hover off.
+    device.el.mouseleave((function(dev) { return function(ev) {
+      if(dragging != null) {
+        dev.highlight(false); 
+      }
+    } })(device));
+    
   });
   // Clear dragging when mouseup anywhere else
   $(document).mouseup(function() {
