@@ -316,7 +316,7 @@ function populateDevicesGrid() {
     
     // connections
     var connection = new Connection(devices[0], wireless_device, "wireless", 1 );
-    connection.shape = "invisible";
+    connection.changeShape("invisible");
     connections.push( connection );
     // dev
     // console.log(' WIRELESS --------');
@@ -357,7 +357,7 @@ function populateDevicesGrid() {
     tv_device.el.appendTo( $('#wired_container') );
     // In advance, connect TV to TV Box (but it wont display until TV Box is connected to Network Box).
     var connection = new Connection(box_device, tv_device, "wired", 1);
-    connection.shape = "90s";
+    connection.changeShape("90s");
     connections.push(connection);
     // click function to collapse/uncollapse TV Box : it always starts uncollapsed, showing its TV
     box_device.el.click((function(dev) { return function() { 
@@ -433,9 +433,9 @@ function populateDevicesGrid() {
           var connection = new Connection(routing_device, personal_device_level2, "wired", 1 );
           // if this is the last row, use a special type of connector: 90s_level2
           if (is_last_row) { 
-            connection.shape = "90s_level2"; 
+            connection.changeShape("90s_level2");
           } else {
-            connection.shape = "90s"; 
+            connection.changeShape("90s");
           }
           connections.push( connection );
           // 
@@ -457,9 +457,9 @@ function populateDevicesGrid() {
             var connectionTVBox = new Connection(routing_device, box_device, "wired", 1 );
             // if this is the last row, use a special type of connector: 90s_level2
             if (is_last_row) { 
-              connectionTVBox.shape = "90s_level2"; 
+              connectionTVBox.changeShape("90s_level2");
             } else {
-              connectionTVBox.shape = "90s"; 
+              connectionTVBox.changeShape("90s");
             }
             connections.push( connectionTVBox );
           }
@@ -496,7 +496,7 @@ function populateDevicesGrid() {
   // Create connections for each Level1 device to Network Box.
   for ( var i = 0; i < array_level1_wired_devices.length; i++ ) {
     var connection = new Connection(devices[0], array_level1_wired_devices[i], "wired", 1);
-    connection.shape = "90s";
+    connection.changeShape("90s");
     connections.push(connection);
   }
 

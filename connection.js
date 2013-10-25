@@ -72,7 +72,7 @@ Connection.prototype = {
 			}
 			else if(this.shape == "invisible") {
 				// for Level 2 of grid layout, dont show any wires.
-				this.el = $(svg.line(x1, y1, x2, y2));
+				this.el = $(svg.line(x1, y1, x2, y2));			// it's actually a straight line, but we hide it witha CSS class.
 				this.el.addClass("invisible");
 			}
 			this.el.addClass("connector");
