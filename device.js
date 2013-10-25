@@ -210,11 +210,10 @@ Device.prototype = {
 		console.log("--------- expandSubnodes !");
 		// if opening this node... 
         if ( this.expanded === false ) {
-        	
+        	// close all device settings panels
         	$.each(devices, function(index, device) {
         		device.showDetails(false);
         	});
-
         	// close other open nodes first
         	$.each(routing_devices, function(index, other_dev) {
 	            if ( other_dev.expanded === true && other_dev.name !== "Network Box" && other_dev.name !== "Wireless Network" ) {

@@ -24,9 +24,7 @@ $(document).bind('click', function (e) {
 	// When clicking on anything outside of an open device settings panel, close the panel.
     if( $(".device_advanced_panel").length && !$(e.target).is(".device_advanced_panel") && !$(e.target).closest(".device_advanced_panel").length ) {
         var current_panel_id = $(".device_advanced_panel").attr("id");
-		var current_panel_device = $.grep(devices, function(device){ return device.id == current_panel_id; });
-		console.log("HELLO!!!")
-		console.log(current_panel_device);
+		var current_panel_device = $.grep(devices, function(device){ return device.id === Number(current_panel_id); });
 		current_panel_device[0].showDetails(false);
     }
 });
@@ -137,6 +135,7 @@ function resetLayouts() {
 	// Break references of old devices
 	// TODO: Make sure circular references are broken, too
 	$.each(devices, function(index, device) {
+		device.showDetails(false);
 		device.die();
 	});
 	// Remove old connections
