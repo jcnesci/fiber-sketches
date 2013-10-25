@@ -68,6 +68,7 @@ function refreshLayout() {
   else if ( _layout_type === "physics" ) { populateDevicesPhysics(); layoutDevices('physics'); }
   else if ( _layout_type === "random" ) { populateDevicesDefault(); layoutDevices('random'); }
   else if ( _layout_type === "random grid" ) { populateDevicesDefault(); layoutDevices('random grid'); }
+  // NB: this fct doesnt apply to Collapsed Nodes and Drag-n-Drop features, its only for layouts.
 }
 
 // TODO: decide if we keep this or not. It is technicaly correct, but is highly undesirable. Thus, proves necessity of a collapsible network.
@@ -277,7 +278,7 @@ function populateDevicesGrid() {
   var n_columns = 4;
   var a_random_names_grid = a_random_names;
   var a_random_rooms_grid = a_random_rooms;
-  $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");
+  $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");       // Grey-out the Toggle Connectors menu item, it doesn't apply to this layout. This is reset in the common reset function.
 
   // - - - - - - - - - - - - - - - NETWORK BOX - - - - - - - - - - - - - - - - - 
 
@@ -508,9 +509,14 @@ function populateDevicesGrid() {
 
 }
 
+// at elast 2 collapsable nodes, after that i can have single items, dont care
+
 // Unaffected by network complexities.
 function populateDevicesCollapsedNodes() {
   resetLayouts();
+
+  // Grey-out the network Complexity menu items, they doesn't apply to this layout. This is reset in the common reset function.
+  $('#menu li a').filter(function(){ return $(this).text() === 'Complexity';}).parent("li").contents().find("a").css("color", "#D2D2D2");
 
   devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
   routing_devices.push(devices[0]);
@@ -676,7 +682,11 @@ function populateDevicesCollapsedNodes() {
 
 // Unaffected by network complexities.
 function populateDevicesDragAndDrop() {
+  
   resetLayouts();
+
+  // Grey-out the network Complexity menu items, they doesn't apply to this layout. This is reset in the common reset function.
+  $('#menu li a').filter(function(){ return $(this).text() === 'Complexity';}).parent("li").contents().find("a").css("color", "#D2D2D2");
 
   $("#controller").show();
 

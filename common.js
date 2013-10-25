@@ -140,7 +140,9 @@ function resetLayouts() {
 	array_level1_wired_devices.length = 0;				// used only in populateDevicesGrid()
 	svg_div_height_multiplier = 1;						// used for resize the SVG div so lines are rendered completely even if they are beneath the bottom of the screen cut-off point. Goes with the zoom operations below.
 
+	// Reset these menu items that are greyed-out for certain layouts.
 	$('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "");
+  	$('#menu li a').filter(function(){ return $(this).text() === 'Complexity';}).parent("li").contents().find("a").css("color", "");
 
 	// reset zooms caused by certain layouts (physics>high complexity)
 	$("#container").css("zoom", 1);
