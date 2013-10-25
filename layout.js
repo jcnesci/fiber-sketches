@@ -183,10 +183,24 @@ function layoutDevices(type) {
 					devices[0].update();
 				}
 			});
-
 			// treePlace(devices[0], $(document).width() / 2 - devices[0].size.width / 2, devices[0].size.height, false);
 			//dev_jc_17/09/2013_a
 			treePlace(devices[0], $('#container').width() / 2 - devices[0].size.width / 2, devices[0].size.height, false);
+
+			break;
+		case "tree cascading":
+			// Place root node
+			devices[0].el.fadeIn({duration: 300, queue: false}).animate({
+				top: 0,
+				//left: $(document).width() / 2 - devices[0].size.width / 2
+				//dev_jc_17/09/2013_a
+				left: $('#container').width() / 2 - devices[0].size.width / 2
+			}, {
+				step: function(n) {
+					devices[0].update();
+				}
+			});
+			treePlace(devices[0], $('#container').width() / 2 - devices[0].size.width / 2, devices[0].size.height, false, true);
 
 			break;
 		case "grid":
@@ -209,6 +223,18 @@ function layoutDevices(type) {
 
 			// Fade in the root node last. (DONT KNOW WHY I MUST DO IT, but it is necessary...)
 			devices[0].el.fadeIn({duration: 300, queue: false});
+
+			// Shrink the entire physics layout to make it less massive overall. Must shrink the entire container but also the SVG div.
+			// console.log("ZOOOOOOM - - --------: "+ $("#container").css("zoom") );
+			// if ( $("#container").css("zoom") === "1" ) {
+			// 	var zoom_shrink_layout = 0.75;
+			// 	$("#container").css("zoom", zoom_shrink_layout);
+			// 	$("#container_background").css("top", ($("#container_background").offset().top * zoom_shrink_layout) + 40);
+			// 	$("#svg_container").css("zoom", zoom_shrink_layout);
+			// 	var zoom_factor = 1 / zoom_shrink_layout;
+			// 	svg_div_height_multiplier = zoom_factor;
+			// 	resetSvgDivHeight();
+			// }
 
 			break;
 		case "physics":
@@ -443,8 +469,12 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 	});
 }
 
-// 
-function treePlace(root, start_x, start_y, hidden) {
+// root: device object. The root node of the tree
+// start_x: pixel value. The starting X position of the first node
+// start_y: pixel value. The starting Y position of the first node
+// hidden: true or false. If the root is already hidden
+// cascadeChildrenLevels: true or false. Place children of each Level1 node on different cascading levels, so they never overlap.
+function treePlace(root, start_x, start_y, hidden, cascadeChildrenLevels) {
 	if(!root.expanded) hidden = true;
 
 	// Used to recursively place nodes in a tree
@@ -503,8 +533,11 @@ function treePlace(root, start_x, start_y, hidden) {
 				}
 			});
 		}
-		// Call treePlace on each child
-		treePlace(device, start_x + x, start_y + root.size.height, hidden);
+
+		// Call treePlace on each child:
+		if ( cascadeChildrenLevels ) var y_next_level = index * root.size.height;			// make children of each node be on subsequently lower levels (so children of two side-by-side nodes won't themselves be on the same level).
+		else y_next_level = 0;
+		treePlace(device, start_x + x, start_y + root.size.height + y_next_level, hidden);
 
 	});
 }

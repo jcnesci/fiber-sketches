@@ -30,7 +30,7 @@ $(document).ready(function() {
   // create and display network
   // DEV - TEMPORARY - - - - - - - - - - - - - - - - - - - - - - - - 
   populateDevicesDefault();
-  layoutDevices("tree");
+  layoutDevices("tree cascading");
   // populateDevicesOrbital();
   // layoutDevices("orbital");
   
@@ -68,6 +68,7 @@ function setNetworkComplexity( cur_network_complexity ) {
 function refreshLayout() {
   if ( _layout_type === "grid" ) { populateDevicesGrid(); layoutDevices('grid'); }
   else if ( _layout_type === "tree" ) { populateDevicesDefault(); layoutDevices('tree'); }
+  else if ( _layout_type === "tree cascading" ) { populateDevicesDefault(); layoutDevices('tree cascading'); }
   else if ( _layout_type === "physics" ) { populateDevicesPhysics(); layoutDevices('physics'); }
   else if ( _layout_type === "random" ) { populateDevicesDefault(); layoutDevices('random'); }
   else if ( _layout_type === "random grid" ) { populateDevicesDefault(); layoutDevices('random grid'); }
@@ -99,16 +100,17 @@ function populateDevicesDefault() {
 
     // Connect TVs to TV Box
     connections.push(new Connection(box_device, tv_device, "wired", 1));
-
-    var parent_router = routing_devices[random(0, routing_devices.length)];
-    while ( parent_router === box_device ) {
-      // console.log("-populateDevicesDefault() ---- parent_router === box_device ");
-      parent_router = routing_devices[random(0, routing_devices.length)];
-    }
-    connections.push(new Connection(parent_router, box_device, "wired", 1));
+    // // Choose a parent router that is not itself
+    // var parent_router = routing_devices[random(0, routing_devices.length)];
+    // while ( parent_router === box_device ) {
+    //   // console.log("-populateDevicesDefault() ---- parent_router === box_device ");
+    //   parent_router = routing_devices[random(0, routing_devices.length)];
+    // }
+    // connections.push(new Connection(parent_router, box_device, "wired", 1));
+    connections.push(new Connection(devices[0], box_device, "wired", 1));
   }
   
-  // 
+  // Create wireless devices
   for ( var i = 0; i < n_wireless_devices; i++ ) {
     var type = personal_device_types[ random(0, personal_device_types.length) ];
     if (type === "laptop" || type === "phone") var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
@@ -119,12 +121,20 @@ function populateDevicesDefault() {
     personal_devices.push(personal_device);
     // choose which connection type to make this device
     var connection_type = "wireless";
-    // Connect Personal Device to Network Box.
-    var parent_router = routing_devices[random(0, routing_devices.length)];
+    // Connect the device to a router:
+    // If not high complexity, connect personal device to any random router.
+    if ( network_complexity !== "high" ) { var parent_router = routing_devices[random(0, routing_devices.length)]; }
+    // If high complexity network, connect only to TV boxes, and not to Network box, to limit amount of devices on the level1.
+    else { 
+      var tv_boxes = $.grep(routing_devices, function(router){ 
+        return router.type === "tvbox"; 
+      });
+      var parent_router = tv_boxes[random(0, tv_boxes.length)];
+    }
     connections.push(new Connection(parent_router, personal_device, connection_type, 1));
   }
 
-  // 
+  // Create wired devices
   for ( var i = 0; i < n_wired_devices; i++ ) {
     var type = personal_device_types[ random(0, personal_device_types.length) ];
     if (type === "laptop" || type === "phone") var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
@@ -135,8 +145,16 @@ function populateDevicesDefault() {
     personal_devices.push(personal_device);
     // choose which connection type to make this device
     var connection_type = "wired";
-    // Connect Personal Device to Network Box.
-    var parent_router = routing_devices[random(0, routing_devices.length)];
+   // Connect the device to a router:
+    // If not high complexity, connect personal device to any random router.
+    if ( network_complexity !== "high" ) { var parent_router = routing_devices[random(0, routing_devices.length)]; }
+    // If high complexity network, connect only to TV boxes, and not to Network box, to limit amount of devices on the level1.
+    else { 
+      var tv_boxes = $.grep(routing_devices, function(router){ 
+        return router.type === "tvbox"; 
+      });
+      var parent_router = tv_boxes[random(0, tv_boxes.length)];
+    }
     connections.push(new Connection(parent_router, personal_device, connection_type, 1));
   }
   
@@ -263,6 +281,7 @@ function populateDevicesGrid() {
   var n_columns = 4;
   var a_random_names_grid = a_random_names;
   var a_random_rooms_grid = a_random_rooms;
+  $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");
 
   // - - - - - - - - - - - - - - - NETWORK BOX - - - - - - - - - - - - - - - - - 
 

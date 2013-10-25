@@ -26,6 +26,7 @@ function Device(name, type) {
 	this.mass = 1;
 	this.target = [0,0];
 
+	// TODO: could take this out of here so its not run when not in Grid layout.
 	// Content of device settings panel
 	this.advanced_settings = getDevicePanelHTML( this );
 	

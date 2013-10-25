@@ -266,6 +266,9 @@ body {
 .connector.wireless {
 	stroke-dasharray: 5,5;
 }
+.connector.invisible {
+	stroke-width: 0;
+}
 
 SVG {
 	position: absolute;

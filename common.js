@@ -45,7 +45,7 @@ function getDevicePanelHTML(device) {
 	var device_panel_html;
 	var device_type = device.type;
 	var device_name = device.name;
-	console.log("device_type: "+ device_type +" | device_name: "+ device_name);
+	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
 	// For personal devices
 	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
 		device_panel_html = "<div class='icon'></div>"
@@ -138,7 +138,9 @@ function resetLayouts() {
 	array_wireless_devices.length = 0;					// used only in populateDevicesGrid()
 	array_wireless_devices.length = 0;					// used only in populateDevicesGrid()
 	array_level1_wired_devices.length = 0;				// used only in populateDevicesGrid()
-	svg_div_height_multiplier = 1;
+	svg_div_height_multiplier = 1;						// used for resize the SVG div so lines are rendered completely even if they are beneath the bottom of the screen cut-off point. Goes with the zoom operations below.
+
+	$('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "");
 
 	// reset zooms caused by certain layouts (physics>high complexity)
 	$("#container").css("zoom", 1);
@@ -175,11 +177,13 @@ function toggleShading(indicator) {
 
 var current_connection_style = 0;
 function toggleConnectors(indicator) {
-	current_connection_style++;
-	$.each(connections, function(index, conn) {
-		console.log(conn);
-		conn.changeShape(Connection.shapes[current_connection_style % Connection.shapes.length]);
-	});
+	if ( _layout_type !== "grid" ) {
+		current_connection_style++;
+		$.each(connections, function(index, conn) {
+			console.log(conn);
+			conn.changeShape(Connection.shapes[current_connection_style % Connection.shapes.length]);
+		});
+	}
 	// Not necessary for now: display which connector style is currently displayed in button
 	// var button_label = 'Toggle Connector Style (' + ((current_connection_style % Connection.shapes.length)+1) + '/' + Connection.shapes.length +')';
 	// $('li #toggle-button').text(button_label);
