@@ -209,24 +209,3 @@ function setConnectorStyle(shape) {
 		conn.changeShape(shape);
 	});	
 }
-
-// OLD
-function buildSketchList() {
-	var sketches = [
-		{ name: "Layout Options",		file: "layout-options.html"	},
-		{ name: "Collapsed Nodes",		file: "collapsed-nodes.html" },		
-		{ name: "Drag-and-Drop",		file: "drag-and-drop.html" },		
-	];
-	var listEl = $("#sketchList");
-	listEl.append("<h2>SKETCHES:</h2>");
-	if(listEl.length > 0) {
-		$.each(sketches, function(i, s) {
-			var link = $("<a />");
-			link.attr("href", s.file);
-			link.text(s.name);
-
-			listEl.append(link);
-		});
-	}
-}
-// $(document).ready(buildSketchList);
