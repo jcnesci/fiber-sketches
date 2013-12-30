@@ -11,6 +11,43 @@ function layoutDevices(type) {
 	});
 	
 	switch (type) {
+		case "accordion grid":
+			console.log("t- ENTER accordion grid.")
+			// Not forcing connector style here, since this layout uses many different ones. They are set in populateDevicesGrid() directly.
+			
+			// Place all Devices.
+			gridPlace(devices[0], $('#container').width() / 2 - devices[0].size.width / 2, 0, false, "level1");
+
+			// Once devices placed, fade in devices and show connectors.
+			$.each(devices, function(index, device) {
+				device.el.animate({
+					opacity: 1,
+				}, {
+					step: function(n) {
+						device.update();
+					}
+				});
+				$.each(device.connections, function(index2, connection) {
+					connection.el.fadeIn(300);
+				});
+			});
+
+			// Fade in the root node last. (DONT KNOW WHY I MUST DO IT, but it is necessary...)
+			devices[0].el.fadeIn({duration: 300, queue: false});
+
+			// Shrink the entire physics layout to make it less massive overall. Must shrink the entire container but also the SVG div.
+			// console.log("ZOOOOOOM - - --------: "+ $("#container").css("zoom") );
+			// if ( $("#container").css("zoom") === "1" ) {
+			// 	var zoom_shrink_layout = 0.75;
+			// 	$("#container").css("zoom", zoom_shrink_layout);
+			// 	$("#container_background").css("top", ($("#container_background").offset().top * zoom_shrink_layout) + 40);
+			// 	$("#svg_container").css("zoom", zoom_shrink_layout);
+			// 	var zoom_factor = 1 / zoom_shrink_layout;
+			// 	svg_div_height_multiplier = zoom_factor;
+			// 	resetSvgDivHeight();
+			// }
+
+			break;
 		case "random":
 			// Force connector style
   			setConnectorStyle("90s");

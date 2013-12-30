@@ -25,7 +25,8 @@ $(document).ready(function() {
   $("#controller").hide();    // Hide the Controller div for the Drag-and-Drop feature
   
   // NEW - Set network complexity, populate and layout network.
-  _layout_type = "tree cascading";
+  // _layout_type = "tree cascading";
+  _layout_type = "accordion grid";
   setNetworkComplexity( "low" );
 });
 
@@ -57,7 +58,8 @@ function setNetworkComplexity( cur_network_complexity ) {
 }
 // Refresh the current layout. Useful after changing the network complexity, to run the same layout we already had.
 function refreshLayout() {
-  if ( _layout_type === "grid" ) { populateDevicesGrid(); layoutDevices('grid'); }
+  if ( _layout_type === "accordion grid" ) { populateDevicesGrid(); layoutDevices('accordion grid'); }
+  else if ( _layout_type === "grid" ) { populateDevicesGrid(); layoutDevices('grid'); }
   else if ( _layout_type === "tree cascading" ) { populateDevicesDefault(); layoutDevices('tree cascading'); }
   else if ( _layout_type === "physics" ) { populateDevicesPhysics(); layoutDevices('physics'); }
   else if ( _layout_type === "random" ) { populateDevicesDefault(); layoutDevices('random'); }
