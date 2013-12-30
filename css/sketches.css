@@ -14,6 +14,11 @@ body {
 	float: left;
 }
 
+/* forces divs (ie. "boxes") to maintain the padding amount within the width of a div (and not add it to the width). */
+/**, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }*/
+ 
 #container {
 	z-index: 0;
 	position: relative;
