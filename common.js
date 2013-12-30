@@ -131,6 +131,15 @@ function resetLayouts() {
  	$('#wireless_icon').remove();
  	$('#container_background').hide();
  	$("#controller").hide();							// Hide sidebar for drag-and-drop
+ 	
+ 	// DEV_JC_dec30
+ 	$('#container_final').hide();
+ 	$('#container').show();
+ 	$("#wired_accordion").remove();
+
+
+
+
 
 	// Break references of old devices
 	// TODO: Make sure circular references are broken, too

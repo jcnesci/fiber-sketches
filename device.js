@@ -17,7 +17,11 @@ function Device(name, type) {
 		// "left": ($(document).width() / 2 - this.size.width / 2),
 		// "top": ($(document).height() / 2 - this.size.height / 2)
 		//dev_jc_17/09/2013_a
+		
+
 		"left": ($('#container').width() / 2 - this.size.width / 2),
+		// DEV_JC_dec30
+		// "left": ($('#wired_container').width() / 2 - this.size.width / 2),
 		"top": ($('#container').height() / 2 - this.size.height / 2)
 	}
 

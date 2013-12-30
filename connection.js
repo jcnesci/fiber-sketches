@@ -143,7 +143,7 @@ Connection.prototype = {
 			if (y2-y1 >= 200) {
 				var quarterY = y1 + this.halfCell;//(y2 - y1) / 4 + y1;
 				var threeQuarterY = y2 - this.halfCell;//3*(y2 - y1) / 4 + y1;
-				var midX = $("#container").width()/2 + $("#container").offset().left;					
+				var midX = $("#wired_container").width()/2 + $("#wired_container").offset().left;					
 			} else {
 				var quarterY = (y2 - y1) / 2 + y1;
 				var threeQuarterY = (y2 - y1) / 2 + y1;
