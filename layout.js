@@ -303,15 +303,11 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				
 				console.log('- - - - WIRELESS - GRID layout');
 				
-
+				// Place wireless icon at the very top, centered horizontally.
 				var wireless_icon_left = $("#wireless_container").width()/2 - n_device_width/2; //n_columns * n_device_width/2;
 				$(".device.wireless_network").css("left", wireless_icon_left );
 				$(".device.wireless_network").css("top", 0 );
 				$(".device.wireless_network").css('display', 'block');
-
-
-
-
 
 				// OLD : useful code in here, keep it for a while.
 				// wrap every row in a div : useful later to center the last row, if it doesnt contain exactly 4 devices.
@@ -341,22 +337,6 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 							"left": cur_row_left
 						});
 					}
-					
-					// DEV_JC_dec30
-					// lower the wireless container to align it with top of the main container.
-					// var n_full_rows = Math.floor((array_wireless_devices.length - 1)/n_columns);				// need to know the number rows we have minus 1, to know by how many rows to lower all wireless devices.
-					// var n_full_rows_height = n_full_rows * n_device_height;
-					// $("#wireless_container").css({
-					// 	"position": "relative",
-					// 	"top": n_full_rows_height
-					// });
-					
-					// Place the Wireless Signal icon. Must do it this way, manually, because it has no connections, technically (meaning, it won't be in this loop).
-					// var n_total_rows = Math.ceil(array_wireless_devices.length/n_columns);						// need to know the total number of rows to know where to wireless icon after the devices.
-					// var n_total_rows_height = n_total_rows * n_device_height;
-					// $(".device.wireless_network").css("top", n_total_rows_height );								// Use ".device.wireless_network" and not just ".wireless_network" so it's not confused with ".device_advanced_panel.wireless_network".
-					// $(".device.wireless_network").css('display', 'block');
-					// $(".device.wireless_network").css('opacity', 0);											// dev_jc_17/10/2013: make wireless icon not flcikr on update()
 				}
 				
 			}

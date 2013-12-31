@@ -15,10 +15,12 @@ body {
 }
 
 /* forces divs (ie. "boxes") to maintain the padding amount within the width of a div (and not add it to the width). */
-#wired_container, #wired_container:before, #wired_container:after,
+/*#wired_container, #wired_container:before, #wired_container:after,
 #wireless_container, #wireless_container:before, #wireless_container:after,
 #wired_accordion, #wired_accordion:before, #wired_accordion:after,
-#wireless_accordion, #wireless_accordion:before, #wireless_accordion:after,
+#wireless_accordion, #wireless_accordion:before, #wireless_accordion:after,*/
+.floated_right, .floated_right:before, .floated_right:after,
+.floated_left, .floated_left:before, .floated_left:after,
 #container_background, #container_background:before, #container_background:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
@@ -44,20 +46,20 @@ body {
 	width: 800px;
 	margin:0;
 	padding:0;
-	border: 1px solid green;
 	/*height: 500px;*/
 	/*bottom: 50px;*/
 	/*margin-bottom: 50px;*/
 	background-color: #F3F3F3;
 	z-index: -2;
 	border-radius: 6px;
+	/*border: 1px solid green;*/
 }
 #wireless_container {
-	/*position: relative;*/
+	background-color: #F3F3F3;
+	border-radius: 6px;
 }
 #wired_container {
-	/*overflow: hidden;	*/
-	/*height: 100%;*/
+	border-radius: 6px;
 }
 #container_final {
 	z-index: 0;
@@ -84,7 +86,7 @@ body {
 .row {
 	float: left;
 	width: 1600px;
-	margin-top:50px;
+	margin: 0 0 50px 0;
 }
 
 

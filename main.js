@@ -75,7 +75,7 @@ function populateDevicesAccordionGrid() {
   // - - - - - - - - - - - - - - - SETUP - - - - - - - - - - - - - - - - - 
 
   resetLayouts();
-  $('#container_background').show();
+  $('#container_background').show();    // show this as a background for the wired zone specifically ; because the connectors are at the lowest background index, we can't use a background color in the wired zone directly as it would hide the connectors, so we use this div instead.
   $("#container").hide();
   $("#container_final").show();
 
@@ -85,9 +85,9 @@ function populateDevicesAccordionGrid() {
   $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");       // Grey-out the Toggle Connectors menu item, it doesn't apply to this layout. This is reset in the common reset function.
 
   // Create containers for Wired zone (accordion + devices) and Wireless zone (accordion + devices).
-  $("#container_final").append("<div class='row'><div id='wireless_accordion' class='floated_left'></div><div id='wireless_container' class='floated_right clear'></div></div>");
+  $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR 2.4GHZ WIRELESS NETWORK</div><div id='wireless_accordion' class='floated_left'></div><div id='wireless_container' class='floated_right clear'></div></div>");
   $("#wireless_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
-  $("#container_final").append("<div class='row'><div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div></div>");
+  $("#container_final").append("<div class='row'><div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR WIRED NETWORK</div><div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div></div>");
   $("#wired_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
 
   // Create the main Network Box
@@ -338,7 +338,15 @@ function populateDevicesAccordionGrid() {
           
           // Doing this checking because of TV boxes. We want to show details if node is open, but expand it if node is closed.
           if (clickedDevice.expanded === true) {
+            
+
+
+            // DEV_JC_dec31 : change to open accordion
             clickedDevice.showDetails(true);
+
+
+
+
           } else {
             clickedDevice.expandSubnodes(); 
             layoutDevices('accordion grid');
