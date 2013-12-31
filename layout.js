@@ -310,7 +310,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 			 	// // device.el.nextAll().andSelf().slice(0,n_columns).wrapAll('<div class="row"></div>');															// other way to do same as above.
 			 	// }
 				
-				var x_starting_pos = $("#wired_container").width()/2 - (n_columns * n_device_width)/2 ;				// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
+				var x_starting_pos = $("#wireless_container").width()/2 - (n_columns * n_device_width)/2 ;				// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 				var x = x_starting_pos + ( (counter_wireless % n_columns) * n_device_width );					// each row of devices goes up, ex: row0.y = 0, row1.y = -200, row2.y = -400, etc...
 				var y = Math.floor(counter_wireless / n_columns) * -(n_device_height);							// var y = - (Math.floor(index / n_columns) * root.size.height + (root.el.position().top + root.size.height));	
 
@@ -334,10 +334,16 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 					// lower the wireless container to align it with top of the main container.
 					var n_full_rows = Math.floor((array_wireless_devices.length - 1)/n_columns);				// need to know the number rows we have minus 1, to know by how many rows to lower all wireless devices.
 					var n_full_rows_height = n_full_rows * n_device_height;
-					$("#wireless_container").css({
-						"position": "relative",
-						"top": n_full_rows_height
-					});
+					
+
+					// DEV_JC_dec30
+					// $("#wireless_container").css({
+					// 	"position": "relative",
+					// 	"top": n_full_rows_height
+					// });
+					
+
+
 					// Place the Wireless Signal icon. Must do it this way, amnually, because it has no conections, technically (meaning, it won't be in this loop).
 					var n_total_rows = Math.ceil(array_wireless_devices.length/n_columns);						// need to know the total number of rows to know where to wireless icon after the devices.
 					var n_total_rows_height = n_total_rows * n_device_height;

@@ -136,7 +136,7 @@ function resetLayouts() {
  	$('#container_final').hide();
  	$('#container').show();
  	$("#wired_accordion").remove();
-
+ 	$("#wireless_accordion").remove();
 
 
 

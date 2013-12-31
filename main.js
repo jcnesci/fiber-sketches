@@ -76,79 +76,83 @@ function populateDevicesAccordionGrid() {
 
   resetLayouts();
   $('#container_background').show();
+  $("#container").hide();
+  $("#container_final").show();
+
   var n_columns = 4;
   var a_random_names_grid = a_random_names;
   var a_random_rooms_grid = a_random_rooms;
   $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");       // Grey-out the Toggle Connectors menu item, it doesn't apply to this layout. This is reset in the common reset function.
 
-  // - - - - - - - - - - - - - - - NETWORK BOX - - - - - - - - - - - - - - - - - 
-
-  // Create the main Network Box
-  $("#container").hide();
-  $("#container_final").show();
+  // Create containers for Wired zone (accordion + devices) and Wireless zone (accordion + devices).
+  $("#container_final").append("<div id='wireless_accordion' class='floated_left'></div><div id='wireless_container' class='floated_right clear'></div>");
+  $("#wireless_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
   $("#container_final").append("<div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div>");
-  // $("#container").append("<div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right'></div>");
-  // $("#container").show();
-  // $("#container").append("<div id='wired_container'></div>");
   $("#wired_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
+  
+  // Create the main Network Box
   var network_box = new Device("Network Box", "networkbox");
   devices.push(network_box);  // devices[0] is always the network box
   network_box.el.appendTo( $("#wired_container") );
   // TODO: make Net Box icon bigger.
-
-  // - - - - - - - - - - - - - - - WIRELESS DEVICES - - - - - - - - - - - - - - - - - 
-
-  // // Wireless devices
-  // $("#container").append("<div id='wireless_accordion' class='floated_left'><div id='wireless_container' class='floated_right'></div>");
-  // $("#wireless_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
-  // for ( var i = 0; i < n_wireless_devices; i++ ) {
-  //   // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
-  //   if ( i % n_columns === 0 ) {
-  //     var cur_row = $("<div class='wireless_grid_row'></div>");
-  //     cur_row.appendTo( $('#wireless_container') );
-  //   }
-
-  //   // create a wireless device
-  //   var type = Math.random() < 0.5 ? "phone" : "laptop";
-  //   var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
-  //   var wireless_device = new Device(name, type );
-  //   wireless_device.is_wireless = true;   // add custom attribute for layout positioning
-  //   devices.push(wireless_device);
-  //   array_wireless_devices.push(wireless_device);
-    
-  //   wireless_device.el.appendTo( cur_row );
-  //   // wireless_device.el.appendTo( $('#wireless_container') );
-    
-  //   // connections
-  //   var connection = new Connection(devices[0], wireless_device, "wireless", 1 );
-  //   connection.changeShape("invisible");
-  //   connections.push( connection );
-  //   // dev
-  //   // console.log(' WIRELESS --------');
-  //   // console.log(wireless_device);
-  // }
-
-  // // Create the Wireless Network device/icon.
-  // var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
-  // devices.push(wireless_network);
-  
-  // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
 
   // Manually set height of the following containers.
   // This would be impossible to set automatically using only CSS unless our devices were using position:relative. But since our system was all built using position:absolute, we must set the container height manually using JS.
   if ( network_complexity === "low" ) {
     $("#wired_accordion").css("height", 3 * devices[0].size.height);
     $("#wired_container").css("height", 3 * devices[0].size.height);
+    $("#wireless_accordion").css("height", 3 * devices[0].size.height);
+    $("#wireless_container").css("height", 3 * devices[0].size.height);
     $("#container_background").css("height", 3 * devices[0].size.height);
   } else if ( network_complexity === "average" ) {
     $("#wired_accordion").css("height", 3 * devices[0].size.height);
     $("#wired_container").css("height", 3 * devices[0].size.height);
+    $("#wireless_accordion").css("height", 3 * devices[0].size.height);
+    $("#wireless_container").css("height", 3 * devices[0].size.height);
     $("#container_background").css("height", 3 * devices[0].size.height);
   } else if ( network_complexity === "high" ) {
     $("#wired_accordion").css("height", 4 * devices[0].size.height);
     $("#wired_container").css("height", 4 * devices[0].size.height);
+    $("#wireless_accordion").css("height", 3 * devices[0].size.height);
+    $("#wireless_container").css("height", 3 * devices[0].size.height);
     $("#container_background").css("height", 4 * devices[0].size.height);
   }
+
+  // - - - - - - - - - - - - - - - WIRELESS DEVICES - - - - - - - - - - - - - - - - - 
+
+  // Wireless devices
+  for ( var i = 0; i < n_wireless_devices; i++ ) {
+    // place items in rows, each row of the grid contains up to the number of columns. Useful for positioning the last row horizontally in the center.
+    if ( i % n_columns === 0 ) {
+      var cur_row = $("<div class='wireless_grid_row'></div>");
+      cur_row.appendTo( $('#wireless_container') );
+    }
+
+    // create a wireless device
+    var type = Math.random() < 0.5 ? "phone" : "laptop";
+    var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
+    var wireless_device = new Device(name, type );
+    wireless_device.is_wireless = true;   // add custom attribute for layout positioning
+    devices.push(wireless_device);
+    array_wireless_devices.push(wireless_device);
+    
+    wireless_device.el.appendTo( cur_row );
+    // wireless_device.el.appendTo( $('#wireless_container') );
+    
+    // connections
+    var connection = new Connection(devices[0], wireless_device, "wireless", 1 );
+    connection.changeShape("invisible");
+    connections.push( connection );
+    // dev
+    // console.log(' WIRELESS --------');
+    // console.log(wireless_device);
+  }
+
+  // Create the Wireless Network device/icon.
+  var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
+  devices.push(wireless_network);
+  
+  // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
 
   // WIRED - TV Boxes and TVs
   if (n_tv_boxes > 3) {
