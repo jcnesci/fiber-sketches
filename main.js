@@ -113,12 +113,19 @@ function populateDevicesAccordionGrid() {
   } else if ( network_complexity === "high" ) {
     $("#wired_accordion").css("height", 4 * devices[0].size.height);
     $("#wired_container").css("height", 4 * devices[0].size.height);
-    $("#wireless_accordion").css("height", 3 * devices[0].size.height);
-    $("#wireless_container").css("height", 3 * devices[0].size.height);
+    $("#wireless_accordion").css("height", 4 * devices[0].size.height);
+    $("#wireless_container").css("height", 4 * devices[0].size.height);
     $("#container_background").css("height", 4 * devices[0].size.height);
   }
 
   // - - - - - - - - - - - - - - - WIRELESS DEVICES - - - - - - - - - - - - - - - - - 
+
+  // Create the Wireless Network device/icon.
+  var first_row = $("<div class='wireless_grid_row'></div>");
+  first_row.appendTo( $('#wireless_container') );
+  var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
+  devices.push(wireless_network);
+  wireless_network.el.appendTo( first_row );
 
   // Wireless devices
   for ( var i = 0; i < n_wireless_devices; i++ ) {
@@ -149,8 +156,8 @@ function populateDevicesAccordionGrid() {
   }
 
   // Create the Wireless Network device/icon.
-  var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
-  devices.push(wireless_network);
+  // var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
+  // devices.push(wireless_network);
   
   // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
 

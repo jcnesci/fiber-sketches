@@ -303,6 +303,16 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				
 				console.log('- - - - WIRELESS - GRID layout');
 				
+
+				var wireless_icon_left = $("#wireless_container").width()/2 - n_device_width/2; //n_columns * n_device_width/2;
+				$(".device.wireless_network").css("left", wireless_icon_left );
+				$(".device.wireless_network").css("top", 0 );
+				$(".device.wireless_network").css('display', 'block');
+
+
+
+
+
 				// OLD : useful code in here, keep it for a while.
 				// wrap every row in a div : useful later to center the last row, if it doesnt contain exactly 4 devices.
 				// if( counter_wireless % n_columns === 0 && device.el.parent(".wireless_grid_row").length === 0 ) {													// check if we are at the beginning of a row, and if we didn't already create the div last time by calling update(), for example.
@@ -312,7 +322,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				
 				var x_starting_pos = $("#wireless_container").width()/2 - (n_columns * n_device_width)/2 ;				// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 				var x = x_starting_pos + ( (counter_wireless % n_columns) * n_device_width );					// each row of devices goes up, ex: row0.y = 0, row1.y = -200, row2.y = -400, etc...
-				var y = Math.floor(counter_wireless / n_columns) * (n_device_height);							// var y = - (Math.floor(index / n_columns) * root.size.height + (root.el.position().top + root.size.height));	
+				var y = (Math.floor(counter_wireless / n_columns) + 1 ) * (n_device_height);							// var y = - (Math.floor(index / n_columns) * root.size.height + (root.el.position().top + root.size.height));	
 
 				// console.log('Wireless X = '+ x);
 				// console.log('Wireless Y = '+ y);
@@ -341,11 +351,11 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 					// 	"top": n_full_rows_height
 					// });
 					
-					// Place the Wireless Signal icon. Must do it this way, amnually, because it has no conections, technically (meaning, it won't be in this loop).
-					var n_total_rows = Math.ceil(array_wireless_devices.length/n_columns);						// need to know the total number of rows to know where to wireless icon after the devices.
-					var n_total_rows_height = n_total_rows * n_device_height;
-					$(".device.wireless_network").css("top", n_total_rows_height );								// Use ".device.wireless_network" and not just ".wireless_network" so it's not confused with ".device_advanced_panel.wireless_network".
-					$(".device.wireless_network").css('display', 'block');
+					// Place the Wireless Signal icon. Must do it this way, manually, because it has no connections, technically (meaning, it won't be in this loop).
+					// var n_total_rows = Math.ceil(array_wireless_devices.length/n_columns);						// need to know the total number of rows to know where to wireless icon after the devices.
+					// var n_total_rows_height = n_total_rows * n_device_height;
+					// $(".device.wireless_network").css("top", n_total_rows_height );								// Use ".device.wireless_network" and not just ".wireless_network" so it's not confused with ".device_advanced_panel.wireless_network".
+					// $(".device.wireless_network").css('display', 'block');
 					// $(".device.wireless_network").css('opacity', 0);											// dev_jc_17/10/2013: make wireless icon not flcikr on update()
 				}
 				
