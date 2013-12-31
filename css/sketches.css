@@ -81,6 +81,11 @@ body {
     border: 3px solid red;
     position: relative;
 }
+.row {
+	float: left;
+	width: 1600px;
+	margin-top:50px;
+}
 
 
 

@@ -85,11 +85,11 @@ function populateDevicesAccordionGrid() {
   $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");       // Grey-out the Toggle Connectors menu item, it doesn't apply to this layout. This is reset in the common reset function.
 
   // Create containers for Wired zone (accordion + devices) and Wireless zone (accordion + devices).
-  $("#container_final").append("<div id='wireless_accordion' class='floated_left'></div><div id='wireless_container' class='floated_right clear'></div>");
+  $("#container_final").append("<div class='row'><div id='wireless_accordion' class='floated_left'></div><div id='wireless_container' class='floated_right clear'></div></div>");
   $("#wireless_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
-  $("#container_final").append("<div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div>");
+  $("#container_final").append("<div class='row'><div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div></div>");
   $("#wired_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
-  
+
   // Create the main Network Box
   var network_box = new Device("Network Box", "networkbox");
   devices.push(network_box);  // devices[0] is always the network box
