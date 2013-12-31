@@ -135,8 +135,7 @@ function resetLayouts() {
  	// DEV_JC_dec30
  	$('#container_final').hide();
  	$('#container').show();
- 	$("#wired_accordion").remove();
- 	$("#wireless_accordion").remove();
+ 	$(".row").remove();
 
 
 
