@@ -86,7 +86,7 @@ function populateDevicesAccordionGrid() {
   // Create the main Network Box
   $("#container").hide();
   $("#container_final").show();
-  $("#container_final").append("<div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right'></div>");
+  $("#container_final").append("<div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div>");
   // $("#container").append("<div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right'></div>");
   // $("#container").show();
   // $("#container").append("<div id='wired_container'></div>");
@@ -134,10 +134,21 @@ function populateDevicesAccordionGrid() {
   
   // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
 
-  // Set height of container_background, grey background to wired devices. Harcoded for now.
-  if ( network_complexity === "low" ) $("#container_background").css("height", 3 * devices[0].size.height);
-  else if ( network_complexity === "average" ) $("#container_background").css("height", 3 * devices[0].size.height);
-  else if ( network_complexity === "high" ) $("#container_background").css("height", 4 * devices[0].size.height);
+  // Manually set height of the following containers.
+  // This would be impossible to set automatically using only CSS unless our devices were using position:relative. But since our system was all built using position:absolute, we must set the container height manually using JS.
+  if ( network_complexity === "low" ) {
+    $("#wired_accordion").css("height", 3 * devices[0].size.height);
+    $("#wired_container").css("height", 3 * devices[0].size.height);
+    $("#container_background").css("height", 3 * devices[0].size.height);
+  } else if ( network_complexity === "average" ) {
+    $("#wired_accordion").css("height", 3 * devices[0].size.height);
+    $("#wired_container").css("height", 3 * devices[0].size.height);
+    $("#container_background").css("height", 3 * devices[0].size.height);
+  } else if ( network_complexity === "high" ) {
+    $("#wired_accordion").css("height", 4 * devices[0].size.height);
+    $("#wired_container").css("height", 4 * devices[0].size.height);
+    $("#container_background").css("height", 4 * devices[0].size.height);
+  }
 
   // WIRED - TV Boxes and TVs
   if (n_tv_boxes > 3) {

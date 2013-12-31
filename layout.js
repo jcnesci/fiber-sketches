@@ -355,7 +355,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 					
 
 					// DEV_JC_dec30
-					network_box_y = 100;
+					network_box_y = 0;
 					// network_box_y = $(".device.wireless_network").position().top + $(".device.wireless_network").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
 
 
@@ -367,7 +367,12 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 
 					// Re-adjust position of Wired Zone background to align with position of Net Box.
 					$("#container_background").css({
-						"top": $("#wired_container").offset().top + network_box_y - in_between_space_wired_wireless/2,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
+						
+						// DEV_JC_dec30
+						// "top": $("#wired_container").offset().top + network_box_y - in_between_space_wired_wireless/2,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
+						"top": $("#wired_container").offset().top + network_box_y,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
+						
+
 						"left": $('#wired_container').width()/2 - $('#container_background').width()/2 + $('#wired_container').offset().left
 					});
 					// console.log('Container BG TOP: '+ $("#container").offset().top );
