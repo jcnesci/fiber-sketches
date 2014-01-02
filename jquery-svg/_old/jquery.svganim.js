@@ -23,8 +23,9 @@ $.each(['x', 'y', 'width', 'height', 'rx', 'ry', 'cx', 'cy', 'r', 'x1', 'y1', 'x
 			var realAttrName = $.svg._attrNames[attrName] || attrName;
 			var attr = fx.elem.attributes.getNamedItem(realAttrName);
 			if (!fx.set) {
-				fx.start = (attr ? parseFloat(attr.value) : 0);
-				var offset = '';
+				fx.start = (attr ? parseFloat(attr.nodeValue) : 0);
+				var offset = ($.fn.jquery >= '1.6' ? '' :
+					fx.options.curAnim['svg' + ccName] || fx.options.curAnim['svg-' + attrName]);
 				if (/^[+-]=/.exec(offset)) {
 					fx.end = fx.start + parseFloat(offset.replace(/=/, ''));
 				}
@@ -32,7 +33,7 @@ $.each(['x', 'y', 'width', 'height', 'rx', 'ry', 'cx', 'cy', 'r', 'x1', 'y1', 'x
 				fx.set = true;
 			}
 			var value = (fx.pos * (fx.end - fx.start) + fx.start) + (fx.unit == '%' ? '%' : '');
-			(attr ? attr.value = value : fx.elem.setAttribute(realAttrName, value));
+			(attr ? attr.nodeValue = value : fx.elem.setAttribute(realAttrName, value));
 		};
 	}
 );
@@ -42,8 +43,10 @@ $.fx.step['svgStrokeDashArray'] = $.fx.step['svg-strokeDashArray'] =
 $.fx.step['svgStroke-dasharray'] = $.fx.step['svg-stroke-dasharray'] = function(fx) {
 	var attr = fx.elem.attributes.getNamedItem('stroke-dasharray');
 	if (!fx.set) {
-		fx.start = parseDashArray(attr ? attr.value : '');
-		var offset = fx.end;
+		fx.start = parseDashArray(attr ? attr.nodeValue : '');
+		var offset = ($.fn.jquery >= '1.6' ? fx.end :
+			fx.options.curAnim['svgStrokeDashArray'] || fx.options.curAnim['svg-strokeDashArray'] ||
+			fx.options.curAnim['svgStroke-dasharray'] || fx.options.curAnim['svg-stroke-dasharray']);
 		fx.end = parseDashArray(offset);
 		if (/^[+-]=/.exec(offset)) {
 			offset = offset.split(/[, ]+/);
@@ -64,7 +67,7 @@ $.fx.step['svgStroke-dasharray'] = $.fx.step['svg-stroke-dasharray'] = function(
 	var value = $.map(fx.start, function(n, i) {
 		return (fx.pos * (fx.end[i] - n) + n);
 	}).join(',');
-	(attr ? attr.value = value : fx.elem.setAttribute('stroke-dasharray', value));
+	(attr ? attr.nodeValue = value : fx.elem.setAttribute('stroke-dasharray', value));
 };
 
 /* Parse a strokeDashArray definition: dash, gap, ...
@@ -91,8 +94,9 @@ function parseDashArray(value) {
 $.fx.step['svgViewBox'] = $.fx.step['svg-viewBox'] = function(fx) {
 	var attr = fx.elem.attributes.getNamedItem('viewBox');
 	if (!fx.set) {
-		fx.start = parseViewBox(attr ? attr.value : '');
-		var offset = fx.end;
+		fx.start = parseViewBox(attr ? attr.nodeValue : '');
+		var offset = ($.fn.jquery >= '1.6' ? fx.end :
+			fx.options.curAnim['svgViewBox'] || fx.options.curAnim['svg-viewBox']);
 		fx.end = parseViewBox(offset);
 		if (/^[+-]=/.exec(offset)) {
 			offset = offset.split(/[, ]+/);
@@ -110,7 +114,7 @@ $.fx.step['svgViewBox'] = $.fx.step['svg-viewBox'] = function(fx) {
 	var value = $.map(fx.start, function(n, i) {
 		return (fx.pos * (fx.end[i] - n) + n);
 	}).join(' ');
-	(attr ? attr.value = value : fx.elem.setAttribute('viewBox', value));
+	(attr ? attr.nodeValue = value : fx.elem.setAttribute('viewBox', value));
 };
 
 /* Parse a viewBox definition: x, y, width, height.
@@ -134,7 +138,7 @@ function parseViewBox(value) {
 $.fx.step['svgTransform'] = $.fx.step['svg-transform'] = function(fx) {
 	var attr = fx.elem.attributes.getNamedItem('transform');
 	if (!fx.set) {
-		fx.start = parseTransform(attr ? attr.value : '');
+		fx.start = parseTransform(attr ? attr.nodeValue : '');
 		fx.end = parseTransform(fx.end, fx.start);
 		fx.set = true;
 	}
@@ -173,7 +177,7 @@ $.fx.step['svgTransform'] = $.fx.step['svg-transform'] = function(fx) {
 				break;
 		}
 	}
-	(attr ? attr.value = transform : fx.elem.setAttribute('transform', transform));
+	(attr ? attr.nodeValue = transform : fx.elem.setAttribute('transform', transform));
 };
 
 /* Decode a transform string and extract component values.
@@ -183,7 +187,7 @@ $.fx.step['svgTransform'] = $.fx.step['svg-transform'] = function(fx) {
 function parseTransform(value, original) {
 	value = value || '';
 	if (typeof value == 'object') {
-		value = value.value;
+		value = value.nodeValue;
 	}
 	var transform = $.extend({translateX: 0, translateY: 0, scaleX: 0, scaleY: 0,
 		rotateA: 0, rotateX: 0, rotateY: 0, skewX: 0, skewY: 0,
@@ -260,7 +264,7 @@ $.each(['fill', 'stroke'],
 				Math.min(Math.max(parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2], 10), 0), 255)
 			].join(',') + ')';
 			colour = (fx.end[3] && fx.state == 1 ? 'none' : colour);
-			(attr ? attr.value = colour : fx.elem.setAttribute(attrName, colour));
+			(attr ? attr.nodeValue = colour : fx.elem.setAttribute(attrName, colour));
 		}
 	}
 );

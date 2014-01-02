@@ -88,6 +88,17 @@ body {
 	width: 1600px;
 	margin: 0 0 50px 0;
 }
+/* removes blue highlight on text caused by jQuery Accordion : http://stackoverflow.com/questions/4265870/using-accordion-from-jquery-ui-im-getting-an-unwanted-blue-highlight-around-th */
+#accordion .ui-state-focus {
+  outline: none;
+}
+
+
+
+
+
+
+
 
 
 

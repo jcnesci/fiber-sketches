@@ -1,119 +1,54 @@
 ﻿/* http://keith-wood.name/svg.html
    jQuery DOM compatibility for jQuery SVG v1.4.5.
    Written by Keith Wood (kbwood{at}iinet.com.au) April 2009.
-   Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and
-   MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses.
+   Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
+   MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
    Please attribute the author if you use it. */
 
 (function($) { // Hide scope, no $ conflict
 
-    var rclass = /[\t\r\n]/g,
-        rspace = /\s+/,
-        rwhitespace = "[\\x20\\t\\r\\n\\f]";
-
 /* Support adding class names to SVG nodes. */
 $.fn.addClass = function(origAddClass) {
-	return function(value) {
-        var classNames, i, l, elem,
-            setClass, c, cl;
-
-        if ( jQuery.isFunction( value ) ) {
-            return this.each(function( j ) {
-                jQuery( this ).addClass( value.call(this, j, this.className) );
-            });
-        }
-
-        if ( value && typeof value === "string" ) {
-            classNames = value.split( rspace );
-
-            for ( i = 0, l = this.length; i < l; i++ ) {
-                elem = this[ i ];
-
-                if ( elem.nodeType === 1 ) {
-                    if ( !(elem.className && elem.getAttribute('class')) && classNames.length === 1 ) {
-                        if ($.svg.isSVGElem(elem)) {
-                            (elem.className ? elem.className.baseVal = value
-                                : elem.setAttribute('class',  value));
-                        } else {
-                            elem.className = value;
-                        }
-                    } else {
-                        setClass = !$.svg.isSVGElem(elem) ? elem.className :
-                                   elem.className ? elem.className.baseVal :
-                                   elem.getAttribute('class');
-
-                        setClass = (" " + setClass + " ");
-                        for ( c = 0, cl = classNames.length; c < cl; c++ ) {
-                            if ( setClass.indexOf( " " + classNames[ c ] + " " ) < 0 ) {
-                                setClass += classNames[ c ] + " ";
-                            }
-                        }
-
-                        setClass = jQuery.trim(setClass);
-                        if ($.svg.isSVGElem(elem)) {
-
-                            (elem.className ? elem.className.baseVal = setClass
-                                : elem.setAttribute('class',  setClass));
-                        } else {
-                            elem.className = setClass;
-                        }
-                    }
-                }
-            }
-        }
-
-        return this;
+	return function(classNames) {
+		classNames = classNames || '';
+		return this.each(function() {
+			if ($.svg.isSVGElem(this)) {
+				var node = this;
+				$.each(classNames.split(/\s+/), function(i, className) {
+					var classes = (node.className ? node.className.baseVal : node.getAttribute('class'));
+					if ($.inArray(className, classes.split(/\s+/)) == -1) {
+						classes += (classes ? ' ' : '') + className;
+						(node.className ? node.className.baseVal = classes :
+							node.setAttribute('class',  classes));
+					}
+				});
+			}
+			else {
+				origAddClass.apply($(this), [classNames]);
+			}
+		});
 	};
 }($.fn.addClass);
 
 /* Support removing class names from SVG nodes. */
 $.fn.removeClass = function(origRemoveClass) {
-	return function(value) {
-        var classNames, i, l, elem, className, c, cl;
-
-        if ( jQuery.isFunction( value ) ) {
-            return this.each(function( j ) {
-                jQuery( this ).removeClass( value.call(this, j, this.className) );
-            });
-        }
-
-        if ( (value && typeof value === "string") || value === undefined ) {
-            classNames = ( value || "" ).split( rspace );
-
-            for ( i = 0, l = this.length; i < l; i++ ) {
-                elem = this[ i ];
-
-                if ( elem.nodeType === 1 && (elem.className || elem.getAttribute('class')) ) {
-                    if ( value ) {
-                        className =  !$.svg.isSVGElem(elem) ? elem.className :
-                                     elem.className ? elem.className.baseVal :
-                                     elem.getAttribute('class');
-
-                        className = (" " + className + " ").replace( rclass, " " );
-
-                        for ( c = 0, cl = classNames.length; c < cl; c++ ) {
-                            // Remove until there is nothing to remove,
-                            while ( className.indexOf(" " + classNames[ c ] + " ") >= 0 ) {
-                                className = className.replace( " " + classNames[ c ] + " " , " " );
-                            }
-                        }
-
-                        className = jQuery.trim( className );
-                    } else {
-                        className = "";
-                    }
-
-                    if ($.svg.isSVGElem(elem)) {
-                        (elem.className ? elem.className.baseVal = className
-                            : elem.setAttribute('class',  className));
-                    } else {
-                        elem.className = className;
-                    }
-                }
-            }
-        }
-
-        return this;
+	return function(classNames) {
+		classNames = classNames || '';
+		return this.each(function() {
+			if ($.svg.isSVGElem(this)) {
+				var node = this;
+				$.each(classNames.split(/\s+/), function(i, className) {
+					var classes = (node.className ? node.className.baseVal : node.getAttribute('class'));
+					classes = $.grep(classes.split(/\s+/), function(n, i) { return n != className; }).
+						join(' ');
+					(node.className ? node.className.baseVal = classes :
+						node.setAttribute('class', classes));
+				});
+			}
+			else {
+				origRemoveClass.apply($(this), [classNames]);
+			}
+		});
 	};
 }($.fn.removeClass);
 
@@ -136,35 +71,29 @@ $.fn.toggleClass = function(origToggleClass) {
 
 /* Support checking class names on SVG nodes. */
 $.fn.hasClass = function(origHasClass) {
-	return function(selector) {
-
-        var className = " " + selector + " ",
-            i = 0,
-            l = this.length,
-            elem, classes;
-
-        for ( ; i < l; i++ ) {
-            elem = this[i];
-            if ( elem.nodeType === 1) {
-                classes = !$.svg.isSVGElem(elem) ? elem.className :
-                          elem.className ? elem.className.baseVal :
-                          elem.getAttribute('class');
-                if ((" " + classes + " ").replace(rclass, " ").indexOf( className ) > -1 ) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+	return function(className) {
+		className = className || '';
+		var found = false;
+		this.each(function() {
+			if ($.svg.isSVGElem(this)) {
+				var classes = (this.className ? this.className.baseVal :
+					this.getAttribute('class')).split(/\s+/);
+				found = ($.inArray(className, classes) > -1);
+			}
+			else {
+				found = (origHasClass.apply($(this), [className]));
+			}
+			return !found;
+		});
+		return found;
 	};
 }($.fn.hasClass);
 
 /* Support attributes on SVG nodes. */
 $.fn.attr = function(origAttr) {
 	return function(name, value, type) {
-        var origArgs = arguments;
 		if (typeof name === 'string' && value === undefined) {
-			var val = origAttr.apply(this, origArgs);
+			var val = origAttr.apply(this, [name]);
 			if (val && val.baseVal && val.baseVal.numberOfItems != null) { // Multiple values
 				value = '';
 				val = val.baseVal;
@@ -197,7 +126,7 @@ $.fn.attr = function(origAttr) {
 			options = {};
 			options[name] = value;
 		}
-		return $(this).each(function() {
+		return this.each(function() {
 			if ($.svg.isSVGElem(this)) {
 				for (var n in options) {
 					var val = ($.isFunction(options[n]) ? options[n]() : options[n]);
@@ -205,7 +134,7 @@ $.fn.attr = function(origAttr) {
 				}
 			}
 			else {
-				origAttr.apply($(this), origArgs);
+				origAttr.apply($(this), [name, value, type]);
 			}
 		});
 	};
@@ -236,18 +165,56 @@ $.extend($.cssNumber, {
 /* Support retrieving CSS/attribute values on SVG nodes. */
 if ($.cssProps) {
 	$.css = function(origCSS) {
-		return function(elem, name, numeric, extra) {
+		return function(elem, name, extra) {
 			var value = (name.match(/^svg.*/) ? $(elem).attr($.cssProps[name] || name) : '');
-			return value || origCSS(elem, name, numeric, extra);
+			return value || origCSS(elem, name, extra);
 		};
 	}($.css);
 }
+  
+/* Determine if any nodes are SVG nodes. */
+function anySVG(checkSet) {
+	for (var i = 0; i < checkSet.length; i++) {
+		if (checkSet[i].nodeType == 1 && checkSet[i].namespaceURI == $.svg.svgNS) {
+			return true;
+		}
+	}
+	return false;
+}
 
-$.find.isXML = function(origIsXml) {
-    return function(elem) {
-        return $.svg.isSVGElem(elem) || origIsXml(elem);
-    }
-}($.find.isXML)
+/* Update Sizzle selectors. */
+
+$.expr.relative['+'] = function(origRelativeNext) {
+	return function(checkSet, part, isXML) {
+		origRelativeNext(checkSet, part, isXML || anySVG(checkSet));
+	};
+}($.expr.relative['+']);
+
+$.expr.relative['>'] = function(origRelativeChild) {
+	return function(checkSet, part, isXML) {
+		origRelativeChild(checkSet, part, isXML || anySVG(checkSet));
+	};
+}($.expr.relative['>']);
+
+$.expr.relative[''] = function(origRelativeDescendant) {
+	return function(checkSet, part, isXML) {
+		origRelativeDescendant(checkSet, part, isXML || anySVG(checkSet));
+	};
+}($.expr.relative['']);
+
+$.expr.relative['~'] = function(origRelativeSiblings) {
+	return function(checkSet, part, isXML) {
+		origRelativeSiblings(checkSet, part, isXML || anySVG(checkSet));
+	};
+}($.expr.relative['~']);
+
+$.expr.find.ID = function(origFindId) {
+	return function(match, context, isXML) {
+		return ($.svg.isSVGElem(context) ?
+			[context.ownerDocument.getElementById(match[1])] :
+			origFindId(match, context, isXML));
+	};
+}($.expr.find.ID);
 
 var div = document.createElement('div');
 div.appendChild(document.createComment(''));
@@ -267,15 +234,59 @@ if (div.getElementsByTagName('*').length > 0) { // Make sure no comments are fou
 	};
 }
 
-$.expr.filter.CLASS = function(className) {
-    var pattern = new RegExp("(^|" + rwhitespace + ")" + className + "(" + rwhitespace + "|$)");
-    return function( elem ) {
-        var elemClass = (!$.svg.isSVGElem(elem) ? elem.className || (typeof elem.getAttribute !== "undefined" && elem.getAttribute("class")) || ""  :
-            (elem.className ? elem.className.baseVal : elem.getAttribute('class')));
-
-        return pattern.test( elemClass );
-    };
+$.expr.preFilter.CLASS = function(match, curLoop, inplace, result, not, isXML) {
+	match = ' ' + match[1].replace(/\\/g, '') + ' ';
+	if (isXML) {
+		return match;
+	}
+	for (var i = 0, elem = {}; elem != null; i++) {
+		elem = curLoop[i];
+		if (!elem) {
+			try {
+				elem = curLoop.item(i);
+			}
+			catch (e) {
+				// Ignore
+			}
+		}
+		if (elem) {
+			var className = (!$.svg.isSVGElem(elem) ? elem.className :
+				(elem.className ? elem.className.baseVal : '') || elem.getAttribute('class'));
+			if (not ^ (className && (' ' + className + ' ').indexOf(match) > -1)) {
+				if (!inplace)
+					result.push(elem);
+			}
+			else if (inplace) {
+				curLoop[i] = false;
+			}
+		}
+	}
+	return false;
 };
+
+$.expr.filter.CLASS = function(elem, match) {
+	var className = (!$.svg.isSVGElem(elem) ? elem.className :
+		(elem.className ? elem.className.baseVal : elem.getAttribute('class')));
+	return (' ' + className + ' ').indexOf(match) > -1;
+};
+
+$.expr.filter.ATTR = function(origFilterAttr) {
+	return function(elem, match) {
+		var handler = null;
+		if ($.svg.isSVGElem(elem)) {
+			handler = match[1];
+			$.expr.attrHandle[handler] = function(elem){
+				var attr = elem.getAttribute(handler);
+				return attr && attr.baseVal || attr;
+			};
+		}
+		var filter = origFilterAttr(elem, match);
+		if (handler) {
+			$.expr.attrHandle[handler] = null;
+		}
+		return filter;
+	};
+}($.expr.filter.ATTR);
 
 /*
 	In the removeData function (line 1881, v1.7.2):

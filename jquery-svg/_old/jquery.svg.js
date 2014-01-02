@@ -1,5 +1,5 @@
-/* http://keith-wood.name/svg.html
-   SVG for jQuery v1.9.
+﻿/* http://keith-wood.name/svg.html
+   SVG for jQuery v1.4.5.
    Written by Keith Wood (kbwood{at}iinet.com.au) August 2007.
    Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
    MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
@@ -109,7 +109,7 @@ $.extend(SVGManager.prototype, {
 			this._afterLoad(container, svg, settings || {});
 		}
 		catch (e) {
-			if (!$.support.noCloneChecked) {
+			if ($.browser.msie) {
 				if (!container.id) {
 					container.id = 'svg' + (this._uuid++);
 				}
@@ -400,11 +400,9 @@ $.extend(SVGWrapper.prototype, {
 		var node = this._makeNode(args.parent, 'style', $.extend(
 			{type: 'text/css'}, args.settings || {}));
 		node.appendChild(this._svg.ownerDocument.createTextNode(args.styles));
-            /*
 		if ($.browser.opera) {
 			$('head').append('<style type="text/css">' + args.styles + '</style>');
 		}
-            */
 		return node;
 	},
 
@@ -419,11 +417,9 @@ $.extend(SVGWrapper.prototype, {
 		var node = this._makeNode(args.parent, 'script', $.extend(
 			{type: args.type || 'text/javascript'}, args.settings || {}));
 		node.appendChild(this._svg.ownerDocument.createTextNode(args.script));
-            /*
 		if (!$.browser.mozilla) {
 			$.globalEval(args.script);
 		}
-            */
 		return node;
 	},
 
@@ -996,16 +992,6 @@ $.extend(SVGWrapper.prototype, {
 					(messages.length ? messages[0] : errors[0]).firstChild.nodeValue);
 				return;
 			}
-			if (!settings.forceKeepRelativePath && url.search(/\//) != -1) {
-				var base = url.replace(/\/[^\/]*$/, '/');
-				$("*[xlink\\:href]", data.documentElement).each( function(i,el) {
-					var href = $(el).attr('xlink:href')+"";
-					if (!href.match(/(^[a-z]([-a-z0-9+.])*:.*$)|(^\/.*$)/i) && href[0] != '#') {
-						// only consider relative href
-						$(el).attr('xlink:href', base + $(el).attr('xlink:href'));
-					}
-				});
-			}
 			var parent = (settings.parent ? $(settings.parent)[0] : wrapper._svg);
 			var attrs = {};
 			for (var i = 0; i < data.documentElement.attributes.length; i++) {
@@ -1034,19 +1020,17 @@ $.extend(SVGWrapper.prototype, {
 				wrapper.configure(parent, {width: size[0], height: size[1]});
 			}
 			if (settings.onLoad) {
-				var w = data.documentElement.getAttribute('width');
-				var h = data.documentElement.getAttribute('height');
-				settings.onLoad.apply(wrapper._container || wrapper._svg, [wrapper, w, h]);
+				settings.onLoad.apply(wrapper._container || wrapper._svg, [wrapper]);
 			}
 		};
 		if (url.match('<svg')) { // Inline SVG
-			loadSVG(!$.support.noCloneChecked ? loadXML4IE(url) :
+			loadSVG($.browser.msie ? loadXML4IE(url) :
 				new DOMParser().parseFromString(url, 'text/xml'));
 		}
 		else { // Remote SVG
-			$.ajax({url: url, dataType: (!$.support.noCloneChecked ? 'text' : 'xml'),
+			$.ajax({url: url, dataType: ($.browser.msie ? 'text' : 'xml'),
 				success: function(xml) {
-					loadSVG(!$.support.noCloneChecked ? loadXML4IE(xml) : xml);
+					loadSVG($.browser.msie ? loadXML4IE(xml) : xml);
 				}, error: function(http, message, exc) {
 					reportError(message + (exc ? ' ' + exc.message : ''));
 				}});
