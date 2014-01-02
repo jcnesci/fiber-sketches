@@ -15,10 +15,6 @@ body {
 }
 
 /* forces divs (ie. "boxes") to maintain the padding amount within the width of a div (and not add it to the width). */
-/*#wired_container, #wired_container:before, #wired_container:after,
-#wireless_container, #wireless_container:before, #wireless_container:after,
-#wired_accordion, #wired_accordion:before, #wired_accordion:after,
-#wireless_accordion, #wireless_accordion:before, #wireless_accordion:after,*/
 .floated_right, .floated_right:before, .floated_right:after,
 .floated_left, .floated_left:before, .floated_left:after,
 #container_background, #container_background:before, #container_background:after {
@@ -89,13 +85,51 @@ body {
 	margin: 0 0 50px 0;
 }
 /* removes blue highlight on text caused by jQuery Accordion : http://stackoverflow.com/questions/4265870/using-accordion-from-jquery-ui-im-getting-an-unwanted-blue-highlight-around-th */
-#accordion .ui-state-focus {
+.accordion .ui-state-focus {
   outline: none;
 }
-
-
-
-
+.accordion {
+	width: 780px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+}
+.accordion:focus, .accordion:active {  
+    outline: 0;  
+} 
+.accordion a {
+	text-decoration: none;
+}
+.accordion .ui-accordion-header {  
+    background-color: #ccc;  
+    margin: 10px 0px 0px 0px;  
+}
+/* We want all accordion headers to have space before them, except the first one (so it aligns with the top perfectly). */
+.accordion .ui-accordion-header:first-child {  
+    margin: 0px;  
+}
+.accordion .ui-accordion-header a {  
+    color: #000;
+    line-height: 42px;  
+    display: block;  
+    font-size: 16px;  
+    width: 100%;  
+    text-indent: 10px;  
+    font-weight: 200;
+}
+.accordion .ui-accordion-content {  
+    width: 100%;  
+    background-color: #f3f3f3;  
+    color: #777;  
+    font-size: 10pt;  
+    line-height: 16pt;  
+}  
+.accordion .ui-accordion-content > * {  
+    margin: 0;  
+    padding: 20px;  
+}
+.accordion .ui-accordion-content a {  
+    color: #F3F3F3;  
+}  
 
 
 

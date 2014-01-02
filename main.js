@@ -85,15 +85,9 @@ function populateDevicesAccordionGrid() {
   $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");       // Grey-out the Toggle Connectors menu item, it doesn't apply to this layout. This is reset in the common reset function.
 
   // Create containers for Wired zone (accordion + devices) and Wireless zone (accordion + devices).
-  $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR 2.4GHZ WIRELESS NETWORK</div><div id='wireless_accordion' class='floated_left'></div><div id='wireless_container' class='floated_right clear'></div></div>");
+  $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR 2.4GHZ WIRELESS NETWORK</div><div id='wireless_accordion' class='floated_left'><div class='accordion'></div></div><div id='wireless_container' class='floated_right clear'></div></div>");
   $("#container_final").append("<div class='row'><div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR WIRED NETWORK</div><div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div></div>");
-  $("#wired_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
-
-  // $("#wireless_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");
-  $("#wireless_accordion").html("<div id='accordion'><h3>First header</h3> <div>First content panel</div> <h3>Second header</h3> <div>Second content panel</div></div>");
-  $("#accordion").accordion();  
-
-
+  $("#wired_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");  
 
   // Create the main Network Box
   var network_box = new Device("Network Box", "networkbox");
@@ -131,6 +125,8 @@ function populateDevicesAccordionGrid() {
   var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
   devices.push(wireless_network);
   wireless_network.el.appendTo( first_row );
+  // append the HTML of it's settings to the accordion div.
+  $("#wireless_accordion .accordion").append(wireless_network.advanced_accordion_settings);
 
   // Wireless devices
   for ( var i = 0; i < n_wireless_devices; i++ ) {
@@ -158,7 +154,17 @@ function populateDevicesAccordionGrid() {
     // dev
     // console.log(' WIRELESS --------');
     // console.log(wireless_device);
+
+    
+
+
+    // DEV_JC_jan2
+    // append the HTML of the current device's settings to the accordion div.
+    $("#wireless_accordion .accordion").append(wireless_device.advanced_accordion_settings);
   }
+  // Once we are done populating the HTML of the accordion, we instantiate it.
+  $(".accordion").accordion({ active: false, collapsible: true });  
+
 
   // Create the Wireless Network device/icon.
   // var wireless_network = new Device("Wi-Fi Network", "wireless_network" );

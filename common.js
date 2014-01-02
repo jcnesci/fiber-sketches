@@ -39,6 +39,27 @@ function resetSvgDivHeight() {
 	// console.log(" * * * * * height * "+svg_div_height_multiplier+" = "+ height * svg_div_height_multiplier);
 	$('svg').height( height * svg_div_height_multiplier );
 }
+// 
+function getDeviceAccordionHTML(device) {
+	var device_panel_html;
+	var device_type = device.type;
+	var device_name = device.name;
+	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
+	// For personal devices
+	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
+		device_panel_html = "<h3><a href='#'>Personal device</a></h3> <div><p>First content panel</p></div>";
+	} // For network box
+	else if ( device_type === "networkbox" ) {
+		device_panel_html = "<h3><a href='#'>Network box</a></h3> <div><p>First content panel</p></div>";
+	}
+	else if ( device_type === "wireless_network" ) {
+		device_panel_html = "<h3><a href='#'>Wireless Network</a></h3> <div><p>First content panel</p></div>";
+	}
+	else if ( device_type === "tvbox" ) {
+		device_panel_html = "<h3><a href='#'>TV Box</a></h3> <div><p>First content panel</p></div>";
+	}
+	return device_panel_html;
+}
 // Provide HTML content for a specified device's settings panel.
 function getDevicePanelHTML(device) {
 	var device_panel_html;
@@ -133,6 +154,7 @@ function resetLayouts() {
  	$("#controller").hide();							// Hide sidebar for drag-and-drop
  	
  	// DEV_JC_dec30
+ 	// Clear DOM element s related to 'accordion grid'.
  	$('#container_final').hide();
  	$('#container').show();
  	$(".row").remove();
