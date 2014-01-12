@@ -44,21 +44,118 @@ function getDeviceAccordionHTML(device) {
 	var device_panel_html;
 	var device_type = device.type;
 	var device_name = device.name;
+	var device_name_escapedQuotes = device_name.replace(/'/g, '&#39;');				// html input fields don't accept single quotes directly, they must be escaped.
 	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
 	// For personal devices
 	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
-		device_panel_html = "<h3><a href='#'>Personal device</a></h3> <div><p>First content panel</p></div>";
+		device_panel_html = "<h3><a href='#'>" + device_name + "</a></h3>"
+							+ "<div>"
+							+ "<ul>"
+							+	"<li class='left'>Device name</li> 															<li class='right'><input value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 1000 mbps <span class='help'>?</span></li>"
+							+ 	"<li></li>"			
+							+	"<li class='left'>Device icon</li> 															<li class='right'><span class='device_icons'></span></li>"
+							+ 	"<li></li>"			
+							+	"<li class='left'>IPv6 address</li> 														<li class='right'><input value='2001:0db8:3c4d:0015:0000:00'></li>"
+							+	"<li class='left'>IPv4 address</li> 														<li class='right'><input value='63.28.214.97'></li>"
+							+	"<li class='left'>MAC address</li> 															<li class='right'><input value='1a:2b:3c:4d:5e:6f'></li>"
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'><span class='toggle_off'></span></li>"
+							+	"<li class='left'></li> 				 													<li class='right'><input value='192.168.1.195'></li>"
+							+ 	"<li></li>"					
+							+ 	"<li class='left'>Demilitarized Zone (DNS)</li>												<li class='right'><span class='toggle_on'></span></li>" 
+							+ 	"<li></li>"			
+							+ 	"<li class='left'>UPnP port forwarding</li>													<li class='right'><span class='toggle_on'></span></li>" 
+							+ "</ul>"
+							+ "</div>";
 	} // For network box
 	else if ( device_type === "networkbox" ) {
-		device_panel_html = "<h3><a href='#'>Network box</a></h3> <div><p>First content panel</p></div>";
+		device_panel_html = "<h3><a href='#'>" + device_name + "</a></h3>"
+							+ "<div>"
+							+ "<ul>"
+							+	"<li class='left'>Fiber status</li> 														<li class='right'>Connected - 1000 mbps <span class='help'>?</span></li>"
+							+	"<li class='left'>						 													<li class='right'><span class='restart'></span></li>"
+							+ 	"<li></li>"
+							+	"<li class='left'>Router IPv6 address</li> 													<li class='right'>2001:0db8:3c4d:0015:0000:0000:abcd:ef12</li>"
+							+	"<li class='left'>Router WAN IPv4 address</li> 												<li class='right'>63.28.214.97</li>"
+							+	"<li class='left'>Router LAN MAC address</li> 												<li class='right'>1a:2b:3c:4d:5e:6f</li>"
+							+	"<li class='left'>Router LAN IPv4 address</li> 												<li class='right'><input value='192.168.1.1'></li>"
+							+	"<li class='left'>Subnet mask</li> 															<li class='right'><input value='255.255.255.0'></li>"
+							+	"<li class='left'>DHCP start sddress</li> 													<li class='right'><input value='192.168.1.100'></li>"
+							+	"<li class='left'>DHCP end address</li> 													<li class='right'><input value='192.168.1.254'></li>"
+							+ 	"<li></li>"
+							+	"<li class='left'>Dynamic DNS service</li> 													<li class='right'><input value='DynDNS'></li>"
+							+	"<li class='left'>Username</li> 															<li class='right'><input value='JESS3_DNS'></li>"
+							+	"<li class='left'>Password</li> 															<li class='right'><input value='myP@$$w0rd!'></li>"
+							+	"<li class='left'>Domain/hostname</li> 														<li class='right'><input value='home.jess3.com'></li>"
+							+ 	"<li></li>"
+							+	"<li class='left accordion_cat_title'>DHCP leases</li><li></li>"
+							+ 	"<li class='accordion_full_row'>"+ getAccordionTable("dhcp") +"</li>"
+							+ 	"<li></li>"
+							+ 	"<li class='left accordion_cat_title'>UPnP port forwarding</li>								<li class='right'><span class='toggle_off'></span></li>" 
+							+ 	"<li class='accordion_full_row'>"+ getAccordionTable("upnp") +"</li>"
+							+ 	"<br />"
+							+ "</ul>"
+							+ "</div>";
 	}
 	else if ( device_type === "wireless_network" ) {
-		device_panel_html = "<h3><a href='#'>Wireless Network</a></h3> <div><p>First content panel</p></div>";
+		device_panel_html = "<h3><a href='#'>" + device_name + "</a></h3>"
+							+ "<div>"
+							+ "<ul>"
+							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input value='JESS3_Network' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Wi-Fi password</li> 														<li class='right'><input value='myP@$$w0rd!' size='40' maxlength='40'></li>"
+							+ 	"<li class='left'>Wireless network</li>														<li class='right'><span class='toggle_off'></span></li>" 
+							+ 	"<li class='left'>Broadcast SSID</li>														<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li></li>"
+							+ 	"<li class='left'>Other 5GHZ wireless network</li>											<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li class='left'>5GHZ Wi-Fi name</li> 														<li class='right'><input value='JESS3_Guest' size='40' maxlength='40'></li>"
+							+ 	"<br />"
+							+ "</ul>"
+							+ "</div>";
 	}
 	else if ( device_type === "tvbox" ) {
-		device_panel_html = "<h3><a href='#'>TV Box</a></h3> <div><p>First content panel</p></div>";
+		device_panel_html = "<h3><a href='#'>" + device_name + "</a></h3>"
+							+ "<div>"
+							+ "<ul>"
+							+	"<li class='left'>TV box name</li> 															<li class='right'><input value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 400 mbps (coaxial) <span class='help'>?</span></li>"
+							+	"<li></li>"
+							+ 	"<li class='left'>Wi-Fi radio</li>															<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li></li>"
+							+	"<li class='left'>IPv6 address</li> 														<li class='right'><input value='2001:0db8:3c4d:0015:0000:00' size='40' maxlength='40'></li>"
+							+	"<li class='left'>IPv4 address</li> 														<li class='right'><input value='63.28.214.97' size='40' maxlength='40'></li>"
+							+	"<li class='left'>MAC address</li> 															<li class='right'><input value='1a:2b:3c:4d:5e:6f' size='40' maxlength='40'></li>"
+							+ 	"<br />"
+							+ "</ul>"
+							+ "</div>";
 	}
 	return device_panel_html;
+}
+// 
+function getAccordionTable(table) {
+	var table_html = "";
+
+	switch (table) {
+		case "dhcp":
+			table_html = "<table class='tftable' border='1'>"
+				+ "<tr><th>Device name</th><th>MAC address</th><th>IP address</th><th>Expiry</th></tr>"
+				+ "<tr><td>TV Box Livingroom</td><td>12-34-56-78-9A-BD</td><td>192.168.1.101</td><td>4h15m3s</td></tr>"
+				+ "<tr><td>Livingroom TV</td><td>12-34-56-78-9A-BV</td><td>192.168.1.103</td><td>Reserved</td></tr>"
+				+ "<tr><td>Matt's Storage</td><td>12-34-56-78-9A-BH</td><td>192.168.1.104</td><td>Reserved</td></tr>"
+				+ "<tr><td>Scanner</td><td>12-34-56-78-9A-BG</td><td>192.168.1.107</td><td>Reserved</td></tr>"
+				+ "<tr><td>Printer</td><td>12-34-56-78-9A-BF</td><td>192.168.1.108</td><td>10h03m45s</td></tr>"
+				+ "</table>";
+			break;
+		case "upnp":
+			table_html = "<table class='tftable' border='1'>"
+				+ "<tr><th>Device name</th><th>Port range</th><th>Service</th></tr>"
+				+ "<tr><td>Matt's Storage</td><td>80</td><td>HTTP</td></tr>"
+				+ "<tr><td>Printer</td><td>6881-6890</td><td>HTTPS</td></tr>"
+				+ "<tr><td>Matt's Laptop</td><td>443</td><td>Bittorrent (UPnP)</td></tr>"
+				+ "</table>";
+			break;	
+	}
+
+	return table_html;
 }
 // Provide HTML content for a specified device's settings panel.
 function getDevicePanelHTML(device) {

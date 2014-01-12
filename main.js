@@ -86,14 +86,13 @@ function populateDevicesAccordionGrid() {
 
   // Create containers for Wired zone (accordion + devices) and Wireless zone (accordion + devices).
   $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR 2.4GHZ WIRELESS NETWORK</div><div id='wireless_accordion' class='floated_left'><div class='accordion'></div></div><div id='wireless_container' class='floated_right clear'></div></div>");
-  $("#container_final").append("<div class='row'><div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR WIRED NETWORK</div><div id='wired_accordion' class='floated_left'></div><div id='wired_container' class='floated_right clear'></div></div>");
-  $("#wired_accordion").html("This<br />is<br />just<br />a<br />left<br />floated<br />column<br />");  
+  $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR WIRED NETWORK</div><div id='wired_accordion' class='floated_left'><div class='accordion'></div></div><div id='wired_container' class='floated_right clear'></div></div>");
 
   // Create the main Network Box
   var network_box = new Device("Network Box", "networkbox");
   devices.push(network_box);  // devices[0] is always the network box
   network_box.el.appendTo( $("#wired_container") );
-  // TODO: make Net Box icon bigger.
+  $("#wired_accordion .accordion").append(network_box.advanced_accordion_settings);
 
   // Manually set height of the following containers.
   // This would be impossible to set automatically using only CSS unless our devices were using position:relative. But since our system was all built using position:absolute, we must set the container height manually using JS.
@@ -155,20 +154,10 @@ function populateDevicesAccordionGrid() {
     // console.log(' WIRELESS --------');
     // console.log(wireless_device);
 
-    
-
-
-    // DEV_JC_jan2
     // append the HTML of the current device's settings to the accordion div.
     $("#wireless_accordion .accordion").append(wireless_device.advanced_accordion_settings);
   }
-  // Once we are done populating the HTML of the accordion, we instantiate it.
-  $(".accordion").accordion({ active: false, collapsible: true });  
 
-
-  // Create the Wireless Network device/icon.
-  // var wireless_network = new Device("Wi-Fi Network", "wireless_network" );
-  // devices.push(wireless_network);
   
   // - - - - - - - - - - - - - - - WIRED DEVICES - - - - - - - - - - - - - - - - - 
 
@@ -203,6 +192,9 @@ function populateDevicesAccordionGrid() {
       dev.expandSubnodes(); 
       layoutDevices('accordion grid');
     } })(box_device));
+
+
+    $("#wired_accordion .accordion").append(box_device.advanced_accordion_settings);
   } 
   
   // WIRED - Personal Devices and Routers
@@ -280,6 +272,12 @@ function populateDevicesAccordionGrid() {
           console.log(personal_device_level2);
           console.log(array_level2_wired_devices);
           console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
+
+
+
+
+
+          $("#wired_accordion .accordion").append(personal_device_level2.advanced_accordion_settings);
         }
         // LEVEL 2 extra tv boxes : if we have more than 3 tv boxes, place remanining ones under the last router.
         if ( n_tv_boxes_level2 > 0 ) {
@@ -299,6 +297,11 @@ function populateDevicesAccordionGrid() {
               connectionTVBox.changeShape("90s");
             }
             connections.push( connectionTVBox );
+
+
+
+
+            $("#wired_accordion .accordion").append(box_device.advanced_accordion_settings);
           }
         }
       } 
@@ -311,6 +314,12 @@ function populateDevicesAccordionGrid() {
         devices.push(wired_device_level1);
         array_level1_wired_devices.push(wired_device_level1);
         wired_device_level1.el.appendTo( $('#wired_container') );
+
+
+
+
+
+        $("#wired_accordion .accordion").append(wired_device_level1.advanced_accordion_settings);
       }
     }
   //  else, there are enough open slots for our devices in Level1...
@@ -327,6 +336,12 @@ function populateDevicesAccordionGrid() {
       array_level1_wired_devices.push(wired_device_level1);
       wired_device_level1.el.appendTo( $('#wired_container') );
 
+
+
+
+
+
+      $("#wired_accordion .accordion").append(wired_device_level1.advanced_accordion_settings);
     }
   }
 
@@ -337,7 +352,22 @@ function populateDevicesAccordionGrid() {
     connections.push(connection);
   }
 
+
   // - - - - - - - - - - - - - - - LAST - - - - - - - - - - - - - - - - - 
+
+
+
+
+
+  // Once we are done populating the HTML of the 2 accordions, we instantiate it.
+  $(".accordion").accordion({ active: false, collapsible: true, heightStyle: "content",
+    beforeActivate: function( event, ui ) {
+      $(".accordion .ui-accordion-content").addClass("clear");      // Use this float-clearing method instead of using 'overflow:hidden', because this allows us to use the 'box-shadow' property, if desired.
+    }
+  });  
+
+
+
 
   // Do stuff to all devices...
   for ( var i = 0; i < devices.length; i++ ) {

@@ -118,18 +118,155 @@ body {
 }
 .accordion .ui-accordion-content {  
     width: 100%;  
+    /*display: inline-block;*/
     background-color: #f3f3f3;  
     color: #777;  
     font-size: 10pt;  
-    line-height: 16pt;  
+    line-height: 16pt;
 }  
+/* Float-clearing technique, as found here : http://stackoverflow.com/questions/16568272/how-css-float-works-why-height-of-the-container-element-doesnt-increase-if-it */
+.clear:after {
+    clear: both;
+    content: "";
+    display: table;
+}
 .accordion .ui-accordion-content > * {  
     margin: 0;  
-    padding: 20px;  
+    padding: 40px;
 }
 .accordion .ui-accordion-content a {  
     color: #F3F3F3;  
-}  
+}
+/* Use same styles as device_advanced_panel */
+.accordion .ui-accordion-content ul {
+	list-style: none;
+	overflow: hidden;		/* clears floats of certain UL elements */	
+}
+.accordion .ui-accordion-content ul li {
+    width: 340px;
+    height: 30px;
+    line-height: 20px;
+    min-height: 20px;
+    overflow: hidden;
+    text-align: justify;
+	color: #626D77;
+	text-decoration: none;
+}
+.accordion .ui-accordion-content ul li.left {
+	float: left;
+}
+.accordion .ui-accordion-content ul li.right {
+	float: right;
+}
+.accordion .ui-accordion-content ul li.accordion_full_row {
+	float: left;
+	width: 100%;
+	height: 100%;
+}
+.accordion .ui-accordion-content ul li input {
+	font: inherit;
+    color: inherit;
+    text-align: inherit;
+    outline: none;
+    cursor: text;
+    width: 330px;
+	padding-left: 5px;
+	border: 1px solid #CCCCCC;
+}
+.accordion .help {
+    width:15px;
+    height:15px;
+    -moz-border-radius: 15px/15px;
+    -webkit-border-radius: 15px 15px;
+    border-radius: 15px/15px;;
+    margin-right:5px;
+    background-color: #CCCCCC;
+    text-align: center;
+    padding: 0 6px;
+    margin-left:5px;
+    /*box-shadow: 1px 1px 3px #626D77;*/
+}
+.accordion .toggle_on {
+	width: 64px;
+	height: 21px;
+	display:inline-block;
+	background-image: url(../images/device_panel_btn_on.png);
+}
+.accordion .toggle_off {
+	width: 64px;
+	height: 21px;
+	display:inline-block;
+	background-image: url(../images/device_panel_btn_off.png);
+}
+.accordion .device_icons {
+	width: 195px;
+	height: 27px;
+	display:inline-block;
+	background-image: url(../images/device_panel_device_icons.png);
+}
+.accordion .restart {
+	width: 75px;
+	height: 21px;
+	display:inline-block;
+	background-image: url(../images/device_panel_btn_restart.png);
+}
+.accordion ul li.row_dhcp {
+	width: 499px;
+	height: 119px;
+	display:inline-block;
+	background-image: url(../images/device_panel_dhcp.png);
+}
+.accordion ul li.row_upnp {
+	width: 499px;
+	height: 80px;
+	display:inline-block;
+	background-image: url(../images/device_panel_upnp.png);
+}
+.accordion_cat_title {
+	font-weight: bold;
+	color: #FFF;
+}
+/* For tables inside the accordions for device settings (in 'accordion grid' layout). */
+.tftable {
+	color:#777;
+	width:100%;
+	border-width: 1px;
+	border-color: #CCCCCC;
+	border-collapse: collapse;
+	margin-bottom: 30px;
+}
+.tftable th {
+	font-weight: normal;
+	background-color:#F3F3F3;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #CCCCCC;
+	text-align:left;
+}
+.tftable tr {
+	background-color:#FFF;
+}
+.tftable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #CCCCCC;
+}
+.tftable tr:hover {
+	background-color:#F3F3F3;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
