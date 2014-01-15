@@ -85,8 +85,8 @@ function populateDevicesAccordionGrid() {
   $('#menu li ul li a').filter(function(){ return $(this).text() === 'Toggle Connector Style';}).css("color", "#D2D2D2");       // Grey-out the Toggle Connectors menu item, it doesn't apply to this layout. This is reset in the common reset function.
 
   // Create containers for Wired zone (accordion + devices) and Wireless zone (accordion + devices).
-  $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR 2.4GHZ WIRELESS NETWORK</div><div id='wireless_accordion' class='floated_left'><div class='accordion'></div></div><div id='wireless_container' class='floated_right clear'></div></div>");
-  $("#container_final").append("<div class='row'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR WIRED NETWORK</div><div id='wired_accordion' class='floated_left'><div class='accordion'></div></div><div id='wired_container' class='floated_right clear'></div></div>");
+  $("#container_final").append("<div class='row wireless'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR 2.4GHZ WIRELESS NETWORK</div><div id='wireless_accordion' class='floated_left'><div class='accordion'></div></div><div id='wireless_container' class='floated_right clear'></div></div>");
+  $("#container_final").append("<div class='row wired'><div class='floated_left' style='padding:10px'>&nbsp;</div><div class='floated_right' style='padding:10px'>YOUR WIRED NETWORK</div><div id='wired_accordion' class='floated_left'><div class='accordion'></div></div><div id='wired_container' class='floated_right clear'></div></div>");
 
   // Create the main Network Box
   var network_box = new Device("Network Box", "networkbox");
@@ -363,11 +363,28 @@ function populateDevicesAccordionGrid() {
   $(".accordion").accordion({ active: false, collapsible: true, heightStyle: "content",
     // this event fires immediately when accordion header is clicked, instead of after the animation is complete.
     beforeActivate: function( event, ui ) {
-      console.log("BEFORE ---- "+ $(".accordion .ui-accordion-content").height())
+      console.log("BEFORE ---- "+ $(this).outerHeight())
+      
+      // add .clear so the content div wraps its floated elements.
       $(".accordion .ui-accordion-content").addClass("clear");      // Use this float-clearing method instead of using 'overflow:hidden', because this allows us to use the 'box-shadow' property, if desired.
     },
     activate: function( event, ui ) {
-      console.log("ACTIVATE ---- "+ $(".accordion .ui-accordion-content").height())
+      console.log("ACTIVATE ---- "+ $(this).outerHeight())
+      console.log("ACTIVATE 2- "+ $("#wireless_accordion").outerHeight())
+
+      // push down Wired zone if current content div overlaps it.
+      var overflow = $("#wireless_accordion").outerHeight() - $(this).outerHeight();
+      console.log("ACTIVATE 3- OVERFLOW = "+ overflow)
+
+      if (overflow > 0) {
+        console.log("---- ENTER OVERFLOW")
+
+        $(".row.wired").css({
+          position: "relative",
+          top: overflow
+        });
+      }
+      
     }
   });
   
