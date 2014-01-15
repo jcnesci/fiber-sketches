@@ -52,6 +52,11 @@ function layoutDevices(type) {
 			// 	resetSvgDivHeight();
 			// }
 
+			// The first time a layout is initialized, populate the attribute.
+			if ( $("#container_background").attr("top_original") === undefined ) {
+				$("#container_background").attr("top_original", $("#container_background").position().top);     // store it's original top position, for animating it later with the accordion.
+			}
+
 			break;
 		case "random":
 			// Force connector style
@@ -359,12 +364,9 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 
 					// Re-adjust position of Wired Zone background to align with position of Net Box.
 					$("#container_background").css({
-						
 						// DEV_JC_dec30
 						// "top": $("#wired_container").offset().top + network_box_y - in_between_space_wired_wireless/2,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
 						"top": $("#wired_container").offset().top + network_box_y,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
-						
-
 						"left": $('#wired_container').width()/2 - $('#container_background').width()/2 + $('#wired_container').offset().left
 					});
 					// console.log('Container BG TOP: '+ $("#container").offset().top );

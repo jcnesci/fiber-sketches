@@ -32,7 +32,6 @@ $(document).ready(function() {
 
 // Choose one of three prototypical networks, based on Google's specifications.
 function setNetworkComplexity( cur_network_complexity ) {
-  
 
   // Set the network complexity.
   network_complexity = cur_network_complexity;
@@ -76,9 +75,15 @@ function populateDevicesAccordionGrid() {
 
   resetLayouts();
   $('#container_background').show();    // show this as a background for the wired zone specifically ; because the connectors are at the lowest background index, we can't use a background color in the wired zone directly as it would hide the connectors, so we use this div instead.
-  $("#container_background").attr("top_original", $("#container_background").position().top);     // store it's original top position, for animating it later with the accordion.
   $("#container").hide();
   $("#container_final").show();
+  // Remove attribute at start so that it may be repopulated when the layout function is completed.
+  if ( $("#container_background").attr("top_original") !== undefined ) {
+    $("#container_background").removeAttr("top_original");
+  }
+  // Reset SVG container's top position at 0
+  $("#svg_container svg").css({ top: 0 });
+  var expandingSubnode = null;      // stores a device that has been clicked to expand. Controls additional accordia behavior.
 
   var n_columns = 4;
   var a_random_names_grid = a_random_names;
@@ -189,9 +194,20 @@ function populateDevicesAccordionGrid() {
     connections.push(connection);
     // click function to collapse/uncollapse TV Box : it always starts uncollapsed, showing its TV
     box_device.el.click((function(dev) { return function() { 
-      // open this clicked node
-      dev.expandSubnodes(); 
-      layoutDevices('accordion grid');
+  
+      // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
+      var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
+      console.log("********** active = "+ active)
+      if (active) {
+        expandingSubnode = dev;
+        $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
+      } else {
+        expandingSubnode = null;   // reset it
+        // open this clicked node
+        dev.expandSubnodes();
+        layoutDevices('accordion grid');
+      }
+
     } })(box_device));
 
 
@@ -236,9 +252,20 @@ function populateDevicesAccordionGrid() {
         routing_device.el.appendTo( $('#wired_container') );
         routing_device.expanded = false;  // Start off closed
         routing_device.el.click((function(dev) { return function() {
-          // open this clicked node
-          dev.expandSubnodes(); 
-          layoutDevices('accordion grid');
+          
+          // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
+          var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
+          console.log("********** active = "+ active)
+          if (active) {
+            expandingSubnode = dev;
+            $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
+          } else {
+            expandingSubnode = null;   // reset it
+            // open this clicked node
+            dev.expandSubnodes();
+            layoutDevices('accordion grid');
+          }
+          
         } })(routing_device));
         
         // LEVEL 2 personal devices
@@ -368,54 +395,67 @@ function populateDevicesAccordionGrid() {
       
       // add .clear so the content div wraps its floated elements.
       $(".accordion .ui-accordion-content").addClass("clear");      // Use this float-clearing method instead of using 'overflow:hidden', because this allows us to use the 'box-shadow' property, if desired.
-    },
-    activate: function( event, ui ) {
-      console.log("ACTIVATE wireless_accordion.outerHeight ---- "+ $("#wireless_accordion").outerHeight())
-      console.log("ACTIVATE this.outerHeight ---- "+ $(this).outerHeight())
-      
+    }
+  });
+  // For the Wireless accordion, apply behavior so that if it spills down onto the Wired zone, push down the Wired zone.
+  $( "#wireless_accordion .accordion" ).on( "accordionactivate", function( event, ui ) {
+    console.log("ACTIVATE wireless_accordion.outerHeight ---- "+ $("#wireless_accordion").outerHeight())
+    console.log("ACTIVATE this.outerHeight ---- "+ $(this).outerHeight())
+    
+    // Calculate whether the wireless accordion has spilled out of its zone.
+    var overflow = $(this).outerHeight() - $("#wireless_accordion").outerHeight();      // ie. current accordion's height - accordion container's height
+    console.log("ACTIVATE overflow = "+ overflow)
 
-      // When opening an accordion in the Wireless zone, if it spills down onto the Wired zone, push down the Wired zone.
-      var overflow = $(this).outerHeight() - $("#wireless_accordion").outerHeight();      // ie. current accordion's height - accordion container's height
-      console.log("ACTIVATE overflow = "+ overflow)
+    if (overflow > 0) {
+      console.log("---- ENTER OVERFLOW")
 
-      if (overflow > 0) {
-        console.log("---- ENTER OVERFLOW")
+      // 1) push down the Wired zone.
+      $(".row.wired").css({ position: "relative" });
+      $(".row.wired").animate({
+        top: overflow
+      });
 
-        // 1) push down the Wired zone.
-        $(".row.wired").css({ position: "relative" });
-        $(".row.wired").animate({
-          top: overflow
-        });
+      // 2) push down the Wired device area's background.
+      var top_original = $("#container_background").attr("top_original");
+      // console.log("*** OVERFLOW *** top_original = "+ typeof top_original)
+      // console.log("*** OVERFLOW *** overflow = "+ typeof overflow)
+      var top_new = Number(Number(top_original)+overflow);
+      console.log("*** OVERFLOW *** top_original+overflow = "+ top_new)
+      // $("#container_background").attr("top_original", top_original)
+      $("#container_background").animate({
+        top: top_new
+      });
 
-        // 2) push down the Wired device area's background.
-        var top_original = $("#container_background").attr("top_original");
-        console.log("*** OVERFLOW *** top_original = "+ typeof top_original)
-        console.log("*** OVERFLOW *** overflow = "+ typeof overflow)
-        var top_new = Number(Number(top_original)+overflow);
-        console.log("*** OVERFLOW *** top_original+overflow = "+ top_new)
-        // $("#container_background").attr("top_original", top_original)
-        $("#container_background").animate({
-          top: top_new
-        });
+      // 3) push down the SVG container
+      console.log($("#svg_container svg").top)
+      $("#svg_container svg").animate({
+        top: overflow
+      });
+    } else {
+      $(".row.wired").css({ position: "relative" });
+      $(".row.wired").animate({
+        top: 0
+      });
+      var top_original = $("#container_background").attr("top_original");
+      console.log("*** NOT OVERFLOW *** top_original = "+ $("#container_background").position().top)
+      console.log("*** NOT OVERFLOW *** top_original = "+ top_original)
+      $("#container_background").animate({
+        top: top_original
+      });
+      $("#svg_container svg").animate({
+        top: 0
+      });
 
-      } else {
-        $(".row.wired").css({ position: "relative" });
-        $(".row.wired").animate({
-          top: 0
-        });
-        var top_original = $("#container_background").attr("top_original");
-        console.log("*** NOT OVERFLOW *** overflow = "+ top_original)
-        $("#container_background").animate({
-          top: top_original
-        });
+      // If expandingSubnode contains a device, we must expand it only after closing this accordion.
+      if (expandingSubnode !== null) {
+          // open this clicked node
+          expandingSubnode.expandSubnodes();
+          layoutDevices('accordion grid');        
       }
-      
+        
     }
   });
   
-
-
-
 
   // Do stuff to all devices...
   for ( var i = 0; i < devices.length; i++ ) {
@@ -430,15 +470,29 @@ function populateDevicesAccordionGrid() {
             
 
 
-            // DEV_JC_dec31 : change to open accordion
+            // TODO : DEV_JC_dec31 : change to open accordion
             clickedDevice.showDetails(true);
 
 
 
 
           } else {
-            clickedDevice.expandSubnodes(); 
-            layoutDevices('accordion grid');
+            // clickedDevice.expandSubnodes(); 
+            // layoutDevices('accordion grid');
+
+            // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
+            var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
+            console.log("********** active = "+ active)
+            if (active) {
+              expandingSubnode = clickedDevice;
+              $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
+            } else {
+              expandingSubnode = null;   // reset it
+              // open this clicked node
+              clickedDevice.expandSubnodes();
+              layoutDevices('accordion grid');
+            }
+
           }
 
         } })(devices[i]));
