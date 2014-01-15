@@ -102,6 +102,15 @@ body {
 .accordion .ui-accordion-header {  
     background-color: #ccc;  
     margin: 10px 0px 0px 0px;  
+    /*border-radius: 6px;*/
+}
+/* When an accordion panel is closed, we round all corners of the header bar. */
+.accordion .ui-corner-all {
+	border-radius: 6px;	
+}
+/* When an accoriodn panel is open, we round only the top corners of the header bar. */
+.accordion .ui-corner-top {
+	border-radius: 6px 6px 0 0;	
 }
 /* We want all accordion headers to have space before them, except the first one (so it aligns with the top perfectly). */
 .accordion .ui-accordion-header:first-child {  
@@ -118,11 +127,11 @@ body {
 }
 .accordion .ui-accordion-content {  
     width: 100%;  
-    /*display: inline-block;*/
     background-color: #f3f3f3;  
     color: #777;  
     font-size: 10pt;  
     line-height: 16pt;
+    border-radius: 0 0 6px 6px;
 }  
 /* Float-clearing technique, as found here : http://stackoverflow.com/questions/16568272/how-css-float-works-why-height-of-the-container-element-doesnt-increase-if-it */
 .clear:after {
@@ -233,7 +242,6 @@ body {
 	border-width: 1px;
 	border-color: #CCCCCC;
 	border-collapse: collapse;
-	margin-bottom: 30px;
 }
 .tftable th {
 	font-weight: normal;

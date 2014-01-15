@@ -70,7 +70,7 @@ function refreshLayout() {
 // Final proposal's version of populateDevicesGrid().
 function populateDevicesAccordionGrid() {
 
-  console.log('t- ENTER populateDevicesAccordionGrid()');
+  // console.log('t- ENTER populateDevicesAccordionGrid()');
 
   // - - - - - - - - - - - - - - - SETUP - - - - - - - - - - - - - - - - - 
 
@@ -325,7 +325,7 @@ function populateDevicesAccordionGrid() {
   //  else, there are enough open slots for our devices in Level1...
   } else {
     // add wired devices to Level1 directly...
-    console.log("t- WIRED - Personal devices ----- LESS THAN or EQUAL to slots.");
+    // console.log("t- WIRED - Personal devices ----- LESS THAN or EQUAL to slots.");
 
     for ( var i = 0; i < n_wired_devices; i++ ) {
       var type = Math.random() < 0.5 ? "storage" : "laptop";
@@ -361,10 +361,16 @@ function populateDevicesAccordionGrid() {
 
   // Once we are done populating the HTML of the 2 accordions, we instantiate it.
   $(".accordion").accordion({ active: false, collapsible: true, heightStyle: "content",
+    // this event fires immediately when accordion header is clicked, instead of after the animation is complete.
     beforeActivate: function( event, ui ) {
+      console.log("BEFORE ---- "+ $(".accordion .ui-accordion-content").height())
       $(".accordion .ui-accordion-content").addClass("clear");      // Use this float-clearing method instead of using 'overflow:hidden', because this allows us to use the 'box-shadow' property, if desired.
+    },
+    activate: function( event, ui ) {
+      console.log("ACTIVATE ---- "+ $(".accordion .ui-accordion-content").height())
     }
-  });  
+  });
+  
 
 
 
@@ -696,7 +702,7 @@ function populateDevicesGrid() {
   //  else, there are enough open slots for our devices in Level1...
   } else {
     // add wired devices to Level1 directly...
-    console.log("t- WIRED - Personal devices ----- LESS THAN or EQUAL to slots.");
+    // console.log("t- WIRED - Personal devices ----- LESS THAN or EQUAL to slots.");
 
     for ( var i = 0; i < n_wired_devices; i++ ) {
       var type = Math.random() < 0.5 ? "storage" : "laptop";

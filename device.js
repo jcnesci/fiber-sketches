@@ -31,10 +31,8 @@ function Device(name, type) {
 	this.target = [0,0];
 
 	// TODO: could take this out of here so its not run when not in Grid layout.
-	console.log("* * * * * * * * * LAYOUT TYPE: "+ _layout_type)
 	// Set content of device settings panel for Accordion Grid layout.	
 	this.advanced_accordion_settings = getDeviceAccordionHTML( this );
-	console.log("* * * * * * * * * this.advanced_accordion_settings: "+ this.name + " = " + this.advanced_accordion_settings)
 
 	// Set content of device settings panel for Grid layout.
 	this.advanced_settings = getDevicePanelHTML( this );

@@ -13,7 +13,7 @@ function layoutDevices(type) {
 	switch (type) {
 		// for final proposal
 		case "accordion grid":
-			console.log("t- ENTER accordion grid.")
+			// console.log("t- ENTER accordion grid.")
 			// Not forcing connector style here, since this layout uses many different ones. They are set in populateDevicesGrid() directly.
 			
 			// Place all Devices.
@@ -246,8 +246,7 @@ function layoutDevices(type) {
 
 // function for displaying Wired devices under the network box in the Grid layout. Is actually half a treePlace (for direct children of Net Box) and half a gridPlace (for subnodes of those children).
 function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
-	console.log("t------------------------------------------------------------------------------------ ENTER accordionGridPlace()")
-
+	
 	if(!root.expanded) hidden = true;
 
 	// Used to recursively place nodes in a tree
@@ -301,7 +300,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 
 			if ( device.is_wireless === true ) {
 				
-				console.log('- - - - WIRELESS - GRID layout');
+				// console.log('- - - - WIRELESS - GRID layout');
 				
 				// Place wireless icon at the very top, centered horizontally.
 				var wireless_icon_left = $("#wireless_container").width()/2 - n_device_width/2; //n_columns * n_device_width/2;
@@ -373,7 +372,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				// Place devices based on nesting level.
 				if ( grid_level === "level1" ) {
 
-					console.log('- - - - WIRED - LEVEL1 - TREE layout');
+					// console.log('- - - - WIRED - LEVEL1 - TREE layout');
 					var x = start_x + ( counter_wired_l1 + 1/2 - array_level1_wired_devices.length / 2) * root.size.width;
 					var y = network_box_y + devices[0].size.height;
 
@@ -385,7 +384,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				}
 				if ( grid_level === "level2" ) {
 
-					console.log('- - - - WIRED - LEVEL2 - GRID layout');
+					// console.log('- - - - WIRED - LEVEL2 - GRID layout');
 
 					var x_starting_pos = $("#wired_container").width()/2 - (n_columns * root.size.width)/2 ;	// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 					if ( device.type !== "tv" ) {
@@ -502,7 +501,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 
 			if ( device.is_wireless === true ) {
 				
-				console.log('- - - - WIRELESS - GRID layout');
+				// console.log('- - - - WIRELESS - GRID layout');
 				
 				// OLD : useful code in here, keep it for a while.
 				// wrap every row in a div : useful later to center the last row, if it doesnt contain exactly 4 devices.
@@ -568,7 +567,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 				// Place devices based on nesting level.
 				if ( grid_level === "level1" ) {
 
-					console.log('- - - - WIRED - LEVEL1 - TREE layout');
+					// console.log('- - - - WIRED - LEVEL1 - TREE layout');
 					var x = start_x + ( counter_wired_l1 + 1/2 - array_level1_wired_devices.length / 2) * root.size.width;
 					var y = network_box_y + devices[0].size.height;
 
@@ -580,7 +579,7 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 				}
 				if ( grid_level === "level2" ) {
 
-					console.log('- - - - WIRED - LEVEL2 - GRID layout');
+					// console.log('- - - - WIRED - LEVEL2 - GRID layout');
 
 					var x_starting_pos = $("#container").width()/2 - (n_columns * root.size.width)/2 ;	// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 					if ( device.type !== "tv" ) {

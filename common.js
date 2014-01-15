@@ -93,7 +93,6 @@ function getDeviceAccordionHTML(device) {
 							+ 	"<li></li>"
 							+ 	"<li class='left accordion_cat_title'>UPnP port forwarding</li>								<li class='right'><span class='toggle_off'></span></li>" 
 							+ 	"<li class='accordion_full_row'>"+ getAccordionTable("upnp") +"</li>"
-							+ 	"<br />"
 							+ "</ul>"
 							+ "</div>";
 	}
@@ -108,7 +107,6 @@ function getDeviceAccordionHTML(device) {
 							+	"<li></li>"
 							+ 	"<li class='left'>Other 5GHZ wireless network</li>											<li class='right'><span class='toggle_off'></span></li>" 
 							+	"<li class='left'>5GHZ Wi-Fi name</li> 														<li class='right'><input value='JESS3_Guest' size='40' maxlength='40'></li>"
-							+ 	"<br />"
 							+ "</ul>"
 							+ "</div>";
 	}
@@ -124,7 +122,6 @@ function getDeviceAccordionHTML(device) {
 							+	"<li class='left'>IPv6 address</li> 														<li class='right'><input value='2001:0db8:3c4d:0015:0000:00' size='40' maxlength='40'></li>"
 							+	"<li class='left'>IPv4 address</li> 														<li class='right'><input value='63.28.214.97' size='40' maxlength='40'></li>"
 							+	"<li class='left'>MAC address</li> 															<li class='right'><input value='1a:2b:3c:4d:5e:6f' size='40' maxlength='40'></li>"
-							+ 	"<br />"
 							+ "</ul>"
 							+ "</div>";
 	}
