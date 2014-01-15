@@ -70,14 +70,14 @@ body {
 .floated_left {
     float: left;
     width: 800px;
-    border: 3px solid red;
     position: relative;
+    /*border: 3px solid red;*/
 }
 .floated_right {
     float: right;
     width: 800px;
-    border: 3px solid red;
     position: relative;
+    /*border: 3px solid red;*/
 }
 .row {
 	float: left;

@@ -76,6 +76,7 @@ function populateDevicesAccordionGrid() {
 
   resetLayouts();
   $('#container_background').show();    // show this as a background for the wired zone specifically ; because the connectors are at the lowest background index, we can't use a background color in the wired zone directly as it would hide the connectors, so we use this div instead.
+  $("#container_background").attr("top_original", $("#container_background").position().top);     // store it's original top position, for animating it later with the accordion.
   $("#container").hide();
   $("#container_final").show();
 
@@ -369,19 +370,43 @@ function populateDevicesAccordionGrid() {
       $(".accordion .ui-accordion-content").addClass("clear");      // Use this float-clearing method instead of using 'overflow:hidden', because this allows us to use the 'box-shadow' property, if desired.
     },
     activate: function( event, ui ) {
-      console.log("ACTIVATE ---- "+ $(this).outerHeight())
-      console.log("ACTIVATE 2- "+ $("#wireless_accordion").outerHeight())
+      console.log("ACTIVATE wireless_accordion.outerHeight ---- "+ $("#wireless_accordion").outerHeight())
+      console.log("ACTIVATE this.outerHeight ---- "+ $(this).outerHeight())
+      
 
-      // push down Wired zone if current content div overlaps it.
-      var overflow = $("#wireless_accordion").outerHeight() - $(this).outerHeight();
-      console.log("ACTIVATE 3- OVERFLOW = "+ overflow)
+      // When opening an accordion in the Wireless zone, if it spills down onto the Wired zone, push down the Wired zone.
+      var overflow = $(this).outerHeight() - $("#wireless_accordion").outerHeight();      // ie. current accordion's height - accordion container's height
+      console.log("ACTIVATE overflow = "+ overflow)
 
       if (overflow > 0) {
         console.log("---- ENTER OVERFLOW")
 
-        $(".row.wired").css({
-          position: "relative",
+        // 1) push down the Wired zone.
+        $(".row.wired").css({ position: "relative" });
+        $(".row.wired").animate({
           top: overflow
+        });
+
+        // 2) push down the Wired device area's background.
+        var top_original = $("#container_background").attr("top_original");
+        console.log("*** OVERFLOW *** top_original = "+ typeof top_original)
+        console.log("*** OVERFLOW *** overflow = "+ typeof overflow)
+        var top_new = Number(Number(top_original)+overflow);
+        console.log("*** OVERFLOW *** top_original+overflow = "+ top_new)
+        // $("#container_background").attr("top_original", top_original)
+        $("#container_background").animate({
+          top: top_new
+        });
+
+      } else {
+        $(".row.wired").css({ position: "relative" });
+        $(".row.wired").animate({
+          top: 0
+        });
+        var top_original = $("#container_background").attr("top_original");
+        console.log("*** NOT OVERFLOW *** overflow = "+ top_original)
+        $("#container_background").animate({
+          top: top_original
         });
       }
       
