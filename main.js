@@ -553,63 +553,57 @@ function populateDevicesAccordionGrid() {
 
   });
   
-  console.log("**************")
-  console.log($("#wireless_accordion .accordion h3.ui-accordion-header"))
-  // When we hover over an accordion header, highlight the device icon in the device area.
+  // When we hover over an accordion header, highlight the corresponding device icon in the device area.
+  // For Wireless devices :
   $("#wireless_accordion .accordion h3.ui-accordion-header").hover( 
+    // on hover-in
     function() {
-      console.log("HOVER --------------- "+ $(this).attr("id"))
-
-      //  Get device with this accordion-related ID
-      accordion_id = Number($(this).attr("id").slice(-1));
-      console.log("accordion_id ------- "+ accordion_id)
-
-      var hovered_device = $.grep(devices, function(device){
-        console.log(device)
+      var accordion_id = $(this).attr("id").split("-");                        // Grab the ID of the accordion header we hovered.
+      accordion_id = Number(accordion_id[accordion_id.length-1])
+      var hovered_device = $.grep(devices, function(device){                // Get the device matching that ID.
         return (device.id_accordion === accordion_id) && (device.is_wireless === true);
       });
-
-      console.log("hovered_device ------- ")
-      console.log(hovered_device)
-
       hovered_device = hovered_device[0];
-      hovered_device.highlight(true);
+      // hovered_device.highlight(true);                                       // highlight the device.
+      hovered_device.el.addClass("highlight_accordion");
     },
     function() {
-      console.log("HOVER --------------- "+ $(this).attr("id"))
-
-      //  Get device with this accordion-related ID
-      accordion_id = Number($(this).attr("id").slice(-1));
-      console.log("accordion_id ------- "+ accordion_id)
-
+      var accordion_id = $(this).attr("id").split("-");
+      accordion_id = Number(accordion_id[accordion_id.length-1])
       var hovered_device = $.grep(devices, function(device){
-        console.log(device)
         return (device.id_accordion === accordion_id) && (device.is_wireless === true);
       });
-
-      console.log("hovered_device ------- ")
-      console.log(hovered_device)
-
       hovered_device = hovered_device[0];
-      hovered_device.highlight(false);
+      // hovered_device.highlight(false);                                      // remove the highlight on the device.
+      hovered_device.el.removeClass("highlight_accordion");
+    }
+  );
+  // For Wired devices :
+  $("#wired_accordion .accordion h3.ui-accordion-header").hover( 
+    // on hover-in
+    function() {
+      var accordion_id = $(this).attr("id").split("-");                        // Grab the ID of the accordion header we hovered.
+      accordion_id = Number(accordion_id[accordion_id.length-1])
+      var hovered_device = $.grep(devices, function(device){               // Get the device matching that ID.
+        return (device.id_accordion === accordion_id) && (device.is_wireless !== true);
+      });
+      hovered_device = hovered_device[0];
+      // hovered_device.highlight(true);                                      // highlight the device.
+      hovered_device.el.addClass("highlight_accordion");
+    },
+    function() {
+      var accordion_id = $(this).attr("id").split("-");
+      accordion_id = Number(accordion_id[accordion_id.length-1])
+      var hovered_device = $.grep(devices, function(device){
+        return (device.id_accordion === accordion_id) && (device.is_wireless !== true);
+      });
+      hovered_device = hovered_device[0];
+      // hovered_device.highlight(false);                                    // remove the highlight on the device.
+      hovered_device.el.removeClass("highlight_accordion");
     }
   );
 
-
-  // $.each(devices, function(index, device) {
-
-
-  // Hover on.
-  // $("#wireless_accordion .accordion h3.ui-accordion-header").mouseenter((function(this) { return function(ev) {
-  //     dev.highlight(true); 
-  //     console.log("^ ^ ^ ^ ^ ^ HILITE 1");
-  // } })(thisthis));
-  // // Hover off.
-  // $("#wireless_accordion .accordion h3.ui-accordion-header").mouseleave((function(this) { return function(ev) {
-  //     dev.highlight(false);
-  // } })(device));
-
-
+  
 }
 
 // TODO: decide if we keep this or not. It is technicaly correct, but is highly undesirable. Thus, proves necessity of a collapsible network.
