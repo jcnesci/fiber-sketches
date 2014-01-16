@@ -601,9 +601,17 @@ function populateDevicesAccordionGrid() {
     }
   );
   
-  // TODO : dev_jc_jan16 : Add functionality for option to change device icon in accordion panel.
+  // Add functionality for option to change device icon in accordion panel.
   $(".accordion .change_type .icon").click(function() {
-    console.log(this)
+    var clickedIconType = $(this).attr('type');
+    var associatedDeviceID = $(this).closest('li.change_type').attr("device_id");
+    var associatedDevice = $.grep(devices, function(device){                // Get the device matching that ID.
+      return (device.id === Number(associatedDeviceID));
+    });
+    associatedDevice = associatedDevice[0];
+    // console.log(associatedDeviceID)
+    // console.log(associatedDevice[0])
+    associatedDevice.changeType(clickedIconType);
   });
   
 }
