@@ -66,7 +66,7 @@ Device.prototype = {
 	},
 	// to show or hide details of a device in hovering pane on click
 	showDetails: function (b_show) {
-		console.log(b_show);
+		console.log("-showDetails -ENTER -b_show = "+ b_show);
 		
 		if ( b_show === true ) {
 			

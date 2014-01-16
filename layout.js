@@ -310,7 +310,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				// Place wireless icon at the very top, centered horizontally.
 				var wireless_icon_left = $("#wireless_container").width()/2 - n_device_width/2; //n_columns * n_device_width/2;
 				$(".device.wireless_network").css("left", wireless_icon_left );
-				$(".device.wireless_network").css("top", 0 );
+				$(".device.wireless_network").css("top", 10 );
 				$(".device.wireless_network").css('display', 'block');
 
 				// OLD : useful code in here, keep it for a while.

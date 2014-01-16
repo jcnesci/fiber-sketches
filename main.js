@@ -81,6 +81,7 @@ function populateDevicesAccordionGrid() {
   if ( $("#container_background").attr("top_original") !== undefined ) {
     $("#container_background").removeAttr("top_original");
   }
+
   // Reset SVG container's top position at 0
   $("#svg_container svg").css({ top: 0 });
   var expandingSubnode = null;      // stores a device that has been clicked to expand. Controls additional accordia behavior.
@@ -99,6 +100,10 @@ function populateDevicesAccordionGrid() {
   devices.push(network_box);  // devices[0] is always the network box
   network_box.el.appendTo( $("#wired_container") );
   $("#wired_accordion .accordion").append(network_box.advanced_accordion_settings);
+  var counter_id_accordion_wired = 0;         // counts the ID of this device in the accordion. The order in which they're added to the accordion makes their ID.
+  network_box.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
+  console.log("t- network_box.id_accordion = "+ network_box.id_accordion)
+  counter_id_accordion_wired++;
 
   // Manually set height of the following containers.
   // This would be impossible to set automatically using only CSS unless our devices were using position:relative. But since our system was all built using position:absolute, we must set the container height manually using JS.
@@ -132,6 +137,11 @@ function populateDevicesAccordionGrid() {
   wireless_network.el.appendTo( first_row );
   // append the HTML of it's settings to the accordion div.
   $("#wireless_accordion .accordion").append(wireless_network.advanced_accordion_settings);
+  wireless_network.is_wireless = true;   // add custom attribute for layout positioning & accordion.
+  var counter_id_accordion_wireless = 0;         // counts the ID of this device in the accordion. The order in which they're added to the accordion makes their ID.
+  wireless_network.id_accordion = counter_id_accordion_wireless;      // store the ID in the device object.
+  console.log("t- wireless_network.id_accordion = "+ wireless_network.id_accordion)
+  counter_id_accordion_wireless++;
 
   // Wireless devices
   for ( var i = 0; i < n_wireless_devices; i++ ) {
@@ -145,7 +155,7 @@ function populateDevicesAccordionGrid() {
     var type = Math.random() < 0.5 ? "phone" : "laptop";
     var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
     var wireless_device = new Device(name, type );
-    wireless_device.is_wireless = true;   // add custom attribute for layout positioning
+    wireless_device.is_wireless = true;   // add custom attribute for layout positioning & accordion.
     devices.push(wireless_device);
     array_wireless_devices.push(wireless_device);
     
@@ -162,6 +172,9 @@ function populateDevicesAccordionGrid() {
 
     // append the HTML of the current device's settings to the accordion div.
     $("#wireless_accordion .accordion").append(wireless_device.advanced_accordion_settings);
+    wireless_device.id_accordion = counter_id_accordion_wireless;
+    console.log("t- wireless_device.id_accordion = "+ wireless_device.id_accordion)
+    counter_id_accordion_wireless++;
   }
 
   
@@ -212,6 +225,9 @@ function populateDevicesAccordionGrid() {
 
 
     $("#wired_accordion .accordion").append(box_device.advanced_accordion_settings);
+    box_device.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
+    console.log("t- box_device.id_accordion = "+ box_device.id_accordion)
+    counter_id_accordion_wired++;
   } 
   
   // WIRED - Personal Devices and Routers
@@ -306,6 +322,9 @@ function populateDevicesAccordionGrid() {
 
 
           $("#wired_accordion .accordion").append(personal_device_level2.advanced_accordion_settings);
+          personal_device_level2.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
+          console.log("t- personal_device_level2.id_accordion = "+ personal_device_level2.id_accordion)
+          counter_id_accordion_wired++;
         }
         // LEVEL 2 extra tv boxes : if we have more than 3 tv boxes, place remanining ones under the last router.
         if ( n_tv_boxes_level2 > 0 ) {
@@ -313,7 +332,7 @@ function populateDevicesAccordionGrid() {
             var name = a_random_rooms_grid.splice( random(0, a_random_rooms_grid.length), 1 ) + " TV Box";
             var box_device = new Device(name, "tvbox");
             devices.push(box_device);
-            routing_devices.push(box_device);
+            // NB: do not add devide to routing_devices, as these in Level2 will not have any child devices.
             array_level2_wired_devices.push(box_device);
             box_device.el.appendTo( cur_row );
             // In advance, connect TV to TV Box (but it wont display until TV Box is connected to Network Box).
@@ -330,6 +349,9 @@ function populateDevicesAccordionGrid() {
 
 
             $("#wired_accordion .accordion").append(box_device.advanced_accordion_settings);
+            box_device.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
+            console.log("t- box_device.id_accordion = "+ box_device.id_accordion)
+            counter_id_accordion_wired++;
           }
         }
       } 
@@ -348,6 +370,9 @@ function populateDevicesAccordionGrid() {
 
 
         $("#wired_accordion .accordion").append(wired_device_level1.advanced_accordion_settings);
+        wired_device_level1.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
+        console.log("t- wired_device_level1.id_accordion = "+ wired_device_level1.id_accordion)
+        counter_id_accordion_wired++;
       }
     }
   //  else, there are enough open slots for our devices in Level1...
@@ -370,6 +395,9 @@ function populateDevicesAccordionGrid() {
 
 
       $("#wired_accordion .accordion").append(wired_device_level1.advanced_accordion_settings);
+      wired_device_level1.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
+      console.log("t- wired_device_level1.id_accordion = "+ wired_device_level1.id_accordion)
+      counter_id_accordion_wired++;
     }
   }
 
@@ -454,6 +482,7 @@ function populateDevicesAccordionGrid() {
       }
         
     }
+
   });
   
 
@@ -469,14 +498,38 @@ function populateDevicesAccordionGrid() {
           if (clickedDevice.expanded === true) {
             
 
-
-            // TODO : DEV_JC_dec31 : change to open accordion
-            clickedDevice.showDetails(true);
-
-
-
+            // Open corresponding accordion panel.
+            console.log("**** id_accordion = "+ clickedDevice.id_accordion)
+            console.log("**** is_wireless = "+ clickedDevice.is_wireless)
+            if (clickedDevice.is_wireless === true) {
+              console.log("######## WIRELESS ACTIVE? = "+ $( "#wireless_accordion .accordion" ).accordion( "option", "active"))
+              // if already open, close it.
+              if ($( "#wireless_accordion .accordion" ).accordion( "option", "active") !== false) {           // false means its closed.
+                // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
+                for (var i=1; i<100; i+=2) {
+                  $( "#wireless_accordion .accordion #ui-accordion-"+i+"-header-"+ clickedDevice.id_accordion ).click();
+                }
+              } else {
+                $( "#wireless_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );
+              }
+            } else {
+              console.log("######## WIRED ACTIVE? = "+ $( "#wired_accordion .accordion" ).accordion( "option", "active"))
+              // if already open, close it.
+              if ($( "#wired_accordion .accordion" ).accordion( "option", "active") !== false) {
+                // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
+                for (var i=2; i<100; i+=2) {
+                  $( "#wired_accordion .accordion #ui-accordion-"+i+"-header-"+ clickedDevice.id_accordion ).click();
+                }
+              } else {
+                $( "#wired_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );   // TODO : replace with Toggle open/close
+              }
+            }
+            
 
           } else {
+            
+            console.log("********** expanded = "+ clickedDevice.expanded)
+
             // clickedDevice.expandSubnodes(); 
             // layoutDevices('accordion grid');
 
