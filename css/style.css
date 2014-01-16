@@ -211,6 +211,9 @@ img {
 .wireless_network .info {
 	margin-top: -10px;
 }
+.wireless_grid_row .wireless_network .icon {
+	margin-top: 10px;
+}
 
 /*Device advanced settings panel for 2 zone layout*/
 .device_advanced_panel {

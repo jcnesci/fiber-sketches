@@ -100,7 +100,7 @@ body {
 	text-decoration: none;
 }
 .accordion .ui-accordion-header {  
-    background-color: #ccc;  
+    background-color: #DDDDDD;				/* #ccc; */
     margin: 10px 0px 0px 0px;  
     /*border-radius: 6px;*/
 }
@@ -112,6 +112,54 @@ body {
 .accordion .ui-corner-top {
 	border-radius: 6px 6px 0 0;	
 }
+/* For adding miniature icons of device in accordion headers */
+.accordion .ui-accordion-icons {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-laptop-accordion-light.png);
+}
+.accordion .ui-accordion-icons.laptop {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-laptop-accordion-light.png);
+}
+.accordion .ui-accordion-icons.networkbox {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-networkbox-accordion-light.png);
+}
+.accordion .ui-accordion-icons.phone {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-phone-accordion-light.png);
+}
+.accordion .ui-accordion-icons.storage {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-storage-accordion-light.png);
+}
+.accordion .ui-accordion-icons.tvbox {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-tvbox-accordion-light.png);
+}
+.accordion .ui-accordion-icons.wireless_network {
+	background-repeat: no-repeat;
+	background-position: right;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-wifi-accordion-light.png);
+}
+
+
+
+
+
 /* We want all accordion headers to have space before them, except the first one (so it aligns with the top perfectly). */
 .accordion .ui-accordion-header:first-child {  
     margin: 0px;  
