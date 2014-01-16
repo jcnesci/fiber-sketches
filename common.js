@@ -47,6 +47,7 @@ function resetSvgDivHeight() {
 // 
 function getDeviceAccordionHTML(device) {
 	var device_panel_html;
+	var device_id = device.id;
 	var device_type = device.type;
 	var device_name = device.name;
 	var device_name_escapedQuotes = device_name.replace(/'/g, '&#39;');				// html input fields don't accept single quotes directly, they must be escaped.
@@ -60,7 +61,7 @@ function getDeviceAccordionHTML(device) {
 							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 1000 mbps <span class='help'>?</span></li>"
 							+ 	"<li></li>"			
 							// +	"<li class='left'>Device icon</li> 															<li class='right'><span class='device_icons'></span></li>"
-							+	"<li class='left'>Device icon</li> 															<li class='right change_type'><span class='change_type_container'><span class='icon laptop'></span><span class='icon phone'></span><span class='icon tv'></span><span class='icon storage'></span></span></li>"
+							+	"<li class='left'>Device icon</li> 															<li class='right change_type' device_id='"+ device_id +"'><span class='change_type_container'><span class='icon laptop' type='laptop'></span><span class='icon phone' type='phone'></span><span class='icon tv' type='tv'></span><span class='icon storage' type='storage'></span></span></li>"
 							+ 	"<li></li>"			
 							+	"<li class='left'>IPv6 address</li> 														<li class='right'><input value='2001:0db8:3c4d:0015:0000:00'></li>"
 							+	"<li class='left'>IPv4 address</li> 														<li class='right'><input value='63.28.214.97'></li>"
