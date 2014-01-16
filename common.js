@@ -10,6 +10,11 @@ $( window ).resize(function() {
 			"top": $(".device.networkbox").offset().top - $(".device.wireless_network").attr("spacing")/2,
 			"left": $('#container').width()/2 - $('#container_background').width()/2 + $('#container').offset().left
 		});
+	} else if (_layout_type === "accordion grid") {
+		$("#container_background").css({
+			"top": $("#wired_container").offset().top,
+			"left": $('#wired_container').width()/2 - $('#container_background').width()/2 + $('#wired_container').offset().left
+		});
 	}
 });
 // Was used to update SVG lines so they draw lines below edge of screen when user scrolls. Stopped working somehow.
