@@ -116,8 +116,8 @@ function populateDevicesAccordionGrid() {
   } else if ( network_complexity === "average" ) {
     $("#wired_accordion").css("height", 3 * devices[0].size.height);
     $("#wired_container").css("height", 3 * devices[0].size.height);
-    $("#wireless_accordion").css("height", 3 * devices[0].size.height);
-    $("#wireless_container").css("height", 3 * devices[0].size.height);
+    $("#wireless_accordion").css("height", 2 * devices[0].size.height);
+    $("#wireless_container").css("height", 2 * devices[0].size.height);
     $("#container_background").css("height", 3 * devices[0].size.height);
   } else if ( network_complexity === "high" ) {
     $("#wired_accordion").css("height", 4 * devices[0].size.height);
