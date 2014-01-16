@@ -414,8 +414,76 @@ function populateDevicesAccordionGrid() {
 
 
 
+  // Do stuff to all devices...
+  for ( var i = 0; i < devices.length; i++ ) {
+    // Clicking on a device's icon display its settings panel. Stop propagation so the event doesn't go to the document.click fct in common.js which would immediately close the panel.
+    if ( devices[i].type !== "router"  &&  devices[i].type !== "tv" ) {
+      
+        devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { 
+          e.stopPropagation(); 
+          
+          // Doing this checking because of TV boxes. We want to show details if node is open, but expand it if node is closed.
+          if (clickedDevice.expanded === true) {
+            
 
-  // Once we are done populating the HTML of the 2 accordions, we instantiate it.
+            // Open corresponding accordion panel.
+            console.log("**** id_accordion = "+ clickedDevice.id_accordion)
+            console.log("**** is_wireless = "+ clickedDevice.is_wireless)
+            if (clickedDevice.is_wireless === true) {
+              console.log("######## WIRELESS ACTIVE? = "+ $( "#wireless_accordion .accordion" ).accordion( "option", "active"))
+              // if already open, close it.
+              if ($( "#wireless_accordion .accordion" ).accordion( "option", "active") !== false) {           // false means its closed.
+                // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
+                for (var i=1; i<100; i+=2) {
+                  $( "#wireless_accordion .accordion #ui-accordion-"+i+"-header-"+ clickedDevice.id_accordion ).click();
+                }
+              } else {
+                $( "#wireless_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );
+              }
+            } else {
+              console.log("######## WIRED ACTIVE? = "+ $( "#wired_accordion .accordion" ).accordion( "option", "active"))
+              // if already open, close it.
+              if ($( "#wired_accordion .accordion" ).accordion( "option", "active") !== false) {
+                // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
+                for (var i=2; i<100; i+=2) {
+                  $( "#wired_accordion .accordion #ui-accordion-"+i+"-header-"+ clickedDevice.id_accordion ).click();
+                }
+              } else {
+                $( "#wired_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );   // TODO : replace with Toggle open/close
+              }
+            }
+            
+
+          } else {
+            
+            console.log("********** expanded = "+ clickedDevice.expanded)
+
+            // clickedDevice.expandSubnodes(); 
+            // layoutDevices('accordion grid');
+
+            // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
+            var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
+            console.log("********** active = "+ active)
+            if (active) {
+              expandingSubnode = clickedDevice;
+              $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
+            } else {
+              expandingSubnode = null;   // reset it
+              // open this clicked node
+              clickedDevice.expandSubnodes();
+              layoutDevices('accordion grid');
+            }
+
+          }
+
+        } })(devices[i]));
+      
+    }
+  }
+
+  
+
+   // Once we are done populating the HTML of the 2 accordions, we instantiate it.
   $(".accordion").accordion({ active: false, collapsible: true, heightStyle: "content",
     // this event fires immediately when accordion header is clicked, instead of after the animation is complete.
     beforeActivate: function( event, ui ) {
@@ -485,73 +553,62 @@ function populateDevicesAccordionGrid() {
 
   });
   
+  console.log("**************")
+  console.log($("#wireless_accordion .accordion h3.ui-accordion-header"))
+  // When we hover over an accordion header, highlight the device icon in the device area.
+  $("#wireless_accordion .accordion h3.ui-accordion-header").hover( 
+    function() {
+      console.log("HOVER --------------- "+ $(this).attr("id"))
 
-  // Do stuff to all devices...
-  for ( var i = 0; i < devices.length; i++ ) {
-    // Clicking on a device's icon display its settings panel. Stop propagation so the event doesn't go to the document.click fct in common.js which would immediately close the panel.
-    if ( devices[i].type !== "router"  &&  devices[i].type !== "tv" ) {
-      
-        devices[i].el.find(".icon").click((function(clickedDevice) { return function(e) { 
-          e.stopPropagation(); 
-          
-          // Doing this checking because of TV boxes. We want to show details if node is open, but expand it if node is closed.
-          if (clickedDevice.expanded === true) {
-            
+      //  Get device with this accordion-related ID
+      accordion_id = Number($(this).attr("id").slice(-1));
+      console.log("accordion_id ------- "+ accordion_id)
 
-            // Open corresponding accordion panel.
-            console.log("**** id_accordion = "+ clickedDevice.id_accordion)
-            console.log("**** is_wireless = "+ clickedDevice.is_wireless)
-            if (clickedDevice.is_wireless === true) {
-              console.log("######## WIRELESS ACTIVE? = "+ $( "#wireless_accordion .accordion" ).accordion( "option", "active"))
-              // if already open, close it.
-              if ($( "#wireless_accordion .accordion" ).accordion( "option", "active") !== false) {           // false means its closed.
-                // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
-                for (var i=1; i<100; i+=2) {
-                  $( "#wireless_accordion .accordion #ui-accordion-"+i+"-header-"+ clickedDevice.id_accordion ).click();
-                }
-              } else {
-                $( "#wireless_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );
-              }
-            } else {
-              console.log("######## WIRED ACTIVE? = "+ $( "#wired_accordion .accordion" ).accordion( "option", "active"))
-              // if already open, close it.
-              if ($( "#wired_accordion .accordion" ).accordion( "option", "active") !== false) {
-                // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
-                for (var i=2; i<100; i+=2) {
-                  $( "#wired_accordion .accordion #ui-accordion-"+i+"-header-"+ clickedDevice.id_accordion ).click();
-                }
-              } else {
-                $( "#wired_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );   // TODO : replace with Toggle open/close
-              }
-            }
-            
+      var hovered_device = $.grep(devices, function(device){
+        console.log(device)
+        return (device.id_accordion === accordion_id) && (device.is_wireless === true);
+      });
 
-          } else {
-            
-            console.log("********** expanded = "+ clickedDevice.expanded)
+      console.log("hovered_device ------- ")
+      console.log(hovered_device)
 
-            // clickedDevice.expandSubnodes(); 
-            // layoutDevices('accordion grid');
+      hovered_device = hovered_device[0];
+      hovered_device.highlight(true);
+    },
+    function() {
+      console.log("HOVER --------------- "+ $(this).attr("id"))
 
-            // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
-            var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
-            console.log("********** active = "+ active)
-            if (active) {
-              expandingSubnode = clickedDevice;
-              $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
-            } else {
-              expandingSubnode = null;   // reset it
-              // open this clicked node
-              clickedDevice.expandSubnodes();
-              layoutDevices('accordion grid');
-            }
+      //  Get device with this accordion-related ID
+      accordion_id = Number($(this).attr("id").slice(-1));
+      console.log("accordion_id ------- "+ accordion_id)
 
-          }
+      var hovered_device = $.grep(devices, function(device){
+        console.log(device)
+        return (device.id_accordion === accordion_id) && (device.is_wireless === true);
+      });
 
-        } })(devices[i]));
-      
+      console.log("hovered_device ------- ")
+      console.log(hovered_device)
+
+      hovered_device = hovered_device[0];
+      hovered_device.highlight(false);
     }
-  }
+  );
+
+
+  // $.each(devices, function(index, device) {
+
+
+  // Hover on.
+  // $("#wireless_accordion .accordion h3.ui-accordion-header").mouseenter((function(this) { return function(ev) {
+  //     dev.highlight(true); 
+  //     console.log("^ ^ ^ ^ ^ ^ HILITE 1");
+  // } })(thisthis));
+  // // Hover off.
+  // $("#wireless_accordion .accordion h3.ui-accordion-header").mouseleave((function(this) { return function(ev) {
+  //     dev.highlight(false);
+  // } })(device));
+
 
 }
 
