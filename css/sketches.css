@@ -255,12 +255,61 @@ body {
 	display:inline-block;
 	background-image: url(../images/device_panel_btn_off.png);
 }
-.accordion .device_icons {
+.accordion .ui-accordion-content ul li.right.change_type {
+	height: 60px;
+}
+.accordion .change_type {
+	display: inline-block;
+	position: relative;
+	margin-top: -15px;
+}
+.accordion .change_type .icon {
+	cursor: pointer;
+}
+.accordion .change_type .laptop {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-laptop-accordion-changeType.png);
+  	margin-right: 15px;
+}
+.accordion .change_type .phone {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-phone-accordion-changeType.png);
+  	margin-right: 15px;
+}
+.accordion .change_type .tv {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-tv-accordion-changeType.png);
+  	margin-right: 15px;
+}
+.accordion .change_type .storage {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+  	background-size: 60px 60px;
+  	background-image: url(../images/device-storage-accordion-changeType.png);
+  	margin-right: 15px;
+  	margin-left: 15px;
+}
+/* TODO : REMOVE */
+/*.accordion .device_icons {
 	width: 195px;
 	height: 27px;
 	display:inline-block;
 	background-image: url(../images/device_panel_device_icons.png);
-}
+}*/
 .accordion .restart {
 	width: 75px;
 	height: 21px;
