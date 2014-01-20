@@ -644,7 +644,6 @@ function populateDevicesAccordionGrid() {
   $(".accordion .ui-accordion-content").find($("input.content-name")).keydown(function(event) { 
     if (event.keyCode == 13) { return editNameAccordionDevice(this); }
   });
-  
   function editNameAccordionDevice(_this) {
 
     console.log("CLICK CONTENT NAME")
@@ -676,6 +675,23 @@ function populateDevicesAccordionGrid() {
     $("#"+accordion_container_id+" .accordion").find($("#"+accordion_container_id+" .accordion").accordion( "option", "header" ))
       .eq(cur_device.id_accordion)
       .find($("a.header-name")).text(cur_device.name);
+  }
+
+  // Upon editing the Wifi password in the accordion panel, reflect the change in the device area under the Wifi device.
+  $(".accordion .ui-accordion-content").find($("input.content-password")).blur(function() { 
+    return editPasswordAccordionDevice(this);
+  });
+  $(".accordion .ui-accordion-content").find($("input.content-password")).keydown(function(event) { 
+    if (event.keyCode == 13) { return editPasswordAccordionDevice(this); }
+  });
+  function editPasswordAccordionDevice(_this) {
+    // Get the Wireless network device.
+    var cur_device = $.grep(devices, function(device){
+      return (device.type === "wireless_network");  
+    });
+    cur_device = cur_device[0];
+    cur_device.password = _this.value;    
+    cur_device.el.find(".password").text(cur_device.password);
   }
   
 }

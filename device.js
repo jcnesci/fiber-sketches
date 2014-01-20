@@ -316,7 +316,15 @@ Device.prototype = {
 			this.password = this.el.find(".edit_password").val();
 			console.log(this);
 			console.log(this.password);
+			// Update the DOM in the device area.
 			this.el.find(".password").text(this.password);
+
+			// For the Accordion Grid layout, 
+			if ( $(".accordion").length ) {
+				// Change the password in the panel content.
+				$("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion).find($("input.content-password")).val(this.password);
+			}
+
 			this.el.find(".edit_password").hide();
 			this.el.find(".password").show();
 		}

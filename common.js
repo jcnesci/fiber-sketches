@@ -108,7 +108,7 @@ function getDeviceAccordionHTML(device) {
 							+ "<div>"
 							+ "<ul>"
 							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input class='content-name' value='JESS3_Network' size='40' maxlength='40'></li>"
-							+	"<li class='left'>Wi-Fi password</li> 														<li class='right'><input value='myP@$$w0rd!' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Wi-Fi password</li> 														<li class='right'><input class='content-password' value='myP@$$w0rd!' size='40' maxlength='40'></li>"
 							+ 	"<li class='left'>Wireless network</li>														<li class='right'><span class='toggle_off'></span></li>" 
 							+ 	"<li class='left'>Broadcast SSID</li>														<li class='right'><span class='toggle_off'></span></li>" 
 							+	"<li></li>"
