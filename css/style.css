@@ -348,8 +348,61 @@ img {
 	background-image: url(../images/device-tvbox-crossed.png);
 }
 
+/* jQuery UI Dialog styles */
 
-
+/* removes blue highlight on text caused by jQueryUI */
+.ui-dialog .ui-state-focus {
+  outline: none;
+}
+.ui-dialog:focus, .ui-dialog:active {  
+    outline: 0;  
+} 
+.ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-dialog {
+	left: 0;
+    outline: 0 none;
+    padding: 0 !important;
+    position: absolute;
+    top: 0;
+	background: #f3f3f3;
+	border-radius: 3px;
+	border: 1px solid #AAAAAA;
+	/*box-shadow: 0 0px 3px #737373;*/
+}
+.ui-dialog .ui-dialog-titlebar {
+	border-radius: 3px 3px 0 0;
+    background: #737373;
+    color: #fff;
+    line-height: 42px;  
+    font-size: 16px;  
+    text-indent: 10px;  
+    font-weight: normal;
+}
+.ui-dialog .ui-dialog-content {
+    /*overflow: auto;*/
+    padding: 10px 20px;
+    color: #626D77;  
+    font-size: 10pt;  
+    line-height: 16pt;
+}
+.ui-dialog .ui-dialog-buttonset {
+	margin: 5px;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+	float: right;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+	margin-left: 5px;
+	cursor: pointer;
+}
+.ui-dialog .ui-button {
+	background: #A7A9AC;
+	border-radius: 2px;
+	padding: 0.5em 1.5em;
+	border: 0px;
+}
 
 
 

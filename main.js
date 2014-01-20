@@ -613,6 +613,70 @@ function populateDevicesAccordionGrid() {
     // console.log(associatedDevice[0])
     associatedDevice.changeType(clickedIconType);
   });
+
+  // In network box's accordion panel, add popup to Restart button.
+  var modalPopup = "<div id='dialog' title='Restarting Network'><p>Restarting the network may temporarily interrupt TV and internet service.</p></div>";
+  $(modalPopup).appendTo("#container_final");
+  $( "#dialog" ).dialog({
+      autoOpen: false,
+      resizable: false,
+      height: 170,
+      width: 350,
+      modal: false,
+      dialogClass: 'restart',
+      buttons: {
+        OK: function() {
+          $( this ).dialog( "close" );
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  $(".accordion .ui-accordion-content .restart").click(function() {
+    $( "#dialog" ).dialog( "open" );
+  });
+
+  // Upon editing the device name in the accordion panel, reflect the new name in the device area and in the current panel's header.
+  $(".accordion .ui-accordion-content").find($("input.content-name")).blur(function() { 
+    return editNameAccordionDevice(this);
+  });
+  $(".accordion .ui-accordion-content").find($("input.content-name")).keydown(function(event) { 
+    if (event.keyCode == 13) { return editNameAccordionDevice(this); }
+  });
+  
+  function editNameAccordionDevice(_this) {
+
+    console.log("CLICK CONTENT NAME")
+    console.log(_this.value)
+
+    //  Get the wireless or wired container
+    var accordion_container = $(_this).closest(".accordion").parent();
+    var accordion_container_id = accordion_container.attr("id");
+    
+    console.log(accordion_container_id)
+
+    // Find the device corresponding to the current accoridon panel.
+    var cur_content_panel_id = $(_this).closest(".ui-accordion-content").attr("id").split("-");
+    cur_content_panel_id = Number(cur_content_panel_id[cur_content_panel_id.length-1]);
+    var cur_device = $.grep(devices, function(device){               // Get the device matching that ID.
+      if (accordion_container_id.indexOf("wireless") !== -1) {
+        return (device.id_accordion === cur_content_panel_id) && (device.is_wireless === true);  
+      } else if (accordion_container_id.indexOf("wired") !== -1) {
+        return (device.id_accordion === cur_content_panel_id) && (device.is_wireless !== true);  
+      }
+    });
+    cur_device = cur_device[0];
+
+    // Store the new device name.
+    cur_device.name = _this.value;
+    // Update device name in the device area.
+    cur_device.el.find(".name").text(cur_device.name);
+    // Update name in this device's accordion header.
+    $("#"+accordion_container_id+" .accordion").find($("#"+accordion_container_id+" .accordion").accordion( "option", "header" ))
+      .eq(cur_device.id_accordion)
+      .find($("a.header-name")).text(cur_device.name);
+  }
   
 }
 

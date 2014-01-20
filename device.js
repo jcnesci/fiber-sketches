@@ -257,10 +257,37 @@ Device.prototype = {
 			});
 		}
 		if(state == false) {
+			// Save new name in current object.
 			this.name = this.el.find(".edit_name").val();
 			console.log(this);
 			console.log(this.name);
+			// Update name in the DOM.
 			this.el.find(".name").text(this.name);
+
+			// For the Accordion Grid layout, here are additionnal places to change the device name.
+			if ( $(".accordion").length ) {
+				if (this.is_wireless) {
+					// Find the wireless accordion header that has the same id_accordion as this object, and change the device name it's 'a' tag text.
+					$("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
+					    .eq(this.id_accordion)
+					    .find($("a.header-name")).text(this.name);
+
+					console.log("CONTENT")
+					console.log($("#wireless_accordion .accordion .ui-accordion-content"))
+					console.log($("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion))
+					console.log($("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion).find($("input.content-name")))
+					// Also change the device name in the panel content.
+					$("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion).find($("input.content-name")).val(this.name);
+				} else {
+					// Find the wireless accordion header that has the same id_accordion as this object, and change it's 'a' tag text.
+					$("#wired_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
+					    .eq(this.id_accordion)
+					    .find($("a.header-name")).text(this.name);
+					// Also change the device name in the panel content.
+					$("#wired_accordion .accordion .ui-accordion-content").eq(this.id_accordion).find($("input.content-name")).val(this.name);
+				}
+			}
+
 			this.el.find(".edit_name").hide();
 			this.el.find(".name").show();
 		}

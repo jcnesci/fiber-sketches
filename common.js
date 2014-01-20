@@ -54,10 +54,10 @@ function getDeviceAccordionHTML(device) {
 	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
 	// For personal devices
 	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
-		device_panel_html = "<h3 class="+ device_type +"><a href='#'>" + device_name + "</a></h3>"
+		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
 							+ "<div>"
 							+ "<ul>"
-							+	"<li class='left'>Device name</li> 															<li class='right'><input value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Device name</li> 															<li class='right'><input class='content-name' value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 1000 mbps <span class='help'>?</span></li>"
 							+ 	"<li></li>"			
 							// +	"<li class='left'>Device icon</li> 															<li class='right'><span class='device_icons'></span></li>"
@@ -76,7 +76,7 @@ function getDeviceAccordionHTML(device) {
 							+ "</div>";
 	} // For network box
 	else if ( device_type === "networkbox" ) {
-		device_panel_html = "<h3 class="+ device_type +"><a href='#'>" + device_name + "</a></h3>"
+		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
 							+ "<div>"
 							+ "<ul>"
 							+	"<li class='left'>Fiber status</li> 														<li class='right'>Connected - 1000 mbps <span class='help'>?</span></li>"
@@ -104,10 +104,10 @@ function getDeviceAccordionHTML(device) {
 							+ "</div>";
 	}
 	else if ( device_type === "wireless_network" ) {
-		device_panel_html = "<h3 class="+ device_type +"><a href='#'>" + device_name + "</a></h3>"
+		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
 							+ "<div>"
 							+ "<ul>"
-							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input value='JESS3_Network' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input class='content-name' value='JESS3_Network' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Wi-Fi password</li> 														<li class='right'><input value='myP@$$w0rd!' size='40' maxlength='40'></li>"
 							+ 	"<li class='left'>Wireless network</li>														<li class='right'><span class='toggle_off'></span></li>" 
 							+ 	"<li class='left'>Broadcast SSID</li>														<li class='right'><span class='toggle_off'></span></li>" 
@@ -118,10 +118,10 @@ function getDeviceAccordionHTML(device) {
 							+ "</div>";
 	}
 	else if ( device_type === "tvbox" ) {
-		device_panel_html = "<h3 class="+ device_type +"><a href='#'>" + device_name + "</a></h3>"
+		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
 							+ "<div>"
 							+ "<ul>"
-							+	"<li class='left'>TV box name</li> 															<li class='right'><input value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
+							+	"<li class='left'>TV box name</li> 															<li class='right'><input class='content-name' value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 400 mbps (coaxial) <span class='help'>?</span></li>"
 							+	"<li></li>"
 							+ 	"<li class='left'>Wi-Fi radio</li>															<li class='right'><span class='toggle_off'></span></li>" 
