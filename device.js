@@ -149,12 +149,45 @@ Device.prototype = {
 		//if(t == this.type) return;
 
 		var thisthis = this;
+		var oldType = this.type;
 		this.el.find(".icon").fadeOut({duration: 200, complete: function() {
-			thisthis.el.removeClass(thisthis.type);
+			thisthis.el.removeClass(oldType);
 			thisthis.el.addClass(t);
 			thisthis.el.find(".icon").fadeIn({duration: 200});
 			thisthis.type = t;
 		}});
+
+		// For Accordion Grid layout
+		if ( $(".accordion").length ) {
+				if (this.is_wireless) {
+					
+					var this_header = $("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
+					    .eq(this.id_accordion);
+
+				    console.log(this_header)
+
+				    // $("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
+					   //  .eq(this.id_accordion)
+					   //  .find($("a.header-name")).text(this.name);
+
+				    
+
+					this_header.removeClass(oldType);
+					this_header.addClass(t);
+					// this.type = t;
+
+					console.log(this_header)
+
+				} else {
+					var this_header = $("#wired_accordion .accordion").find($("#wired_accordion .accordion").accordion( "option", "header" ))
+					    .eq(this.id_accordion);
+
+					this_header.removeClass(oldType);
+					this_header.addClass(t);
+					// this.type = t;
+				}
+			}
+
 	},
 	highlight: function(state) {
 		if(state == true) {
