@@ -1,6 +1,12 @@
 Fiber Prototype
 =======================================
 
+
+Usage Tips
+---------------------------------------
+Use the zoom keys on your keyboard (Ctrl or Cmd +/-) to adapt the size of the prototype to your screen size.
+
+
 This prototype uses jQuery and a jQuery-SVG library to achieve various prototypical graphical network layouts.  
 * *index.html* is the one and only HTML file
 * *main.js* is where things begin, and populates our network depending on network type (grid, tree, physics, etc.) and complexity (low, average, high)

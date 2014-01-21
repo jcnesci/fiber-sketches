@@ -51,6 +51,7 @@ function getDeviceAccordionHTML(device) {
 	var device_type = device.type;
 	var device_name = device.name;
 	var device_name_escapedQuotes = device_name.replace(/'/g, '&#39;');				// html input fields don't accept single quotes directly, they must be escaped.
+	var toggle_btn_id = 0;
 	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
 	// For personal devices
 	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
@@ -59,22 +60,21 @@ function getDeviceAccordionHTML(device) {
 							+ "<ul>"
 							+	"<li class='left'>Device name</li> 															<li class='right'><input class='content-name' value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 1000 mbps <span class='help'>?</span></li>"
-							+ 	"<li></li>"			
-							// +	"<li class='left'>Device icon</li> 															<li class='right'><span class='device_icons'></span></li>"
+							+ 	"<li></li>"
 							+	"<li class='left'>Device icon</li> 															<li class='right change_type' device_id='"+ device_id +"'><span class='change_type_container'><span class='icon laptop' type='laptop'></span><span class='icon phone' type='phone'></span><span class='icon tv' type='tv'></span><span class='icon storage' type='storage'></span></span></li>"
 							+ 	"<li></li>"			
 							+	"<li class='left'>IPv6 address</li> 														<li class='right'><input value='2001:0db8:3c4d:0015:0000:00'></li>"
 							+	"<li class='left'>IPv4 address</li> 														<li class='right'><input value='63.28.214.97'></li>"
-							+	"<li class='left'>MAC address</li> 															<li class='right'><input value='1a:2b:3c:4d:5e:6f'></li>"
-							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'><span class='toggle_off'></span></li>"
+							+	"<li class='left'>MAC address</li> 															<li class='right'><input value='1a:2b:3c:4d:5e:6f'></li>"							
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
 							+	"<li class='left'></li> 				 													<li class='right'><input value='192.168.1.195'></li>"
 							+ 	"<li></li>"					
-							+ 	"<li class='left'>Demilitarized Zone (DNS)</li>												<li class='right'><span class='toggle_on'></span></li>" 
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "on") +"</li>"
 							+ 	"<li></li>"			
-							+ 	"<li class='left'>UPnP port forwarding</li>													<li class='right'><span class='toggle_on'></span></li>" 
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "on") +"</li>"
 							+ "</ul>"
 							+ "</div>";
-	} // For network box
+	}
 	else if ( device_type === "networkbox" ) {
 		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
 							+ "<div>"
@@ -98,7 +98,7 @@ function getDeviceAccordionHTML(device) {
 							+	"<li class='left accordion_cat_title'>DHCP leases</li><li></li>"
 							+ 	"<li class='accordion_full_row'>"+ getAccordionTable("dhcp") +"</li>"
 							+ 	"<li></li>"
-							+ 	"<li class='left accordion_cat_title'>UPnP port forwarding</li>								<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
 							+ 	"<li class='accordion_full_row'>"+ getAccordionTable("upnp") +"</li>"
 							+ "</ul>"
 							+ "</div>";
@@ -109,10 +109,10 @@ function getDeviceAccordionHTML(device) {
 							+ "<ul>"
 							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input class='content-name' value='JESS3_Network' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Wi-Fi password</li> 														<li class='right'><input class='content-password' value='myP@$$w0rd!' size='40' maxlength='40'></li>"
-							+ 	"<li class='left'>Wireless network</li>														<li class='right'><span class='toggle_off'></span></li>" 
-							+ 	"<li class='left'>Broadcast SSID</li>														<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
 							+	"<li></li>"
-							+ 	"<li class='left'>Other 5GHZ wireless network</li>											<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
 							+	"<li class='left'>5GHZ Wi-Fi name</li> 														<li class='right'><input value='JESS3_Guest' size='40' maxlength='40'></li>"
 							+ "</ul>"
 							+ "</div>";
@@ -124,7 +124,7 @@ function getDeviceAccordionHTML(device) {
 							+	"<li class='left'>TV box name</li> 															<li class='right'><input class='content-name' value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Status</li> 																<li class='right'>Connected - 400 mbps (coaxial) <span class='help'>?</span></li>"
 							+	"<li></li>"
-							+ 	"<li class='left'>Wi-Fi radio</li>															<li class='right'><span class='toggle_off'></span></li>" 
+							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
 							+	"<li></li>"
 							+	"<li class='left'>IPv6 address</li> 														<li class='right'><input value='2001:0db8:3c4d:0015:0000:00' size='40' maxlength='40'></li>"
 							+	"<li class='left'>IPv4 address</li> 														<li class='right'><input value='63.28.214.97' size='40' maxlength='40'></li>"
@@ -161,6 +161,21 @@ function getAccordionTable(table) {
 
 	return table_html;
 }
+
+// 
+function getToggleButton(id, starting_state) {
+	console.log("------------------ toggle ID = "+ id)
+	console.log("------------------ toggle starting_state = "+ starting_state)
+	var toggle_html = "<div class='onoffswitch starts-"+starting_state+"'>"
+		+ "    <input type='checkbox' name='onoffswitch' class='onoffswitch-checkbox' id='myonoffswitch_"+id+"' checked>"
+		+ "    <label class='onoffswitch-label' for='myonoffswitch_"+id+"'>"
+		+ "        <div class='onoffswitch-inner'></div>"
+		+ "        <div class='onoffswitch-switch'></div>"
+		+ "    </label>"
+		+ "</div>";
+	return toggle_html;
+}
+
 // Provide HTML content for a specified device's settings panel.
 function getDevicePanelHTML(device) {
 	var device_panel_html;

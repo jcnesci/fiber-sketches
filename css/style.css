@@ -404,6 +404,69 @@ img {
 	border: 0px;
 }
 
+/* For the toggle button in the Accordion Grid layout. */
+.onoffswitch {
+    position: relative; width: 60px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #CCCCCC; 
+    border-radius: 3px;
+}
+.onoffswitch-inner {
+    width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+.starts-on .onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 5px;
+    background-color: #A8A9AC; color: #FFFFFF;
+}
+.starts-on .onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 5px;
+    background-color: #FFFFFF; color: #999999;
+    text-align: right;
+}
+.starts-off .onoffswitch-inner:before {
+    content: "OFF";
+    padding-left: 5px;
+    background-color: #FFFFFF; color: #999999;
+}
+.starts-off .onoffswitch-inner:after {
+    content: "ON";
+    padding-right: 5px;
+    background-color: #A8A9AC; color: #FFFFFF;
+    text-align: right;
+}
+.onoffswitch-switch {
+    width: 14px; margin: 3px;
+    background: #DDDDDD;
+    border: 1px solid #CCCCCC; 
+    border-radius: 3px;
+    position: absolute; top: 0; bottom: 0; right: 36px;
+    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+
+
 
 
 
