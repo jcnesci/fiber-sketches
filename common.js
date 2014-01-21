@@ -99,7 +99,7 @@ function getDeviceAccordionHTML(device) {
 		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
 							+ "<div>"
 							+ "<ul>"
-							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input class='content-name' value='JESS3_Network' size='40' maxlength='40'></li>"
+							+	"<li class='left'>Wi-Fi name</li> 															<li class='right'><input class='content-name' value='" + device_name_escapedQuotes + "' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Wi-Fi password</li> 														<li class='right'><input class='content-password' value='myP@$$w0rd!' size='40' maxlength='40'></li>"
 							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
 							+	"<li class='left'>Reserved IPv4 address</li> 												<li class='right'>"+ getToggleButton(device.id +"_"+ toggle_btn_id++, "off") +"</li>"
