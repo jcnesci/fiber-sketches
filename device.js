@@ -14,14 +14,7 @@ function Device(name, type) {
 	this.n_children = 0;
 
 	this.anchor = {
-		// "left": ($(document).width() / 2 - this.size.width / 2),
-		// "top": ($(document).height() / 2 - this.size.height / 2)
-		//dev_jc_17/09/2013_a
-		
-
 		"left": ($('#container').width() / 2 - this.size.width / 2),
-		// DEV_JC_dec30
-		// "left": ($('#wired_container').width() / 2 - this.size.width / 2),
 		"top": ($('#container').height() / 2 - this.size.height / 2)
 	}
 
@@ -30,7 +23,6 @@ function Device(name, type) {
 	this.mass = 1;
 	this.target = [0,0];
 
-	// TODO: could take this out of here so its not run when not in Grid layout.
 	// Set content of device settings panel for Accordion Grid layout.	
 	this.advanced_accordion_settings = getDeviceAccordionHTML( this );
 
@@ -87,7 +79,7 @@ Device.prototype = {
 			setTimeout(function(){
 				new_panel.css({
 					"top": thisthis.el.offset().top - $("#container").offset().top,// - padding_topAndBottom,
-					"left": ( (thisthis.el.offset().left - $("#container").offset().left) + thisthis.el.width()/2 - new_panel.width()/2 ) - padding_leftAndRight,				//DEV - PROBLEM: cant get the calculation right to left-align panel to the clicked device.
+					"left": ( (thisthis.el.offset().left - $("#container").offset().left) + thisthis.el.width()/2 - new_panel.width()/2 ) - padding_leftAndRight,
 					// "padding-top": padding_topAndBottom,
 					// "padding-bottom": padding_topAndBottom,
 					"padding-left": padding_leftAndRight,

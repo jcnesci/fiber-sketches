@@ -12,7 +12,7 @@ function Connection(a, b, type, strength) {
 
 	this.halfCell = devices[0].size.width / 2;
 	
-	//this.shape = "bezier"; // "bezier"
+	//this.shape = "bezier";
 	this.shape = Connection.shapes[current_connection_style % Connection.shapes.length]
 	
 	this.addToDom();
@@ -169,8 +169,6 @@ Connection.prototype = {
 							   "L" + (x2-rx) + "," + (midY) + " " +
 							   "A" + rx + "," + ry + " 0 0," + (flip ? 1 : 0) + " " + (x2) + "," + (midY+ry) + " " +
 							   "L" + x2 + "," + y2);
-
-			//A 20,20 0 0,0 215,215
 		}
 
 		if(this.a.el.is(":visible") && this.b.el.is(":visible")) {

@@ -166,7 +166,6 @@ function populateDevicesAccordionGrid() {
     // append the HTML of the current device's settings to the accordion div.
     $("#wireless_accordion .accordion").append(wireless_device.advanced_accordion_settings);
     wireless_device.id_accordion = counter_id_accordion_wireless;
-    console.log("t- wireless_device.id_accordion = "+ wireless_device.id_accordion)
     counter_id_accordion_wireless++;
   }
 
@@ -203,7 +202,6 @@ function populateDevicesAccordionGrid() {
   
       // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
       var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
-      console.log("********** active = "+ active)
       if (active) {
         expandingSubnode = dev;
         $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
@@ -219,7 +217,6 @@ function populateDevicesAccordionGrid() {
 
     $("#wired_accordion .accordion").append(box_device.advanced_accordion_settings);
     box_device.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
-    console.log("t- box_device.id_accordion = "+ box_device.id_accordion)
     counter_id_accordion_wired++;
   } 
   
@@ -231,7 +228,6 @@ function populateDevicesAccordionGrid() {
 
   //  if there are more devices than empty slots on Level1...
   if ( n_wired_devices > n_remaining_slots_level1 ) {
-    console.log("t- WIRED - Personal devices --------------- MORE THAN slots : "+ n_wired_devices);
 
     // need routers
     var n_cur_wired = 0;
@@ -247,10 +243,6 @@ function populateDevicesAccordionGrid() {
       }
       n_so_far += n_cur_wired;
 
-      console.log("----- i = "+ i);
-      console.log("n_cur_wired = "+ n_cur_wired);
-      console.log("n_so_far = "+ n_so_far);
-
       // If this slot has more than 1 device, create a router then connect those devices to it.
       if ( n_cur_wired > 1 ) {
         var is_last_row = false;
@@ -264,7 +256,7 @@ function populateDevicesAccordionGrid() {
           
           // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
           var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
-          console.log("********** active = "+ active)
+          
           if (active) {
             expandingSubnode = dev;
             $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
@@ -304,19 +296,10 @@ function populateDevicesAccordionGrid() {
             connection.changeShape("90s");
           }
           connections.push( connection );
-          // 
-          console.log("************** j = "+ j);
-          console.log(personal_device_level2);
-          console.log(array_level2_wired_devices);
-          console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
-
-
-
-
-
+          
           $("#wired_accordion .accordion").append(personal_device_level2.advanced_accordion_settings);
           personal_device_level2.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
-          console.log("t- personal_device_level2.id_accordion = "+ personal_device_level2.id_accordion)
+          
           counter_id_accordion_wired++;
         }
         // LEVEL 2 extra tv boxes : if we have more than 3 tv boxes, place remanining ones under the last router.
@@ -338,12 +321,9 @@ function populateDevicesAccordionGrid() {
             }
             connections.push( connectionTVBox );
 
-
-
-
             $("#wired_accordion .accordion").append(box_device.advanced_accordion_settings);
             box_device.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
-            console.log("t- box_device.id_accordion = "+ box_device.id_accordion)
+            
             counter_id_accordion_wired++;
           }
         }
@@ -358,21 +338,16 @@ function populateDevicesAccordionGrid() {
         array_level1_wired_devices.push(wired_device_level1);
         wired_device_level1.el.appendTo( $('#wired_container') );
 
-
-
-
-
         $("#wired_accordion .accordion").append(wired_device_level1.advanced_accordion_settings);
         wired_device_level1.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
-        console.log("t- wired_device_level1.id_accordion = "+ wired_device_level1.id_accordion)
+        
         counter_id_accordion_wired++;
       }
     }
   //  else, there are enough open slots for our devices in Level1...
   } else {
     // add wired devices to Level1 directly...
-    // console.log("t- WIRED - Personal devices ----- LESS THAN or EQUAL to slots.");
-
+    
     for ( var i = 0; i < n_wired_devices; i++ ) {
       var type = Math.random() < 0.5 ? "storage" : "laptop";
       if (type === "laptop") var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
@@ -382,14 +357,9 @@ function populateDevicesAccordionGrid() {
       array_level1_wired_devices.push(wired_device_level1);
       wired_device_level1.el.appendTo( $('#wired_container') );
 
-
-
-
-
-
       $("#wired_accordion .accordion").append(wired_device_level1.advanced_accordion_settings);
       wired_device_level1.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
-      console.log("t- wired_device_level1.id_accordion = "+ wired_device_level1.id_accordion)
+
       counter_id_accordion_wired++;
     }
   }
@@ -410,7 +380,6 @@ function populateDevicesAccordionGrid() {
   $(".accordion").accordion({ active: false, collapsible: true, heightStyle: "content",
     // this event fires immediately when accordion header is clicked, instead of after the animation is complete.
     beforeActivate: function( event, ui ) {
-      console.log("BEFORE ---- "+ $(this).outerHeight())
       
       // add .clear so the content div wraps its floated elements.
       $(".accordion .ui-accordion-content").addClass("clear");      // Use this float-clearing method instead of using 'overflow:hidden', because this allows us to use the 'box-shadow' property, if desired.
@@ -418,16 +387,12 @@ function populateDevicesAccordionGrid() {
   });
   // For the Wireless accordion, apply behavior so that if it spills down onto the Wired zone, push down the Wired zone.
   $( "#wireless_accordion .accordion" ).on( "accordionactivate", function( event, ui ) {
-    console.log("ACTIVATE wireless_accordion.outerHeight ---- "+ $("#wireless_accordion").outerHeight())
-    console.log("ACTIVATE this.outerHeight ---- "+ $(this).outerHeight())
     
     // Calculate whether the wireless accordion has spilled out of its zone.
     var overflow = $(this).outerHeight() - $("#wireless_accordion").outerHeight();      // ie. current accordion's height - accordion container's height
-    console.log("ACTIVATE overflow = "+ overflow)
-
+    
     if (overflow > 0) {
-      console.log("---- ENTER OVERFLOW")
-
+      
       // 1) push down the Wired zone.
       $(".row.wired").css({ position: "relative" });
       $(".row.wired").animate({
@@ -436,17 +401,13 @@ function populateDevicesAccordionGrid() {
 
       // 2) push down the Wired device area's background.
       var top_original = $("#container_background").attr("top_original");
-      // console.log("*** OVERFLOW *** top_original = "+ typeof top_original)
-      // console.log("*** OVERFLOW *** overflow = "+ typeof overflow)
       var top_new = Number(Number(top_original)+overflow);
-      console.log("*** OVERFLOW *** top_original+overflow = "+ top_new)
-      // $("#container_background").attr("top_original", top_original)
+      
       $("#container_background").animate({
         top: top_new
       });
 
       // 3) push down the SVG container
-      console.log($("#svg_container svg").top)
       $("#svg_container svg").animate({
         top: overflow
       });
@@ -456,8 +417,6 @@ function populateDevicesAccordionGrid() {
         top: 0
       });
       var top_original = $("#container_background").attr("top_original");
-      console.log("*** NOT OVERFLOW *** top_original = "+ $("#container_background").position().top)
-      console.log("*** NOT OVERFLOW *** top_original = "+ top_original)
       $("#container_background").animate({
         top: top_original
       });
@@ -490,10 +449,7 @@ function populateDevicesAccordionGrid() {
             
 
             // Open corresponding accordion panel.
-            console.log("**** id_accordion = "+ clickedDevice.id_accordion)
-            console.log("**** is_wireless = "+ clickedDevice.is_wireless)
             if (clickedDevice.is_wireless === true) {
-              console.log("######## WIRELESS ACTIVE? = "+ $( "#wireless_accordion .accordion" ).accordion( "option", "active"))
               // if already open, close it.
               if ($( "#wireless_accordion .accordion" ).accordion( "option", "active") !== false) {           // false means its closed.
                 // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
@@ -504,7 +460,6 @@ function populateDevicesAccordionGrid() {
                 $( "#wireless_accordion .accordion" ).accordion( "option", "active", clickedDevice.id_accordion );
               }
             } else {
-              console.log("######## WIRED ACTIVE? = "+ $( "#wired_accordion .accordion" ).accordion( "option", "active"))
               // if already open, close it.
               if ($( "#wired_accordion .accordion" ).accordion( "option", "active") !== false) {
                 // Hack: since there is no close() function for the jQueryUI accordion, we attempt to close all odd-numbered accordion headers, since they always represent wireless headers.
@@ -519,14 +474,9 @@ function populateDevicesAccordionGrid() {
 
           } else {
             
-            console.log("********** expanded = "+ clickedDevice.expanded)
-
-            // clickedDevice.expandSubnodes(); 
-            // layoutDevices('accordion grid');
-
             // If accordion is open, close it and set the var of the expanding device so it is expanded in accordionactivate.
             var active = $( "#wireless_accordion .accordion" ).accordion( "option", "active" );
-            console.log("********** active = "+ active)
+            
             if (active) {
               expandingSubnode = clickedDevice;
               $( "#wireless_accordion .accordion" ).accordion( "option", "active", false );
@@ -602,8 +552,6 @@ function populateDevicesAccordionGrid() {
       return (device.id === Number(associatedDeviceID));
     });
     associatedDevice = associatedDevice[0];
-    // console.log(associatedDeviceID)
-    // console.log(associatedDevice[0])
     associatedDevice.changeType(clickedIconType);
   });
 
@@ -639,15 +587,10 @@ function populateDevicesAccordionGrid() {
   });
   function editNameAccordionDevice(_this) {
 
-    console.log("CLICK CONTENT NAME")
-    console.log(_this.value)
-
     //  Get the wireless or wired container
     var accordion_container = $(_this).closest(".accordion").parent();
     var accordion_container_id = accordion_container.attr("id");
     
-    console.log(accordion_container_id)
-
     // Find the device corresponding to the current accoridon panel.
     var cur_content_panel_id = $(_this).closest(".ui-accordion-content").attr("id").split("-");
     cur_content_panel_id = Number(cur_content_panel_id[cur_content_panel_id.length-1]);
@@ -715,13 +658,6 @@ function populateDevicesDefault() {
 
     // Connect TVs to TV Box
     connections.push(new Connection(box_device, tv_device, "wired", 1));
-    // // Choose a parent router that is not itself
-    // var parent_router = routing_devices[random(0, routing_devices.length)];
-    // while ( parent_router === box_device ) {
-    //   // console.log("-populateDevicesDefault() ---- parent_router === box_device ");
-    //   parent_router = routing_devices[random(0, routing_devices.length)];
-    // }
-    // connections.push(new Connection(parent_router, box_device, "wired", 1));
     connections.push(new Connection(devices[0], box_device, "wired", 1));
   }
   
@@ -777,10 +713,7 @@ function populateDevicesDefault() {
 
 // For 2 Zone layout for Wireless and Wired devices, featuring a 4-column grid.
 function populateDevicesGrid() {
-  // console.log('- - - - - - - - - - -');
-  // console.log('populateDevicesGrid() ENTER');
-  // console.log('- - - - - - - - - - -');
-
+  
   // - - - - - - - - - - - - - - - SETUP - - - - - - - - - - - - - - - - - 
 
   resetLayouts();
@@ -825,9 +758,6 @@ function populateDevicesGrid() {
     var connection = new Connection(devices[0], wireless_device, "wireless", 1 );
     connection.changeShape("invisible");
     connections.push( connection );
-    // dev
-    // console.log(' WIRELESS --------');
-    // console.log(wireless_device);
   }
 
   // Create the Wireless Network device/icon.
@@ -882,8 +812,7 @@ function populateDevicesGrid() {
 
   //  if there are more devices than empty slots on Level1...
   if ( n_wired_devices > n_remaining_slots_level1 ) {
-    console.log("t- WIRED - Personal devices --------------- MORE THAN slots : "+ n_wired_devices);
-
+    
     // need routers
     var n_cur_wired = 0;
     var n_so_far = 0;
@@ -897,10 +826,6 @@ function populateDevicesGrid() {
         n_cur_wired = n_wired_devices - n_so_far;
       }
       n_so_far += n_cur_wired;
-
-      console.log("----- i = "+ i);
-      console.log("n_cur_wired = "+ n_cur_wired);
-      console.log("n_so_far = "+ n_so_far);
 
       // If this slot has more than 1 device, create a router then connect those devices to it.
       if ( n_cur_wired > 1 ) {
@@ -944,11 +869,6 @@ function populateDevicesGrid() {
             connection.changeShape("90s");
           }
           connections.push( connection );
-          // 
-          console.log("************** j = "+ j);
-          console.log(personal_device_level2);
-          console.log(array_level2_wired_devices);
-          console.log('New Level2 device '+ j + ': ' + type + ', on Router ' + i );
         }
         // LEVEL 2 extra tv boxes : if we have more than 3 tv boxes, place remanining ones under the last router.
         if ( n_tv_boxes_level2 > 0 ) {
@@ -985,8 +905,6 @@ function populateDevicesGrid() {
   //  else, there are enough open slots for our devices in Level1...
   } else {
     // add wired devices to Level1 directly...
-    // console.log("t- WIRED - Personal devices ----- LESS THAN or EQUAL to slots.");
-
     for ( var i = 0; i < n_wired_devices; i++ ) {
       var type = Math.random() < 0.5 ? "storage" : "laptop";
       if (type === "laptop") var name = a_random_names_grid.splice( random(0, a_random_names_grid.length), 1 ) + "'s " + type.charAt(0).toUpperCase() + type.slice(1);
@@ -1048,18 +966,11 @@ function populateDevicesCollapsedNodes() {
   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"]
   var personal_device_types = ["phone", "laptop", "storage"];
   
-  // var n_personal_devices = Math.round(Math.random() * 8 + 2);
-  // var n_tv_devices = Math.round(Math.random() * 3);
-  // var n_routers = random(1,4);
-  
   // We wish to limit the number of personal devices to 4 per router (not including the Network box, although it will be getting some of these devices).
   var n_routers = random(2,4);                            // routers here means either normal routers or TV boxes.
   var n_max_devices = 4;
   var n_personal_devices = Math.round(Math.random() * (( n_routers * n_max_devices ) - 4) + 4);         // guaranteed at least 4 devices.
-  // console.log(" - n_routers : "+ n_routers);
-  // console.log(" - n_personal_devices : "+ n_personal_devices);
-
-
+  
   // Create a few routers
   for(var i=0; i<n_routers; i++) {
     var is_TV = Math.random() < 0.5;
@@ -1068,7 +979,7 @@ function populateDevicesCollapsedNodes() {
       var router = new Device(room + " Router", "router");
       router.expanded = false;  // Start off closed
       router.el.parent = router;
-      console.log(router.el);
+      
       // Closures are weird. A function that returns a function is needed to make sure the context of router is correct
       router.el.click((function(dev) { return function() { dev.expandSubnodes(); layoutDevices('tree'); } })(router));
       //router.el.click(function() { router.expandSubnodes() });
@@ -1146,52 +1057,11 @@ function populateDevicesCollapsedNodes() {
     if (empty_routers.length > 0) var cur_router = empty_routers[random(0, empty_routers.length)];
     else if (one_child_routers.length > 0) var cur_router = one_child_routers[random(0, one_child_routers.length)];
     else {
-      // console.log(" - - - - - - - - - * other_routers: "+ other_routers);
       var cur_router = other_routers[random(0, other_routers.length)];
     } 
-
-    console.log("Selected router: "+ cur_router.name);
-
     var type = Math.random() < 0.5 ? "wired" : "wireless";
     connections.push(new Connection(cur_router, device, type, 1));  
   });
-
-  // OLD
-  // // Connect each device to a router
-  // $.each(personal_devices, function(index, device) {
-  //   // Start by populating empty routers, if any.
-  //   var empty_routers = $.grep(routing_devices, function(router){ 
-  //     var router_children = 0;
-  //     for(var i=0; i<router.connections.length; i++) {
-  //       if(router.connections[i].a == router) router_children++;
-  //     }
-  //     return router_children === 0; 
-  //   });
-  //   // console.log("- - - - - empty_routers: "+ empty_routers.length);
-
-  //   // Select an empty router.
-  //   if ( empty_routers.length > 0 ) {
-  //     var cur_router = empty_routers[random(0, empty_routers.length)];
-  //   }
-  //   // Select any router that has less than 4 children, to avoid clutter.
-  //   else {
-  //     var potential_routers = $.grep(routing_devices, function(router){ 
-  //       var router_children = 0;
-  //       for(var i=0; i<router.connections.length; i++) {
-  //         if(router.connections[i].a == router) router_children++;
-  //       }
-  //       // console.log("*** name: "+ router.name + "router_children = "+ router_children);
-  //       return router_children < 4; 
-  //     });
-  //     // console.log(" --- --- - - - - - - - - - - - potential_routers : ");
-  //     var cur_router = potential_routers[random(0, potential_routers.length)];
-  //   }
-
-  //   // console.log("Selected router: "+ cur_router.name);
-
-  //   var type = Math.random() < 0.5 ? "wired" : "wireless";
-  //   connections.push(new Connection(cur_router, device, type, 1));  
-  // });
 
   // Expand routers with only 1 device
   $.each(routing_devices, function(index, device) {
@@ -1277,8 +1147,6 @@ function populateDevicesDragAndDrop() {
   });
 
   // Assign drop event handler for each device
-  // dev_jc_19/09/2013_c : make only personal device icons customizable by drag-n-dropping new icons over them.
-  // $.each(devices, function(index, device) {
   $.each(devices, function(index, device) {
     // For all devices except Network box, have drag-n-drop events.
     device.el.mouseup((function(dev) { return function() {
@@ -1317,7 +1185,6 @@ function populateDevicesDragAndDrop() {
     device.el.mouseenter((function(dev) { return function(ev) {
       if(dragging != null) {
         dev.highlight(true); 
-        console.log("^ ^ ^ ^ ^ ^ HILITE 1");
       }
     } })(device));
     // Hover off.
@@ -1466,7 +1333,6 @@ function populateDevicesPhysics() {
   
   // Create a Wifi network
   var ssid = random_item(random_adjectives) + "_" + random_item(random_nouns);
-  console.log("Adding wireless network '" + ssid);
   var wifi_device = new Device(ssid, "wifi");
   devices.push(wifi_device);
   routing_devices.push(wifi_device);
@@ -1514,9 +1380,6 @@ function populateDevicesPhysics() {
     // Connect Personal Device to Network Box.
     connections.push(new Connection(wifi_device, personal_device, "wireless", 1));
   }
-  // console.log('A------ ' + n_tv_devices);
-  // console.log('B------ ' + n_personal_devices_network_box);
-  // console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
   
   // Create Personal Devices for Network Box.
   for ( var i = 0; i < n_wired_devices; i++ ) {
@@ -1544,158 +1407,9 @@ function populateDevicesPhysics() {
     var potential_routers = $.grep(routing_devices, function(router){ 
       return ( router.type  !== "wifi" ); 
     });
-    console.log(" ------- POTENTIAL ROUTERS :");
-    console.log(potential_routers);
+    
     var selected_router = potential_routers[random(0, potential_routers.length)];
-    console.log(" ------- SELECTED ROUTERS : ");
-    console.log(selected_router);
     connections.push(new Connection(selected_router, personal_device, "wired", 1));
   }
   
 }
-
-// function populateDevicesPhysics() {
-//   resetLayouts();
-
-//   // Create 1 Network Box
-//   devices.push(new Device("Network Box", "networkbox"));  // devices[0] is always the network box
-//   routing_devices.push(devices[0]);
-//   devices[0].mass = 100;
-  
-//   // Setup children devices of the Network Box. Total maximum of Network Box devices is 4, minimum is 2.
-//   var random_names = ["Ralph", "Elena", "Rex", "Mordecai", "Betty White", "Nancy", "Jamilah", "Jim", "Judy", "Francine", "Jack", "Bob", "Linda", "Sadie", "Pauline", "Jose", "Elizabeth"];
-//   var random_rooms = ["Office", "Poolside", "Living Room", "Bedroom", "Upstairs", "Downstairs", "Basement", "War Room"];
-//   // maximum 2 TV boxes (each with a TV)
-//   var n_tv_devices = Math.round(Math.random() * max_tv_devices);
-//   // number of minimum & maximum personal devices depends on amount of TV Boxes
-//   if ( n_tv_devices === 0 ) var n_personal_devices_network_box = Math.round(random(2, 5));
-//   if ( n_tv_devices === 1 ) var n_personal_devices_network_box = Math.round(random(1, 4));
-//   if ( n_tv_devices === 2 ) var n_personal_devices_network_box = Math.round(random(1, 3));
-//   // var n_personal_devices_network_box = Math.round(random( (2 - n_tv_devices) , (5 - n_tv_devices) ));      //OLD
-
-//   // Create 0, 1, or 2 wireless networks
-//   var n_wireless_networks = random(0,100) < 20 ? 2 : 1;
-//   for(var k=0; k<n_wireless_networks; k++) {
-
-//     var random_nouns = ["mollusk", "tail", "front", "thneed", "house", "corner", "plant", "ether", "tortoise", "array", "node", "square", "zone", "block", "index", "network", "freedom", "party", "date"]
-//     var random_adjectives = ["frothy", "angular", "slow", "limber", "lethargic", "passable", "twisted", "plastic", "jinxed", "pliable", "rotated", "tall", "ansible", "large", "needy", "anxious"];
-//     var ssid = random_item(random_adjectives) + "_" + random_item(random_nouns);
-//     console.log("Adding wireless network '" + ssid + "' (" + k + "/" + n_wireless_networks + ")");
-//     var wifi_device = new Device(ssid, "wifi");
-//     devices.push(wifi_device);
-//     routing_devices.push(wifi_device);
-//     connections.push(new Connection(devices[0], wifi_device, "wireless", 1));
-
-//     // Add some personal devices to wifi network
-//     var n_wifi_connections = random(1,8);
-//     for ( var i = 0; i < n_wifi_connections; i++ ) {
-//       var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-//       var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-//       //  give the device a unique name
-//       var unique_name = false;
-//       var name = ""; 
-//       while(!unique_name) {
-//         name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-//         // Check all devices to see if this name is taken
-//         var taken = false;
-//         for(var j=0; j<devices.length; j++) {
-//           if(devices[j].name == name) taken = true;
-//         }
-//         if(!taken) unique_name = true;
-//       }
-//       // create the device
-//       var personal_device = new Device(name, device_type);
-//       devices.push(personal_device);
-//       personal_devices.push(personal_device);
-      
-//       // Connect Personal Device to Network Box.
-//       connections.push(new Connection(wifi_device, personal_device, "wireless", 1));
-//     }    
-//   }
-
-//   console.log('A------ ' + n_tv_devices);
-//   console.log('B------ ' + n_personal_devices_network_box);
-//   console.log('C------ ' + (n_tv_devices + n_personal_devices_network_box));     // total should never be more than 4
-  
-//   // Create TV Boxes with their TVs for Network Box.
-//   for ( var i = 0; i < n_tv_devices; i++ ) {
-//     var room = random_rooms[Math.round(Math.random() * (random_rooms.length-1))];
-//     var box_device = new Device(room + " TV Box", "tvbox");
-//     var tv_device = new Device(room + " TV", "tv");
-//     devices.push(box_device);
-//     routing_devices.push(box_device);
-//     devices.push(tv_device);
-
-//     // Connect TVs to TV Box
-//     connections.push(new Connection(box_device, tv_device, "wired", 1));
-
-//     // Connect TV Box to Network Box
-//     // if we have 2 TV Boxes, add the second one after all personal devices, to the right completely.
-//     if ( i === 1 ) {
-//       console.log('--------HELLO 1')
-//       bool_add_last = true;
-//     } else {
-//       bool_add_last = false;
-//       console.log('--------HELLO 0')
-//       connections.push(new Connection(devices[0], box_device, "wired", 1));
-//     }
-
-//     // For each TV Box, create Personal Devices
-//     var n_personal_devices_tv_box = Math.round(random(0, 3));      // range is 0 to 2
-//     console.log('D------ ' + n_personal_devices_tv_box);
-//     for ( var j = 0; j < n_personal_devices_tv_box; j++ ) {
-//       var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-//       var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-//       //  give the device a unique name
-//       var unique_name = false;
-//       var name = ""; 
-//       while(!unique_name) {
-//         name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-//         // Check all devices to see if this name is taken
-//         var taken = false;
-//         for(var w=0; w<devices.length; w++) {
-//           if(devices[w].name == name) taken = true;
-//         }
-//         if(!taken) unique_name = true;
-//       }
-//       // create the device
-//       var personal_device = new Device(name, device_type);
-//       devices.push(personal_device);
-//       personal_devices.push(personal_device);
-    
-//       // Connect Personal Device to TV Box.
-//       connections.push(new Connection(box_device, personal_device, "wired", 1));
-//     }
-//   }
-  
-//   // Create Personal Devices for Network Box.
-//   for ( var i = 0; i < n_personal_devices_network_box; i++ ) {
-//     var device_type = Math.random() < 0.5 ? "phone" : "laptop";
-//     var propertype = device_type.charAt(0).toUpperCase() + device_type.slice(1);
-//     //  give the device a unique name
-//     var unique_name = false;
-//     var name = ""; 
-//     while(!unique_name) {
-//       name = random_names[Math.round(Math.random() * (random_names.length-1))] + "'s " + propertype;
-//       // Check all devices to see if this name is taken
-//       var taken = false;
-//       for(var j=0; j<devices.length; j++) {
-//         if(devices[j].name == name) taken = true;
-//       }
-//       if(!taken) unique_name = true;
-//     }
-//     // create the device
-//     var personal_device = new Device(name, device_type);
-//     devices.push(personal_device);
-//     personal_devices.push(personal_device);
-    
-//     // Connect Personal Device to Network Box.
-//     connections.push(new Connection(devices[0], personal_device, "wired", 1));
-//   }
-  
-
-//   if (bool_add_last === true) {
-//     console.log('--------HELLO 2')
-//     connections.push(new Connection(devices[0], box_device, "wired", 1));
-//   }
-// }
