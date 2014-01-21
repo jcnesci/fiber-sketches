@@ -17,12 +17,6 @@ $( window ).resize(function() {
 		});
 	}
 });
-// Was used to update SVG lines so they draw lines below edge of screen when user scrolls. Stopped working somehow.
-// $( window ).scroll(function() {
-// 	$.each(devices, function(index, device) {
-// 	  device.update();
-// 	});
-// });
 // 
 $(document).bind('click', function (e) {
 

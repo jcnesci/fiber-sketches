@@ -16,8 +16,6 @@ function layoutDevices(type) {
 			// Not forcing connector style here, since this layout uses many different ones. They are set in populateDevicesGrid() directly.
 			
 			// Place all Devices.
-			// accordionGridPlace(devices[0], $('#wired_container').width() / 2 - devices[0].size.width / 2, 0, false, "level1");
-			// gridPlace(devices[0], $('#container').width() / 2 - devices[0].size.width / 2, 0, false, "level1");
 			var x_pos = $('#wired_container').width() / 2 - devices[0].size.width / 2;
 			devices[0].el.css("left", x_pos);
 			accordionGridPlace(devices[0], x_pos, 0, false, "level1");
@@ -50,15 +48,11 @@ function layoutDevices(type) {
 
 			$.each(devices, function(index, device) {
 				
-				//dev_jc_17/09/2013_a
 				// positions devices very far from container edges, thats because the size of device is set to 200px by default....
 				var iUsableHalfHeight = $('#container').height()/2 - device.size.height/2;
 				var iUsableHalfWidth = $('#container').width()/2 - device.size.width/2;
 
 				device.el.fadeIn(500).animate({
-					// top: $(document).height()/2 - device.size.height / 2 + random(-500, 500),
-					// left: $(document).width()/2 - device.size.width / 2 + random(-500, 500),
-					//dev_jc_17/09/2013_a
 					top: iUsableHalfHeight + random( -iUsableHalfHeight, iUsableHalfHeight ),
 					left: iUsableHalfWidth + random( -iUsableHalfWidth, iUsableHalfWidth ),
 				}, {
@@ -101,15 +95,11 @@ function layoutDevices(type) {
 				var x = (target_j - grid_width/2 + 1/2) * grid_interval;
 				var y = (target_i - grid_height/2 + 1/2) * grid_interval;
 
-				//dev_jc_17/09/2013_a
 				// positions devices very far from container edges, thats because the size of device is set to 200px by default....
 				var iUsableHalfHeight = $('#container').height()/2 - device.size.height/2;
 				var iUsableHalfWidth = $('#container').width()/2 - device.size.width/2;
 
 				device.el.fadeIn(500).animate({
-					// top: $(document).height()/2 - device.size.height / 2 + y,
-					// left: $(document).width()/2 - device.size.width / 2 + x,
-					//dev_jc_17/09/2013_a
 					top: iUsableHalfHeight + random( -iUsableHalfHeight, iUsableHalfHeight ),
 					left: iUsableHalfWidth + random( -iUsableHalfWidth, iUsableHalfWidth ),
 				}, {
@@ -180,18 +170,6 @@ function layoutDevices(type) {
 			// Fade in the root node last. (DONT KNOW WHY I MUST DO IT, but it is necessary...)
 			devices[0].el.fadeIn({duration: 300, queue: false});
 
-			// Shrink the entire physics layout to make it less massive overall. Must shrink the entire container but also the SVG div.
-			// console.log("ZOOOOOOM - - --------: "+ $("#container").css("zoom") );
-			// if ( $("#container").css("zoom") === "1" ) {
-			// 	var zoom_shrink_layout = 0.75;
-			// 	$("#container").css("zoom", zoom_shrink_layout);
-			// 	$("#container_background").css("top", ($("#container_background").offset().top * zoom_shrink_layout) + 40);
-			// 	$("#svg_container").css("zoom", zoom_shrink_layout);
-			// 	var zoom_factor = 1 / zoom_shrink_layout;
-			// 	svg_div_height_multiplier = zoom_factor;
-			// 	resetSvgDivHeight();
-			// }
-
 			break;
 		case "physics":
 			// Force connector style
@@ -204,13 +182,6 @@ function layoutDevices(type) {
 					top: "+=" + random(-10,10)
 				}, 10);
 			});
-
-			console.log('win.height------ ' + $(window).height());
-			console.log('win.width------ ' + $(window).width());
-			console.log('devices[0].size.height------ ' + devices[0].size.height);
-			console.log('devices[0].size.width------ ' + devices[0].size.width);
-			console.log('container.height------ ' + $('#container').height());
-			console.log('container.width------ ' + $('#container').width());
 
 			if ( network_complexity !== "high" ) { var y_adjuster = 2; }
 			else { var y_adjuster = 1.5; }
@@ -291,28 +262,15 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 
 			if ( device.is_wireless === true ) {
 				
-				// console.log('- - - - WIRELESS - GRID layout');
-				
 				// Place wireless icon at the very top, centered horizontally.
 				var wireless_icon_left = $("#wireless_container").width()/2 - n_device_width/2; //n_columns * n_device_width/2;
 				$(".device.wireless_network").css("left", wireless_icon_left );
 				$(".device.wireless_network").css("top", 0 );
 				$(".device.wireless_network").css('display', 'block');
-
-				// OLD : useful code in here, keep it for a while.
-				// wrap every row in a div : useful later to center the last row, if it doesnt contain exactly 4 devices.
-				// if( counter_wireless % n_columns === 0 && device.el.parent(".wireless_grid_row").length === 0 ) {													// check if we are at the beginning of a row, and if we didn't already create the div last time by calling update(), for example.
-			 	// device.el.nextUntil( $("#device_" + (device.id-1 + n_columns) +" + *") ).andSelf().wrapAll("<div class='wireless_grid_row'></div>");			// take this element and the next ones until the next row, and wrap them.
-			 	// // device.el.nextAll().andSelf().slice(0,n_columns).wrapAll('<div class="row"></div>');															// other way to do same as above.
-			 	// }
 				
 				var x_starting_pos = $("#wireless_container").width()/2 - (n_columns * n_device_width)/2 ;				// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 				var x = x_starting_pos + ( (counter_wireless % n_columns) * n_device_width );					// each row of devices goes up, ex: row0.y = 0, row1.y = -200, row2.y = -400, etc...
 				var y = (Math.floor(counter_wireless / n_columns) + 1 ) * (n_device_height);							// var y = - (Math.floor(index / n_columns) * root.size.height + (root.el.position().top + root.size.height));	
-
-				// console.log('Wireless X = '+ x);
-				// console.log('Wireless Y = '+ y);
-				// console.log("counter_wireless = "+ counter_wireless);
 
 				counter_wireless++;
 
@@ -335,45 +293,24 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 				// Before placing the devices...
 				if ( counter_wired_l1 === 0 && counter_wired_l2 === 0 ) {
 					// start by placing the Network Box under the wireless devices.
-					
-
-					// DEV_JC_dec30
 					network_box_y = 0;
-					// network_box_y = $(".device.wireless_network").position().top + $(".device.wireless_network").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
-
-
-
 
 					devices[0].el.css("top", network_box_y);
 					$(".device.wireless_network").attr("spacing", in_between_space_wired_wireless);
-					// console.log('Net box TOP: ' + devices[0].el.css("top"));
-
+					
 					// Re-adjust position of Wired Zone background to align with position of Net Box.
 					$("#container_background").css({
-						// DEV_JC_dec30
-						// "top": $("#wired_container").offset().top + network_box_y - in_between_space_wired_wireless/2,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
 						"top": $("#wired_container").offset().top + network_box_y,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
 						"left": $('#wired_container').width()/2 - $('#container_background').width()/2 + $('#wired_container').offset().left
 					});
-					// console.log('Container BG TOP: '+ $("#container").offset().top );
 				}
 				// Place devices based on nesting level.
 				if ( grid_level === "level1" ) {
-
-					// console.log('- - - - WIRED - LEVEL1 - TREE layout');
 					var x = start_x + ( counter_wired_l1 + 1/2 - array_level1_wired_devices.length / 2) * root.size.width;
 					var y = network_box_y + devices[0].size.height;
-
-					// console.log('Wired L1 X = '+ x);
-					// console.log('Wired L1 Y = '+ y);
-					// console.log("counter_wired_l1 = "+ counter_wired_l1);
-
 					counter_wired_l1++;
 				}
 				if ( grid_level === "level2" ) {
-
-					// console.log('- - - - WIRED - LEVEL2 - GRID layout');
-
 					var x_starting_pos = $("#wired_container").width()/2 - (n_columns * root.size.width)/2 ;	// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 					if ( device.type !== "tv" ) {
 						var x = x_starting_pos + ( (counter_wired_l2 % n_columns) * root.size.width );
@@ -382,11 +319,6 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 						var x = root.el.css("left");
 						var y = root.el.position().top + root.size.height;
 					}
-
-					// console.log('Wired L2 X = '+ x);
-					// console.log('Wired L2 Y = '+ y);
-					// console.log("counter_wired_l2 = "+ counter_wired_l2);
-					
 					counter_wired_l2++;
 
 					// after we have placed all devices... 
@@ -418,14 +350,11 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 		}
 		// Call gridPlace on children
 		if ( grid_level === "level1" ) { 
-			// var is_level2 = true;
 			accordionGridPlace(device, start_x + x, start_y + root.size.height, hidden, "level2");
-			// console.log('------B');
 		}
 		// or, use treePlace for children
 		else {
 			treePlace(device, start_x + x, start_y + root.size.height, hidden); 
-			// console.log('------A'); 
 		}
 
 	});
@@ -433,9 +362,7 @@ function accordionGridPlace(root, start_x, start_y, hidden, grid_level) {
 
 // function for displaying Wired devices under the network box in the Grid layout. Is actually half a treePlace (for direct children of Net Box) and half a gridPlace (for subnodes of those children).
 function gridPlace(root, start_x, start_y, hidden, grid_level) {
-	console.log("t************************************************************************************************************** ENTER gridPlace()")
-
-
+	
 	if(!root.expanded) hidden = true;
 
 	// Used to recursively place nodes in a tree
@@ -488,24 +415,9 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 		else {
 
 			if ( device.is_wireless === true ) {
-				
-				// console.log('- - - - WIRELESS - GRID layout');
-				
-				// OLD : useful code in here, keep it for a while.
-				// wrap every row in a div : useful later to center the last row, if it doesnt contain exactly 4 devices.
-				// if( counter_wireless % n_columns === 0 && device.el.parent(".wireless_grid_row").length === 0 ) {													// check if we are at the beginning of a row, and if we didn't already create the div last time by calling update(), for example.
-			 	// device.el.nextUntil( $("#device_" + (device.id-1 + n_columns) +" + *") ).andSelf().wrapAll("<div class='wireless_grid_row'></div>");			// take this element and the next ones until the next row, and wrap them.
-			 	// // device.el.nextAll().andSelf().slice(0,n_columns).wrapAll('<div class="row"></div>');															// other way to do same as above.
-			 	// }
-				
 				var x_starting_pos = $("#container").width()/2 - (n_columns * n_device_width)/2 ;				// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 				var x = x_starting_pos + ( (counter_wireless % n_columns) * n_device_width );					// each row of devices goes up, ex: row0.y = 0, row1.y = -200, row2.y = -400, etc...
 				var y = Math.floor(counter_wireless / n_columns) * -(n_device_height);							// var y = - (Math.floor(index / n_columns) * root.size.height + (root.el.position().top + root.size.height));	
-
-				// console.log('Wireless X = '+ x);
-				// console.log('Wireless Y = '+ y);
-				// console.log("counter_wireless = "+ counter_wireless);
-
 				counter_wireless++;
 
 				// after we have placed all devices... 
@@ -531,7 +443,6 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 					var n_total_rows_height = n_total_rows * n_device_height;
 					$(".device.wireless_network").css("top", n_total_rows_height );								// Use ".device.wireless_network" and not just ".wireless_network" so it's not confused with ".device_advanced_panel.wireless_network".
 					$(".device.wireless_network").css('display', 'block');
-					// $(".device.wireless_network").css('opacity', 0);											// dev_jc_17/10/2013: make wireless icon not flcikr on update()
 				}
 				
 			}
@@ -543,32 +454,20 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 					network_box_y = $(".device.wireless_network").position().top + $(".device.wireless_network").height() + in_between_space_wired_wireless;			//dev_jc_29/09/2013_3: hack: i would use wireless_container.height instead of what's here...
 					devices[0].el.css("top", network_box_y);
 					$(".device.wireless_network").attr("spacing", in_between_space_wired_wireless);
-					// console.log('Net box TOP: ' + devices[0].el.css("top"));
 
 					// Re-adjust position of Wired Zone background to align with position of Net Box.
 					$("#container_background").css({
 						"top": $("#container").offset().top + network_box_y - in_between_space_wired_wireless/2,									// DEV_PROBLEM: i think this should work but doens not position top of div exactly between the wireless and network box icons.
 						"left": $('#container').width()/2 - $('#container_background').width()/2 + $('#container').offset().left
 					});
-					// console.log('Container BG TOP: '+ $("#container").offset().top );
 				}
 				// Place devices based on nesting level.
 				if ( grid_level === "level1" ) {
-
-					// console.log('- - - - WIRED - LEVEL1 - TREE layout');
 					var x = start_x + ( counter_wired_l1 + 1/2 - array_level1_wired_devices.length / 2) * root.size.width;
 					var y = network_box_y + devices[0].size.height;
-
-					// console.log('Wired L1 X = '+ x);
-					// console.log('Wired L1 Y = '+ y);
-					// console.log("counter_wired_l1 = "+ counter_wired_l1);
-
 					counter_wired_l1++;
 				}
 				if ( grid_level === "level2" ) {
-
-					// console.log('- - - - WIRED - LEVEL2 - GRID layout');
-
 					var x_starting_pos = $("#container").width()/2 - (n_columns * root.size.width)/2 ;	// considering the number of columns and the width of each item, determine what the starting X position is in order for a row of 4 items to be centered in the container.
 					if ( device.type !== "tv" ) {
 						var x = x_starting_pos + ( (counter_wired_l2 % n_columns) * root.size.width );
@@ -577,11 +476,6 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 						var x = root.el.css("left");
 						var y = root.el.position().top + root.size.height;
 					}
-
-					// console.log('Wired L2 X = '+ x);
-					// console.log('Wired L2 Y = '+ y);
-					// console.log("counter_wired_l2 = "+ counter_wired_l2);
-					
 					counter_wired_l2++;
 
 					// after we have placed all devices... 
@@ -613,14 +507,11 @@ function gridPlace(root, start_x, start_y, hidden, grid_level) {
 		}
 		// Call gridPlace on children
 		if ( grid_level === "level1" ) { 
-			// var is_level2 = true;
 			gridPlace(device, start_x + x, start_y + root.size.height, hidden, "level2");
-			// console.log('------B');
 		}
 		// or, use treePlace for children
 		else {
 			treePlace(device, start_x + x, start_y + root.size.height, hidden); 
-			// console.log('------A'); 
 		}
 
 	});
@@ -648,10 +539,7 @@ function treePlace(root, start_x, start_y, hidden, cascadeChildrenLevels) {
 	// Put each child in its place
 	$.each(children, function(index, device) {
 		if(hidden) {
-			//device.el.addClass("invisible");
 			device.el.animate({
-				//dev_jc_19/09/2013_b : fix animation of collapsing nodes back to parent properly (with new container they would animate towards the side of the screen)
-				// replaced offset() with position()
 				top: root.el.position().top,
 				left: root.el.position().left
 			}, {
@@ -714,13 +602,7 @@ function runTinyPhysics(snapToGrid) {
 
 	// Set target to current position
 	$.each(devices, function(index, device) {
-		// dev_jc_19/09/2013_a : replace offset with position to place items within the container.
-		// device.target = [device.el.offset().left, device.el.offset().top];
 		device.target = [device.el.position().left, device.el.position().top];
-		// console.log('runTinyPhysics----- device.el.offset().left = ' + device.el.offset().left);
-		// console.log('runTinyPhysics----- device.el.offset().top = ' + device.el.offset().top);
-		// console.log('runTinyPhysics----- device.el.position().left = ' + device.el.position().left);
-		// console.log('runTinyPhysics----- device.el.position().top = ' + device.el.position().top);
 	});
 	for(var step = 0; step<STEPS; step++) {
 		$.each(devices, function(index, device) {
@@ -749,9 +631,6 @@ function runTinyPhysics(snapToGrid) {
 			// Calculate force to keep device on screen
 			if(device.target[0] + device.size.width > $(window).width()) 	 F[0] -= BOUNDARY_K;
 			if(device.target[1] + device.size.height > $(window).height()) 	 F[1] -= BOUNDARY_K;
-			//dev_jc_17/09/2013_a
-			// if(device.target[0] + device.size.width > $('#container').width()) 	 F[0] -= BOUNDARY_K;
-			// if(device.target[1] + device.size.height > $('#container').height()) 	 F[1] -= BOUNDARY_K;
 			if(device.target[0] < 0)					 					 F[0] += BOUNDARY_K;
 			if(device.target[1] < 1)					 					 F[1] += BOUNDARY_K;
 
@@ -764,7 +643,6 @@ function runTinyPhysics(snapToGrid) {
 				F[0] -= v[0] * GRID_K;
 				F[1] -= v[1] * GRID_K;
 			}
-
 
 			// Add (force/mass = accelration) to velocity
 			device.velocity[0] += F[0] / device.mass;

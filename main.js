@@ -69,8 +69,6 @@ function refreshLayout() {
 // Final proposal's version of populateDevicesGrid().
 function populateDevicesAccordionGrid() {
 
-  // console.log('t- ENTER populateDevicesAccordionGrid()');
-
   // - - - - - - - - - - - - - - - SETUP - - - - - - - - - - - - - - - - - 
 
   resetLayouts();
@@ -102,7 +100,6 @@ function populateDevicesAccordionGrid() {
   $("#wired_accordion .accordion").append(network_box.advanced_accordion_settings);
   var counter_id_accordion_wired = 0;         // counts the ID of this device in the accordion. The order in which they're added to the accordion makes their ID.
   network_box.id_accordion = counter_id_accordion_wired;      // store the ID in the device object.
-  console.log("t- network_box.id_accordion = "+ network_box.id_accordion)
   counter_id_accordion_wired++;
 
   // Manually set height of the following containers.
@@ -140,7 +137,6 @@ function populateDevicesAccordionGrid() {
   wireless_network.is_wireless = true;   // add custom attribute for layout positioning & accordion.
   var counter_id_accordion_wireless = 0;         // counts the ID of this device in the accordion. The order in which they're added to the accordion makes their ID.
   wireless_network.id_accordion = counter_id_accordion_wireless;      // store the ID in the device object.
-  console.log("t- wireless_network.id_accordion = "+ wireless_network.id_accordion)
   counter_id_accordion_wireless++;
 
   // Wireless devices
@@ -166,10 +162,7 @@ function populateDevicesAccordionGrid() {
     var connection = new Connection(devices[0], wireless_device, "wireless", 1 );
     connection.changeShape("invisible");
     connections.push( connection );
-    // dev
-    // console.log(' WIRELESS --------');
-    // console.log(wireless_device);
-
+    
     // append the HTML of the current device's settings to the accordion div.
     $("#wireless_accordion .accordion").append(wireless_device.advanced_accordion_settings);
     wireless_device.id_accordion = counter_id_accordion_wireless;
