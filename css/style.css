@@ -2,8 +2,6 @@
 
 body {
 	font-family: 'Open Sans', sans-serif;
-	/*overflow: auto;
-	height: 100%;*/
 }
 #controller {
 	z-index: 1000;
@@ -17,7 +15,6 @@ body {
 #container_background, #container_background:before, #container_background:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
-
 #container {
 	z-index: 0;
 	position: relative;
@@ -82,7 +79,7 @@ body {
 	text-decoration: none;
 }
 .accordion .ui-accordion-header {  
-    background-color: #DDDDDD;				/* #ccc; */
+    background-color: #DDDDDD;
     margin: 10px 0px 0px 0px;  
 }
 /* When an accordion panel is closed, we round all corners of the header bar. */
@@ -374,9 +371,7 @@ body {
 	width: 180px;
 	margin-left: auto;
 	margin-right: auto;
-	/*border: 1px solid black;*/
 	padding: 10px;
-	/*margin-top: 2em;*/
 	background-color: rgba(255,255,255,0.75);
 }
 .palette h2 {
@@ -402,7 +397,6 @@ body {
 .device .name, .device .password {
 	font-weight: lighter;
 	text-align: center;
-	/*background-color: rgba(255,255,255,0.8);*/
 	padding: 7px;
 	text-shadow: 1px 1px 0px #FFF;	
 }
@@ -561,10 +555,6 @@ h2 {
 	width: 980px;
 	margin: 60px auto;
 	border-radius: 6px;
-	/*border: 1px solid #222;
-	background-color: #111;
-	background-image: linear-gradient(#444, #111);*/
-	/*box-shadow: 0 1px 1px #777;*/
 	border: 1px solid #DDD;
 	background-color: #F8F8F8;
 	background-image: linear-gradient(#FAFAFA, #F3F3F3);
@@ -587,8 +577,6 @@ h2 {
 /* List Elements */
 #menu li {
 	float: left;
-	/*border-right: 1px solid #DDD;*/
-	/*box-shadow: 1px 0 0 #F8F8F8;*/
 	position: relative;
 }
 /* Exception: only for Google logo at top <li> level, add a right border. */
@@ -643,10 +631,6 @@ img {
 	background: #F3F3F3;
 	background: linear-gradient(#FAFAFA, #F3F3F3);
 	box-shadow: 0 1px 1px #A5A5A5;
-	/*background: #444;
-	background: linear-gradient(#444, #111);
-	box-shadow: 0 -1px 0 rgba(255,255,2550.3);
-	box-shadow: 0 -1px 0 rgba(165,165,165,0.3);*/
 	transition: all 0.4s ease-in-out;						/*fine-tune these timing setting to make sure the dropdowns are well usable.*/
 	transition-delay: 0.4s;
 }
