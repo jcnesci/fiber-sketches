@@ -12,3 +12,7 @@ This prototype uses jQuery and a jQuery-SVG library to achieve various prototypi
 Usage Tips
 ---------------------------------------
 * This prototype was originally designed for large screens. Use your browser's zoom keys (Ctrl or Cmd +/-) to adapt the size of the prototype to your screen size.
+
+Notes
+---------------------------------------
+* This repository is only a copy of the final state of the development repository, found here: https://github.com/jcnesci/fiber-sketches
