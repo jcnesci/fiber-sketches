@@ -1,4 +1,3 @@
-
 @import "../jquery-svg/jquery.svg.css";
 
 body {
@@ -6,21 +5,18 @@ body {
 	/*overflow: auto;
 	height: 100%;*/
 }
-
 #controller {
 	z-index: 1000;
 	width: 200px;
 	position: relative;
 	float: left;
 }
-
 /* forces divs (ie. "boxes") to maintain the padding amount within the width of a div (and not add it to the width). */
 .floated_right, .floated_right:before, .floated_right:after,
 .floated_left, .floated_left:before, .floated_left:after,
 #container_background, #container_background:before, #container_background:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
-
 #container {
 	z-index: 0;
 	position: relative;
@@ -161,11 +157,6 @@ body {
   	background-size: 60px 60px;
   	background-image: url(../images/device-tv-accordion-light.png);
 }
-
-
-
-
-
 /* We want all accordion headers to have space before them, except the first one (so it aligns with the top perfectly). */
 .accordion .ui-accordion-header:first-child {  
     margin: 0px;  
@@ -367,24 +358,6 @@ body {
 .tftable tr:hover {
 	background-color:#F3F3F3;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .button {
 }
 .button:after {
@@ -396,11 +369,9 @@ body {
 	cursor: pointer;
 	background-color: rgba(200,200,200,0.5);
 }
-
 .invisible {
 	display: none;
 }
-
 /* DIVs that contain a device */
 .device {
 	width: 200px;
@@ -408,27 +379,22 @@ body {
 	position: absolute;
 	/*background-color: rgba(255,255,255,0.5);*/
 }
-
 .device:hover {
 	cursor: pointer;
 }
-
 #icon_palette .device {
 	position: relative;
 	display: block;
 	height: 100px;	
 	margin-left: -10px;
 }
-
 .dragging {
 	pointer-events:none;
 }
-
 #icon_palette .device.dragging {
     background-color: transparent;
     opacity: 0.5;
 }
-
 #icon_palette {
 	/*
 	height: 300px;
@@ -436,7 +402,6 @@ body {
 	overflow-x: hidden;
 	*/
 }
-
 .palette {
 	width: 180px;
 	margin-left: auto;
@@ -453,7 +418,6 @@ body {
 	margin-top: 30px;
 	margin-bottom: 30px;
 }
-
 .palette .ip {
 	background-color: rgba(200,200,200,0.5);
 	margin-bottom: 2px;
@@ -461,15 +425,12 @@ body {
 	text-align: center;
 	font-weight: lighter;
 }
-
 .palette .ip:hover {
 	cursor: pointer;
 }
-
 .shaded {
 	background-color: rgba(200,200,200,0.5);
 }
-
 .device .name, .device .password {
 	font-weight: lighter;
 	text-align: center;
@@ -480,19 +441,16 @@ body {
 .device .password {
 	/*font-size: 80%;*/
 }
-
 .device .name:hover, .device .password:hover {
 	cursor: text;
 	background-color: rgba(200,200,200,0.5);
 }
-
 .device .icon {
 	width: 128px;
 	height: 128px;
 	margin-left: auto;
 	margin-right: auto;
 }
-
 .device input {
 	text-align: center;
 	margin-left: auto;
@@ -504,36 +462,30 @@ body {
 	background-color: rgba(200,200,200,0.5);
 	border: 0;
 }
-
 .networkbox .icon  {
 	background-image: url(../images/device-networkbox.png);
 }
 .networkbox .info {
 	margin-top: -40px;
 }
-
 .laptop .icon  {
 	background-image: url(../images/device-laptop.png);
 }
-
 .laptop .info {
 	margin-top: -30px;
 }
-
 .phone .icon  {
 	background-image: url(../images/device-phone.png);
 }
 .phone .info {
 	margin-top: -30px;
 }
-
 .storage .icon  {
 	background-image: url(../images/device-storage.png);
 }
 .storage .info {
 	margin-top: -40px;
 }
-
 .router .icon  {
 	background-image: url(../images/device-router.png);
 }
@@ -541,28 +493,24 @@ body {
 	display: none;
 	margin-top: -40px;
 }
-
 .tv .icon  {
 	background-image: url(../images/device-tv.png);
 }
 .tv .info {
 	margin-top: -10px;
 }
-
 .tvbox .icon  {
 	background-image: url(../images/device-tvbox.png);
 }
 .tvbox .info {
 	margin-top: -40px;
 }
-
 .wifi .icon  {
 	background-image: url(../images/device-wifi.png);
 }
 .wifi .info {
 	margin-top: -20px;
 }
-
 .device .status {
 	display: none;
 	width: 75%;
@@ -573,22 +521,18 @@ body {
 	padding: 5px;
 	background: rgba(200,200,200, 0.6);
 }
-
 .device.highlight {
 	background-color: rgba(200,200,200,0.5);
 }
 .device.highlight_accordion {
 	background-color: rgba(200,200,200,0.5);
 }
-
 .collapsed { 
 	 /*background-color: rgba(200,200,200,.5); */
 }
-
 .collapsed:hover {
 	cursor: pointer;
 }
-
 .badge {
 	display: none;
 }
@@ -607,20 +551,17 @@ body {
 	margin-right: 55px;
 	margin-top: 40px;
 }
-
 .connector  {
 	stroke: #AAA;
 	stroke-width: 2;
 	fill: none;
 }
-
 .connector.wireless {
 	stroke-dasharray: 5,5;
 }
 .connector.invisible {
 	stroke-width: 0;
 }
-
 SVG {
 	position: absolute;
 	left: 0px;
@@ -633,7 +574,6 @@ SVG {
 	height: 100%;
 	width: 100%;
 }*/
-
 h2 {
 	text-transform: uppercase;
 	font-size: 12px;
@@ -651,7 +591,6 @@ h2 {
 	cursor: pointer;
 	background-color: rgba(200,200,200,0.5);
 }
-
 #sketchList a:before {
 	content: "> ";
 }
