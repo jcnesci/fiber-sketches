@@ -5,14 +5,12 @@ body {
 	/*overflow: auto;
 	height: 100%;*/
 }
-
 #controller {
 	z-index: 1000;
 	width: 200px;
 	position: relative;
 	float: left;
 }
-
 /* forces divs (ie. "boxes") to maintain the padding amount within the width of a div (and not add it to the width). */
 .floated_right, .floated_right:before, .floated_right:after,
 .floated_left, .floated_left:before, .floated_left:after,
@@ -27,27 +25,16 @@ body {
 	margin: 0 auto;
 	width: 1200px;
 	height: 1000px;
-
-	/*margin: 0 0 0 50%;*/
-	/*width: 800px;*/
-
-	/*background-color: #F3F3F3;*/
-	/*border: 1px solid red;			dev_option: make container easier to see.*/
 }
 #container_background {
 	position: absolute;
-	/*top:100px;*/
 	left: 25%;
 	width: 800px;
 	margin:0;
 	padding:0;
-	/*height: 500px;*/
-	/*bottom: 50px;*/
-	/*margin-bottom: 50px;*/
 	background-color: #F3F3F3;
 	z-index: -2;
 	border-radius: 6px;
-	/*border: 1px solid green;*/
 }
 #wireless_container {
 	background-color: #F3F3F3;
@@ -63,20 +50,16 @@ body {
 	margin: 0 auto;
 	width: 1600px;
 	height: 1000px;
-	/*background-color: #F3F3F3;*/
-	/*border: 1px solid red;			dev_option: make container easier to see.*/
 }
 .floated_left {
     float: left;
     width: 800px;
     position: relative;
-    /*border: 3px solid red;*/
 }
 .floated_right {
     float: right;
     width: 800px;
     position: relative;
-    /*border: 3px solid red;*/
 }
 .row {
 	float: left;
@@ -101,7 +84,6 @@ body {
 .accordion .ui-accordion-header {  
     background-color: #DDDDDD;				/* #ccc; */
     margin: 10px 0px 0px 0px;  
-    /*border-radius: 6px;*/
 }
 /* When an accordion panel is closed, we round all corners of the header bar. */
 .accordion .ui-corner-all {
@@ -160,11 +142,6 @@ body {
   	background-size: 60px 60px;
   	background-image: url(../images/device-tv-accordion-light.png);
 }
-
-
-
-
-
 /* We want all accordion headers to have space before them, except the first one (so it aligns with the top perfectly). */
 .accordion .ui-accordion-header:first-child {  
     margin: 0px;  
@@ -246,7 +223,6 @@ body {
     text-align: center;
     padding: 0 6px;
     margin-left:5px;
-    /*box-shadow: 1px 1px 3px #626D77;*/
 }
 .accordion .toggle_on {
 	width: 64px;
@@ -308,13 +284,6 @@ body {
   	margin-right: 15px;
   	margin-left: 15px;
 }
-/* TODO : REMOVE */
-/*.accordion .device_icons {
-	width: 195px;
-	height: 27px;
-	display:inline-block;
-	background-image: url(../images/device_panel_device_icons.png);
-}*/
 .accordion .restart {
 	width: 75px;
 	height: 21px;
@@ -366,76 +335,41 @@ body {
 .tftable tr:hover {
 	background-color:#F3F3F3;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .button {
 }
 .button:after {
 	content: " >";
 }
-
 .button:hover {
 	font-style: italic;
 	cursor: pointer;
 	background-color: rgba(200,200,200,0.5);
 }
-
 .invisible {
 	display: none;
 }
-
 /* DIVs that contain a device */
 .device {
 	width: 200px;
 	height: 200px;
 	position: absolute;
-	/*background-color: rgba(255,255,255,0.5);*/
 }
-
 .device:hover {
 	cursor: pointer;
 }
-
 #icon_palette .device {
 	position: relative;
 	display: block;
 	height: 100px;	
 	margin-left: -10px;
 }
-
 .dragging {
 	pointer-events:none;
 }
-
 #icon_palette .device.dragging {
     background-color: transparent;
     opacity: 0.5;
 }
-
-#icon_palette {
-	/*
-	height: 300px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	*/
-}
-
 .palette {
 	width: 180px;
 	margin-left: auto;
@@ -452,7 +386,6 @@ body {
 	margin-top: 30px;
 	margin-bottom: 30px;
 }
-
 .palette .ip {
 	background-color: rgba(200,200,200,0.5);
 	margin-bottom: 2px;
@@ -460,15 +393,12 @@ body {
 	text-align: center;
 	font-weight: lighter;
 }
-
 .palette .ip:hover {
 	cursor: pointer;
 }
-
 .shaded {
 	background-color: rgba(200,200,200,0.5);
 }
-
 .device .name, .device .password {
 	font-weight: lighter;
 	text-align: center;
@@ -476,22 +406,16 @@ body {
 	padding: 7px;
 	text-shadow: 1px 1px 0px #FFF;	
 }
-.device .password {
-	/*font-size: 80%;*/
-}
-
 .device .name:hover, .device .password:hover {
 	cursor: text;
 	background-color: rgba(200,200,200,0.5);
 }
-
 .device .icon {
 	width: 128px;
 	height: 128px;
 	margin-left: auto;
 	margin-right: auto;
 }
-
 .device input {
 	text-align: center;
 	margin-left: auto;
@@ -503,36 +427,30 @@ body {
 	background-color: rgba(200,200,200,0.5);
 	border: 0;
 }
-
 .networkbox .icon  {
 	background-image: url(../images/device-networkbox.png);
 }
 .networkbox .info {
 	margin-top: -40px;
 }
-
 .laptop .icon  {
 	background-image: url(../images/device-laptop.png);
 }
-
 .laptop .info {
 	margin-top: -30px;
 }
-
 .phone .icon  {
 	background-image: url(../images/device-phone.png);
 }
 .phone .info {
 	margin-top: -30px;
 }
-
 .storage .icon  {
 	background-image: url(../images/device-storage.png);
 }
 .storage .info {
 	margin-top: -40px;
 }
-
 .router .icon  {
 	background-image: url(../images/device-router.png);
 }
@@ -540,28 +458,24 @@ body {
 	display: none;
 	margin-top: -40px;
 }
-
 .tv .icon  {
 	background-image: url(../images/device-tv.png);
 }
 .tv .info {
 	margin-top: -10px;
 }
-
 .tvbox .icon  {
 	background-image: url(../images/device-tvbox.png);
 }
 .tvbox .info {
 	margin-top: -40px;
 }
-
 .wifi .icon  {
 	background-image: url(../images/device-wifi.png);
 }
 .wifi .info {
 	margin-top: -20px;
 }
-
 .device .status {
 	display: none;
 	width: 75%;
@@ -572,22 +486,15 @@ body {
 	padding: 5px;
 	background: rgba(200,200,200, 0.6);
 }
-
 .device.highlight {
 	background-color: rgba(200,200,200,0.5);
 }
 .device.highlight_accordion {
 	background-color: rgba(200,200,200,0.5);
 }
-
-.collapsed { 
-	 /*background-color: rgba(200,200,200,.5); */
-}
-
 .collapsed:hover {
 	cursor: pointer;
 }
-
 .badge {
 	display: none;
 }
@@ -606,33 +513,23 @@ body {
 	margin-right: 55px;
 	margin-top: 40px;
 }
-
 .connector  {
 	stroke: #AAA;
 	stroke-width: 2;
 	fill: none;
 }
-
 .connector.wireless {
 	stroke-dasharray: 5,5;
 }
 .connector.invisible {
 	stroke-width: 0;
 }
-
 SVG {
 	position: absolute;
 	left: 0px;
 	top: 0px;
 	z-index: -1;
-	/*height: 4000px;*/
 }
-/*#svg_container {
-	overflow: auto;
-	height: 100%;
-	width: 100%;
-}*/
-
 h2 {
 	text-transform: uppercase;
 	font-size: 12px;
@@ -650,21 +547,16 @@ h2 {
 	cursor: pointer;
 	background-color: rgba(200,200,200,0.5);
 }
-
 #sketchList a:before {
 	content: "> ";
 }
-
 /* Reset */
-
 #menu, #menu ul {
 	margin: 0;
 	padding:0;
 	list-style: none;
 }
-
 /* Main Level */
-
 #menu {
 	width: 980px;
 	margin: 60px auto;
@@ -680,37 +572,29 @@ h2 {
 	position: relative;
 	z-index: 100000;					/*even though the sketches will be limited to a container away from the menu, we guarantee it will be at the top-level with z-index.*/
 }
-
 /* Clear Floats */
-
 #menu:before,
 #menu:after {
 	content: "";
 	display: table;
 }
-
 #menu:after{
 	clear:both;
 }
-
 #menu {
 	zoom:1;
 }
-
 /* List Elements */
-
 #menu li {
 	float: left;
 	/*border-right: 1px solid #DDD;*/
 	/*box-shadow: 1px 0 0 #F8F8F8;*/
 	position: relative;
 }
-
 /* Exception: only for Google logo at top <li> level, add a right border. */
 #menu > li:first-child {
 	border-right: 1px solid #DDD;
 }
-
 .logo {
 	display: block;
 	overflow: hidden;
@@ -738,26 +622,21 @@ img {
 	font-size: 12px;
 	color: #626D77;
 	text-decoration: none;
-	/*text-shadow: 0 1px 0 #000;*/
 }
-
 /* Exception: reduce paddings for Google logo, for various alignment reasons. */
 #menu > li:first-child a {
 	padding: 15px 30px 10px 30px;
 }
-
 #menu li:hover > a {
 	color: #207fd1;
 }
-
 /* Submenus */
-
 #menu ul {
 	margin: 20px 0 0 0;
 	opacity: 0;
 	visibility: hidden;
 	position: absolute;
-	top: 70px;					/*?*/
+	top: 70px;
 	left: 60px;
 	z-index: 1;
 	border-radius: 3px;
@@ -771,51 +650,40 @@ img {
 	transition: all 0.4s ease-in-out;						/*fine-tune these timing setting to make sure the dropdowns are well usable.*/
 	transition-delay: 0.4s;
 }
-
 #menu li:hover > ul {
 	opacity: 1;
 	visibility: visible;
 	margin: 0;
 }
-
 #menu ul ul {
 	top: 0;
 	left: 150px;
 	margin: 0 0 0 20px;
 	box-shadow: -1px  0 0 rgba(255,255,255,0.3);
 }
-
 #menu ul li {
-	float: none;			/*?*/
+	float: none;
 	display: block;
 	border: 0;
-	box-shadow: 0 1px 0 #E0E0E0, 0 2px 0 #F8F8F8;				/*?*/
+	box-shadow: 0 1px 0 #E0E0E0, 0 2px 0 #F8F8F8;
 }
-
 #menu ul li:last-child {
 	box-shadow: none;
 }
-
 #menu ul a {
 	padding: 10px;
 	width: 130px;
-	display: block;				/*?*/
-	white-space: nowrap;		/*?*/
-	float: none;				/*?*/
+	display: block;
+	white-space: nowrap;
+	float: none;		
 	text-transform: none;
 }
-
 #menu ul a:hover {
-	/*background-color: #0186ba;
-	background-image: linear-gradient(#04acec, #0186ba);*/
 	color: #207fd1;
 }
-
 #menu ul li:first-child > a {
 	border-radius: 3px 3px 0 0;
 }
-
-/*?*/
 #menu ul li:first-child > a:after {
 	content: '';
 	position: absolute;
@@ -825,7 +693,6 @@ img {
 	border-right: 6px solid transparent;
 	border-bottom: 6px solid #444;
 }
-/*?*/
 #menu ul ul li:first-child a:after {
 	left: -6px;
 	top: 50%;
@@ -835,20 +702,13 @@ img {
 	border-top: 6px solid transparent;
 	border-right: 6px solid #3b3b3b;
 }
-/*?*/
-#menu ul li:first-child a:hover:after {
-	/*border-bottom-color: #04acec; */			/*remove triangle hover color*/
-}
-/*?*/
 #menu ul ul li:first-child a:hover:after {
 	border-right-color: #0299d3; 
 	border-bottom-color: transparent; 	
 }
-/*?*/
 #menu ul li:last-child > a {
 	border-radius: 0 0 3px 3px;
 }
-
 /* New icons 2 zone layout */
 #wireless_icon {
 	position: relative;
@@ -871,7 +731,6 @@ img {
 .wireless_grid_row .wireless_network .icon {
 	margin-top: 10px;
 }
-
 /*Device advanced settings panel for 2 zone layout*/
 .device_advanced_panel {
 	position: absolute;
@@ -883,7 +742,6 @@ img {
 	box-shadow: 1px 1px 3px #CCC;
 	z-index: 1000000;
 	display: none;
-	/*opacity: 0.5;*/
 }
 .device_advanced_panel.networkbox {
 	width: 500px;
@@ -913,7 +771,6 @@ img {
 .device_advanced_panel ul {
 	list-style: none;
 	margin: 0;
-	/*padding: 10px;*/
 	padding:0;
 	padding-bottom: 30px;
 	float:left;
@@ -922,7 +779,6 @@ img {
 	width: 100%;
 }
 .device_advanced_panel ul li {
-	/*border-bottom: 1px solid black;*/
     float: left;
     width: 50%;
 	margin: 0 0 5px 0;
@@ -940,9 +796,6 @@ img {
 	padding-left: 5px;
 	border: 1px solid #CCCCCC;
 }
-/*.device_advanced_panel h2 {
-	margin-bottom: 40px;
-}*/
 .device_advanced_panel .help {
     width:15px;
     height:15px;
@@ -954,7 +807,6 @@ img {
     text-align: center;
     padding: 0 6px;
     margin-left:5px;
-    /*box-shadow: 1px 1px 3px #626D77;*/
 }
 .device_advanced_panel .toggle_on {
 	width: 64px;
@@ -992,7 +844,6 @@ img {
 	display:inline-block;
 	background-image: url(../images/device_panel_upnp.png);
 }
-
 /* For Drag-n-drop, show that you can't drop on Network box or TV boxes. */
 /* Highlight class is for when you drag and hover on a device. */
 .device.networkbox.highlight, .device.tvbox.highlight {
@@ -1004,9 +855,7 @@ img {
 .device.tvbox.highlight .icon {
 	background-image: url(../images/device-tvbox-crossed.png);
 }
-
 /* jQuery UI Dialog styles */
-
 /* removes blue highlight on text caused by jQueryUI */
 .ui-dialog .ui-state-focus {
   outline: none;
@@ -1026,7 +875,6 @@ img {
 	background: #f3f3f3;
 	border-radius: 3px;
 	border: 1px solid #AAAAAA;
-	/*box-shadow: 0 0px 3px #737373;*/
 }
 .ui-dialog .ui-dialog-titlebar {
 	border-radius: 3px 3px 0 0;
@@ -1038,7 +886,6 @@ img {
     font-weight: normal;
 }
 .ui-dialog .ui-dialog-content {
-    /*overflow: auto;*/
     padding: 10px 20px;
     color: #626D77;  
     font-size: 10pt;  
@@ -1060,7 +907,6 @@ img {
 	padding: 0.5em 1.5em;
 	border: 0px;
 }
-
 /* For the toggle button in the Accordion Grid layout. */
 .onoffswitch {
     position: relative; width: 60px;
@@ -1121,18 +967,3 @@ img {
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
