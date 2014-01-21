@@ -87,7 +87,6 @@ Connection.prototype = {
 
 		// Remove and re-build
 		var d = this.el.css('display');
-		// console.log(d);
 		this.el.remove();
 		this.addToDom();
 		this.el.css('display', d);

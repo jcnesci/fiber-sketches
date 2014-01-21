@@ -66,18 +66,14 @@ Device.prototype = {
 	},
 	// to show or hide details of a device in hovering pane on click
 	showDetails: function (b_show) {
-		console.log("-showDetails -ENTER -b_show = "+ b_show);
 		
 		if ( b_show === true ) {
 			
-			console.log("--- Show advanced settings panel.");
-
 			// If panel exists already for another device, then remove it first.
 			var current_panel = $(".device_advanced_panel");
 			if ( current_panel.length ) {
 				var current_panel_id = current_panel.attr("id");
 				var current_panel_device = $.grep(devices, function(device){ return device.id == current_panel_id; });
-				console.log(current_panel_device);
 				current_panel_device[0].showDetails(false);
 			}
 
@@ -111,17 +107,6 @@ Device.prototype = {
 			new_panel.prependTo("#container");
 			new_panel.fadeIn( 400 );
 
-			// console.log('------ ------ ------ thisthis.top: '+ thisthis.el.offset().top);
-			// console.log('------ ------ ------ container.top: '+ $("#container").offset().top);
-			// console.log('------ ------ ------ new_panel.top: '+ new_panel.offset().top);
-			// console.log('------ ------ ------ new_panel.padding-top: '+ new_panel.css("padding-top"));
-			// console.log('------ ------ ------');
-			// console.log('------ ------ ------ thisthis.left: '+ thisthis.el.offset().left);
-			// console.log('------ ------ ------ thisthis.left: '+ thisthis.el.position().left);
-			// console.log('------ ------ ------ container.left: '+ $("#container").offset().left);
-			// console.log('------ ------ ------ new_panel.left: '+ new_panel.offset().left);
-			// console.log('------ ------ ------ new_panel.padding-left: '+ new_panel.css("padding-left"));
-
 		} else if ( b_show === false ) {
 			var current_panel = $(".device_advanced_panel");
 			current_panel.fadeOut( 400, function() {
@@ -146,8 +131,7 @@ Device.prototype = {
 		this.el.fadeOut(500);
 	},
 	changeType: function(t) {
-		//if(t == this.type) return;
-
+		
 		var thisthis = this;
 		var oldType = this.type;
 		this.el.find(".icon").fadeOut({duration: 200, complete: function() {
@@ -159,40 +143,23 @@ Device.prototype = {
 
 		// For Accordion Grid layout
 		if ( $(".accordion").length ) {
-				if (this.is_wireless) {
-					
-					var this_header = $("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
-					    .eq(this.id_accordion);
-
-				    console.log(this_header)
-
-				    // $("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
-					   //  .eq(this.id_accordion)
-					   //  .find($("a.header-name")).text(this.name);
-
-				    
-
-					this_header.removeClass(oldType);
-					this_header.addClass(t);
-					// this.type = t;
-
-					console.log(this_header)
-
-				} else {
-					var this_header = $("#wired_accordion .accordion").find($("#wired_accordion .accordion").accordion( "option", "header" ))
-					    .eq(this.id_accordion);
-
-					this_header.removeClass(oldType);
-					this_header.addClass(t);
-					// this.type = t;
-				}
+			if (this.is_wireless) {
+				var this_header = $("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
+				    .eq(this.id_accordion);
+				this_header.removeClass(oldType);
+				this_header.addClass(t);
+			} else {
+				var this_header = $("#wired_accordion .accordion").find($("#wired_accordion .accordion").accordion( "option", "header" ))
+				    .eq(this.id_accordion);
+				this_header.removeClass(oldType);
+				this_header.addClass(t);
 			}
+		}
 
 	},
 	highlight: function(state) {
 		if(state == true) {
 			this.el.addClass("highlight");
-			// console.log("^ ^ ^ ^ ^ ^ * * * * * HILITE 2");
 		}
 		else {
 			this.el.removeClass("highlight");
@@ -247,7 +214,6 @@ Device.prototype = {
 		this.el.find(".status").html("STATUS: ONLINE<br />IP " + (this.static_ip ? "(static)" : "(DHCP)") + ": <div class='ip_slot'>" + this.ip + "</div>");
 	},
 	expandSubnodes: function() {
-		console.log("--------- expandSubnodes !");
 		// if opening this node... 
         if ( this.expanded === false ) {
         	// close all device settings panels
@@ -292,8 +258,6 @@ Device.prototype = {
 		if(state == false) {
 			// Save new name in current object.
 			this.name = this.el.find(".edit_name").val();
-			console.log(this);
-			console.log(this.name);
 			// Update name in the DOM.
 			this.el.find(".name").text(this.name);
 
@@ -304,11 +268,6 @@ Device.prototype = {
 					$("#wireless_accordion .accordion").find($("#wireless_accordion .accordion").accordion( "option", "header" ))
 					    .eq(this.id_accordion)
 					    .find($("a.header-name")).text(this.name);
-
-					console.log("CONTENT")
-					console.log($("#wireless_accordion .accordion .ui-accordion-content"))
-					console.log($("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion))
-					console.log($("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion).find($("input.content-name")))
 					// Also change the device name in the panel content.
 					$("#wireless_accordion .accordion .ui-accordion-content").eq(this.id_accordion).find($("input.content-name")).val(this.name);
 				} else {
@@ -347,8 +306,6 @@ Device.prototype = {
 		}
 		if(state == false) {
 			this.password = this.el.find(".edit_password").val();
-			console.log(this);
-			console.log(this.password);
 			// Update the DOM in the device area.
 			this.el.find(".password").text(this.password);
 

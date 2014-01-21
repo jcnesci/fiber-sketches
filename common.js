@@ -41,7 +41,6 @@ function resetSvgDivHeight() {
 	var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );	
 	// use the global multiplier var
 	if (svg_div_height_multiplier === undefined) svg_div_height_multiplier = 1;
-	// console.log(" * * * * * height * "+svg_div_height_multiplier+" = "+ height * svg_div_height_multiplier);
 	$('svg').height( height * svg_div_height_multiplier );
 }
 // 
@@ -52,7 +51,6 @@ function getDeviceAccordionHTML(device) {
 	var device_name = device.name;
 	var device_name_escapedQuotes = device_name.replace(/'/g, '&#39;');				// html input fields don't accept single quotes directly, they must be escaped.
 	var toggle_btn_id = 0;
-	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
 	// For personal devices
 	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
 		device_panel_html = "<h3 class="+ device_type +"><a href='#' class='header-name'>" + device_name + "</a></h3>"
@@ -164,8 +162,6 @@ function getAccordionTable(table) {
 
 // 
 function getToggleButton(id, starting_state) {
-	console.log("------------------ toggle ID = "+ id)
-	console.log("------------------ toggle starting_state = "+ starting_state)
 	var toggle_html = "<div class='onoffswitch starts-"+starting_state+"'>"
 		+ "    <input type='checkbox' name='onoffswitch' class='onoffswitch-checkbox' id='myonoffswitch_"+id+"' checked>"
 		+ "    <label class='onoffswitch-label' for='myonoffswitch_"+id+"'>"
@@ -181,7 +177,6 @@ function getDevicePanelHTML(device) {
 	var device_panel_html;
 	var device_type = device.type;
 	var device_name = device.name;
-	// console.log("device_type: "+ device_type +" | device_name: "+ device_name);
 	// For personal devices
 	if ( device_type === "laptop" || device_type === "phone" || device_type === "storage" ) {
 		device_panel_html = "<div class='icon'></div>"
@@ -270,13 +265,11 @@ function resetLayouts() {
  	$("#controller").hide();							// Hide sidebar for drag-and-drop
  	
  	// DEV_JC_dec30
- 	// Clear DOM element s related to 'accordion grid'.
+ 	// Clear DOM elements related to 'accordion grid'.
  	$('#container_final').hide();
  	$('#container').show();
  	$(".row").remove();
-
-
-
+ 	$("#svg_container svg").css({ top: 0 });
 
 	// Break references of old devices
 	// TODO: Make sure circular references are broken, too
@@ -342,13 +335,9 @@ function toggleConnectors(indicator) {
 	if ( _layout_type !== "grid" ) {
 		current_connection_style++;
 		$.each(connections, function(index, conn) {
-			console.log(conn);
 			conn.changeShape(Connection.shapes[current_connection_style % Connection.shapes.length]);
 		});
 	}
-	// Not necessary for now: display which connector style is currently displayed in button
-	// var button_label = 'Toggle Connector Style (' + ((current_connection_style % Connection.shapes.length)+1) + '/' + Connection.shapes.length +')';
-	// $('li #toggle-button').text(button_label);
 }
 function setConnectorStyle(shape) {
 	$.each(connections, function(index, conn) {
